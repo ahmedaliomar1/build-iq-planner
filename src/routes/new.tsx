@@ -13,7 +13,6 @@ import {
   Search,
   Sparkles,
   Trash2,
-  X,
 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { AppShell } from "@/components/app-shell";
@@ -724,12 +723,6 @@ function StepReview({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // synchronise both canvases
-  useEffect(() => {
-    right.setView(left.view);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [left.view]);
-
   const sync = (v: typeof left.view) => {
     left.setView(v);
     right.setView(v);
@@ -905,5 +898,3 @@ function StepReady({ projectId }: { projectId: string | null }) {
     </div>
   );
 }
-
-export { X };
