@@ -47,8 +47,8 @@ export function SelectCard({
   selected: boolean;
   onClick: () => void;
   title: string;
-  note?: string;
-  badge?: string;
+  note?: string | undefined;
+  badge?: string | undefined;
   children?: ReactNode;
 }) {
   return (
