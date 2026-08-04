@@ -275,7 +275,7 @@ function RfWizard() {
                   generatedAt: pkg.timestamp,
                   completed: Array.from(
                     { length: STEP_TITLES.length },
-                    (_, i) => i,
+                    (_unused, i: number) => i,
                   ),
                 });
                 navigate({ to: "/rf/$projectId/ready", params: { projectId } });
