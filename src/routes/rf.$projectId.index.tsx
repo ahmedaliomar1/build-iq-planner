@@ -4,7 +4,7 @@ import { AppShell } from "@/components/app-shell";
 import { useProject } from "@/lib/project-store";
 import { buildingStats } from "@/lib/rf-config";
 
-export const Route = createFileRoute("/rf/$projectId")({
+export const Route = createFileRoute("/rf/$projectId/")({
   head: () => ({
     meta: [
       { title: "RF Design Configuration — AI Private Cellular Planner" },
