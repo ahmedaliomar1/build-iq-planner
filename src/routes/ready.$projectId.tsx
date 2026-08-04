@@ -65,10 +65,10 @@ function ReadyPage() {
 
           <div className="mt-8 flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
             <button
-              onClick={() => navigate({ to: "/editor/$projectId", params: { projectId } })}
+              onClick={() => navigate({ to: "/rf/$projectId", params: { projectId } })}
               className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-soft transition-smooth hover:brightness-110 active:scale-[0.98]"
             >
-              <Radio className="size-4" /> Start RF Planning
+              <Radio className="size-4" /> Continue to RF Planning
             </button>
             <Link
               to="/"
