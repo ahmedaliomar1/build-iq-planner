@@ -21,6 +21,7 @@ import { Route as RfProjectIdConfigRouteImport } from './routes/rf.$projectId.co
 import { Route as RfProjectIdOverviewRouteImport } from './routes/rf.$projectId.overview'
 import { Route as RfProjectIdPrepareRouteImport } from './routes/rf.$projectId.prepare'
 import { Route as RfProjectIdProfileRouteImport } from './routes/rf.$projectId.profile'
+import { Route as RfProjectIdProfileReadyRouteImport } from './routes/rf.$projectId.profile-ready'
 import { Route as RfProjectIdReadyRouteImport } from './routes/rf.$projectId.ready'
 
 const IndexRoute = IndexRouteImport.update({
@@ -83,6 +84,11 @@ const RfProjectIdProfileRoute = RfProjectIdProfileRouteImport.update({
   path: '/rf/$projectId/profile',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RfProjectIdProfileReadyRoute = RfProjectIdProfileReadyRouteImport.update({
+  id: '/rf/$projectId/profile-ready',
+  path: '/rf/$projectId/profile-ready',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RfProjectIdReadyRoute = RfProjectIdReadyRouteImport.update({
   id: '/rf/$projectId/ready',
   path: '/rf/$projectId/ready',
@@ -101,6 +107,7 @@ export interface FileRoutesByFullPath {
   '/rf/$projectId/overview': typeof RfProjectIdOverviewRoute
   '/rf/$projectId/prepare': typeof RfProjectIdPrepareRoute
   '/rf/$projectId/profile': typeof RfProjectIdProfileRoute
+  '/rf/$projectId/profile-ready': typeof RfProjectIdProfileReadyRoute
   '/rf/$projectId/ready': typeof RfProjectIdReadyRoute
   '/rf/$projectId/': typeof RfProjectIdIndexRoute
 }
@@ -116,6 +123,7 @@ export interface FileRoutesByTo {
   '/rf/$projectId/overview': typeof RfProjectIdOverviewRoute
   '/rf/$projectId/prepare': typeof RfProjectIdPrepareRoute
   '/rf/$projectId/profile': typeof RfProjectIdProfileRoute
+  '/rf/$projectId/profile-ready': typeof RfProjectIdProfileReadyRoute
   '/rf/$projectId/ready': typeof RfProjectIdReadyRoute
   '/rf/$projectId': typeof RfProjectIdIndexRoute
 }
@@ -132,6 +140,7 @@ export interface FileRoutesById {
   '/rf/$projectId/overview': typeof RfProjectIdOverviewRoute
   '/rf/$projectId/prepare': typeof RfProjectIdPrepareRoute
   '/rf/$projectId/profile': typeof RfProjectIdProfileRoute
+  '/rf/$projectId/profile-ready': typeof RfProjectIdProfileReadyRoute
   '/rf/$projectId/ready': typeof RfProjectIdReadyRoute
   '/rf/$projectId/': typeof RfProjectIdIndexRoute
 }
@@ -149,6 +158,7 @@ export interface FileRouteTypes {
     | '/rf/$projectId/overview'
     | '/rf/$projectId/prepare'
     | '/rf/$projectId/profile'
+    | '/rf/$projectId/profile-ready'
     | '/rf/$projectId/ready'
     | '/rf/$projectId/'
   fileRoutesByTo: FileRoutesByTo
@@ -164,6 +174,7 @@ export interface FileRouteTypes {
     | '/rf/$projectId/overview'
     | '/rf/$projectId/prepare'
     | '/rf/$projectId/profile'
+    | '/rf/$projectId/profile-ready'
     | '/rf/$projectId/ready'
     | '/rf/$projectId'
   id:
@@ -179,6 +190,7 @@ export interface FileRouteTypes {
     | '/rf/$projectId/overview'
     | '/rf/$projectId/prepare'
     | '/rf/$projectId/profile'
+    | '/rf/$projectId/profile-ready'
     | '/rf/$projectId/ready'
     | '/rf/$projectId/'
   fileRoutesById: FileRoutesById
@@ -195,6 +207,7 @@ export interface RootRouteChildren {
   RfProjectIdOverviewRoute: typeof RfProjectIdOverviewRoute
   RfProjectIdPrepareRoute: typeof RfProjectIdPrepareRoute
   RfProjectIdProfileRoute: typeof RfProjectIdProfileRoute
+  RfProjectIdProfileReadyRoute: typeof RfProjectIdProfileReadyRoute
   RfProjectIdReadyRoute: typeof RfProjectIdReadyRoute
   RfProjectIdIndexRoute: typeof RfProjectIdIndexRoute
 }
@@ -285,6 +298,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RfProjectIdProfileRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/rf/$projectId/profile-ready': {
+      id: '/rf/$projectId/profile-ready'
+      path: '/rf/$projectId/profile-ready'
+      fullPath: '/rf/$projectId/profile-ready'
+      preLoaderRoute: typeof RfProjectIdProfileReadyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/rf/$projectId/ready': {
       id: '/rf/$projectId/ready'
       path: '/rf/$projectId/ready'
@@ -307,6 +327,7 @@ const rootRouteChildren: RootRouteChildren = {
   RfProjectIdOverviewRoute: RfProjectIdOverviewRoute,
   RfProjectIdPrepareRoute: RfProjectIdPrepareRoute,
   RfProjectIdProfileRoute: RfProjectIdProfileRoute,
+  RfProjectIdProfileReadyRoute: RfProjectIdProfileReadyRoute,
   RfProjectIdReadyRoute: RfProjectIdReadyRoute,
   RfProjectIdIndexRoute: RfProjectIdIndexRoute,
 }
