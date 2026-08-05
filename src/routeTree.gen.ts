@@ -18,6 +18,9 @@ import { Route as EditorProjectIdRouteImport } from './routes/editor.$projectId'
 import { Route as ReadyProjectIdRouteImport } from './routes/ready.$projectId'
 import { Route as RfProjectIdIndexRouteImport } from './routes/rf.$projectId.index'
 import { Route as RfProjectIdConfigRouteImport } from './routes/rf.$projectId.config'
+import { Route as RfProjectIdOverviewRouteImport } from './routes/rf.$projectId.overview'
+import { Route as RfProjectIdPrepareRouteImport } from './routes/rf.$projectId.prepare'
+import { Route as RfProjectIdProfileRouteImport } from './routes/rf.$projectId.profile'
 import { Route as RfProjectIdReadyRouteImport } from './routes/rf.$projectId.ready'
 
 const IndexRoute = IndexRouteImport.update({
@@ -65,6 +68,21 @@ const RfProjectIdConfigRoute = RfProjectIdConfigRouteImport.update({
   path: '/rf/$projectId/config',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RfProjectIdOverviewRoute = RfProjectIdOverviewRouteImport.update({
+  id: '/rf/$projectId/overview',
+  path: '/rf/$projectId/overview',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RfProjectIdPrepareRoute = RfProjectIdPrepareRouteImport.update({
+  id: '/rf/$projectId/prepare',
+  path: '/rf/$projectId/prepare',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RfProjectIdProfileRoute = RfProjectIdProfileRouteImport.update({
+  id: '/rf/$projectId/profile',
+  path: '/rf/$projectId/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RfProjectIdReadyRoute = RfProjectIdReadyRouteImport.update({
   id: '/rf/$projectId/ready',
   path: '/rf/$projectId/ready',
@@ -80,6 +98,9 @@ export interface FileRoutesByFullPath {
   '/editor/$projectId': typeof EditorProjectIdRoute
   '/ready/$projectId': typeof ReadyProjectIdRoute
   '/rf/$projectId/config': typeof RfProjectIdConfigRoute
+  '/rf/$projectId/overview': typeof RfProjectIdOverviewRoute
+  '/rf/$projectId/prepare': typeof RfProjectIdPrepareRoute
+  '/rf/$projectId/profile': typeof RfProjectIdProfileRoute
   '/rf/$projectId/ready': typeof RfProjectIdReadyRoute
   '/rf/$projectId/': typeof RfProjectIdIndexRoute
 }
@@ -92,6 +113,9 @@ export interface FileRoutesByTo {
   '/editor/$projectId': typeof EditorProjectIdRoute
   '/ready/$projectId': typeof ReadyProjectIdRoute
   '/rf/$projectId/config': typeof RfProjectIdConfigRoute
+  '/rf/$projectId/overview': typeof RfProjectIdOverviewRoute
+  '/rf/$projectId/prepare': typeof RfProjectIdPrepareRoute
+  '/rf/$projectId/profile': typeof RfProjectIdProfileRoute
   '/rf/$projectId/ready': typeof RfProjectIdReadyRoute
   '/rf/$projectId': typeof RfProjectIdIndexRoute
 }
@@ -105,6 +129,9 @@ export interface FileRoutesById {
   '/editor/$projectId': typeof EditorProjectIdRoute
   '/ready/$projectId': typeof ReadyProjectIdRoute
   '/rf/$projectId/config': typeof RfProjectIdConfigRoute
+  '/rf/$projectId/overview': typeof RfProjectIdOverviewRoute
+  '/rf/$projectId/prepare': typeof RfProjectIdPrepareRoute
+  '/rf/$projectId/profile': typeof RfProjectIdProfileRoute
   '/rf/$projectId/ready': typeof RfProjectIdReadyRoute
   '/rf/$projectId/': typeof RfProjectIdIndexRoute
 }
@@ -119,6 +146,9 @@ export interface FileRouteTypes {
     | '/editor/$projectId'
     | '/ready/$projectId'
     | '/rf/$projectId/config'
+    | '/rf/$projectId/overview'
+    | '/rf/$projectId/prepare'
+    | '/rf/$projectId/profile'
     | '/rf/$projectId/ready'
     | '/rf/$projectId/'
   fileRoutesByTo: FileRoutesByTo
@@ -131,6 +161,9 @@ export interface FileRouteTypes {
     | '/editor/$projectId'
     | '/ready/$projectId'
     | '/rf/$projectId/config'
+    | '/rf/$projectId/overview'
+    | '/rf/$projectId/prepare'
+    | '/rf/$projectId/profile'
     | '/rf/$projectId/ready'
     | '/rf/$projectId'
   id:
@@ -143,6 +176,9 @@ export interface FileRouteTypes {
     | '/editor/$projectId'
     | '/ready/$projectId'
     | '/rf/$projectId/config'
+    | '/rf/$projectId/overview'
+    | '/rf/$projectId/prepare'
+    | '/rf/$projectId/profile'
     | '/rf/$projectId/ready'
     | '/rf/$projectId/'
   fileRoutesById: FileRoutesById
@@ -156,6 +192,9 @@ export interface RootRouteChildren {
   EditorProjectIdRoute: typeof EditorProjectIdRoute
   ReadyProjectIdRoute: typeof ReadyProjectIdRoute
   RfProjectIdConfigRoute: typeof RfProjectIdConfigRoute
+  RfProjectIdOverviewRoute: typeof RfProjectIdOverviewRoute
+  RfProjectIdPrepareRoute: typeof RfProjectIdPrepareRoute
+  RfProjectIdProfileRoute: typeof RfProjectIdProfileRoute
   RfProjectIdReadyRoute: typeof RfProjectIdReadyRoute
   RfProjectIdIndexRoute: typeof RfProjectIdIndexRoute
 }
@@ -225,6 +264,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RfProjectIdConfigRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/rf/$projectId/overview': {
+      id: '/rf/$projectId/overview'
+      path: '/rf/$projectId/overview'
+      fullPath: '/rf/$projectId/overview'
+      preLoaderRoute: typeof RfProjectIdOverviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rf/$projectId/prepare': {
+      id: '/rf/$projectId/prepare'
+      path: '/rf/$projectId/prepare'
+      fullPath: '/rf/$projectId/prepare'
+      preLoaderRoute: typeof RfProjectIdPrepareRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rf/$projectId/profile': {
+      id: '/rf/$projectId/profile'
+      path: '/rf/$projectId/profile'
+      fullPath: '/rf/$projectId/profile'
+      preLoaderRoute: typeof RfProjectIdProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/rf/$projectId/ready': {
       id: '/rf/$projectId/ready'
       path: '/rf/$projectId/ready'
@@ -244,6 +304,9 @@ const rootRouteChildren: RootRouteChildren = {
   EditorProjectIdRoute: EditorProjectIdRoute,
   ReadyProjectIdRoute: ReadyProjectIdRoute,
   RfProjectIdConfigRoute: RfProjectIdConfigRoute,
+  RfProjectIdOverviewRoute: RfProjectIdOverviewRoute,
+  RfProjectIdPrepareRoute: RfProjectIdPrepareRoute,
+  RfProjectIdProfileRoute: RfProjectIdProfileRoute,
   RfProjectIdReadyRoute: RfProjectIdReadyRoute,
   RfProjectIdIndexRoute: RfProjectIdIndexRoute,
 }
