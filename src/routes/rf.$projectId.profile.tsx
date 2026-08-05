@@ -20,6 +20,7 @@ import {
 import {
   buildRfProfileObject,
   saveRfProfile,
+  useRfProfile,
   validateRfProfile,
   type RfProfileConfig,
 } from "@/lib/rf-profile";
@@ -225,5 +226,3 @@ function RfProfileWizard() {
     </AppShell>
   );
 }
-
-import { useRfProfile } from "@/lib/rf-profile";
