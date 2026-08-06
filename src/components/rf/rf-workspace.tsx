@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   AlertTriangle,
   Antenna,
@@ -100,6 +100,13 @@ export function RfPlanningWorkspace({
   const [tab, setTab] = useState<"warnings" | "recommendations">("warnings");
 
   const bounds = useMemo(() => modelBounds(model), [model]);
+  const fitted = useRef(false);
+  useEffect(() => {
+    if (fitted.current) return;
+    fitted.current = true;
+    const t = setTimeout(() => vp.fit(bounds.w, bounds.h, 50), 30);
+    return () => clearTimeout(t);
+  }, [vp, bounds.w, bounds.h]);
   const layer = activeLayer ? design.layers[activeLayer] : null;
 
   const viewModel: BuildingModel = useMemo(

@@ -80,10 +80,10 @@ function RfProfileReady() {
 
           <div className="mt-8 flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
             <button
-              onClick={() => navigate({ to: "/rf/$projectId/profile", params: { projectId } })}
+              onClick={() => navigate({ to: "/rf/$projectId/simulate", params: { projectId } })}
               className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-soft transition-smooth hover:brightness-110 active:scale-[0.98]"
             >
-              <Radio className="size-4" /> Continue to Link Budget Engine
+              <Radio className="size-4" /> Continue to RF Simulation
             </button>
             <Link
               to="/"
