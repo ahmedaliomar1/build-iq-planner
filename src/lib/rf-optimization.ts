@@ -303,8 +303,8 @@ export interface ValidationItem {
   label: string;
   pass: boolean;
   detail: string;
-  x?: number;
-  y?: number;
+  x?: number | undefined;
+  y?: number | undefined;
 }
 
 export interface ValidationReport {
