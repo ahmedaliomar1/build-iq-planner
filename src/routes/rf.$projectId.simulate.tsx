@@ -166,9 +166,7 @@ function RfSimulate() {
           onActiveLayer={setLayer}
           onSave={save}
           onExport={exportDesign}
-          onContinue={() =>
-            toast.info("Interactive Optimization arrives in the next module — the Initial RF Design is ready as its input.")
-          }
+          onContinue={() => navigate({ to: "/rf/$projectId/optimize", params: { projectId } })}
           saved={Boolean(state.savedAt)}
         />
       </AppShell>
