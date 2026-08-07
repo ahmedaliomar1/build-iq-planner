@@ -97,11 +97,11 @@ export function OptCanvas({
         ...l,
         visible:
           l.id === "walls"
-            ? layerSettings.walls?.visible !== false
+            ? layerSettings['walls']?.visible !== false
             : l.id === "labels"
-              ? layerSettings.rooms?.visible !== false
+              ? layerSettings['rooms']?.visible !== false
               : l.id === "columns"
-                ? layerSettings.materials?.visible !== false
+                ? layerSettings['materials']?.visible !== false
                 : l.visible,
       })),
     }),
@@ -228,7 +228,7 @@ export function OptCanvas({
 
             <Scene model={viewModel} showDimensions={false} />
 
-            {layerSettings.antennas?.visible !== false &&
+            {layerSettings['antennas']?.visible !== false &&
               antennas.map((a) => {
                 const sel = selectedIds.includes(a.id);
                 const ox = sel && drag ? drag.dx : 0;
@@ -240,7 +240,7 @@ export function OptCanvas({
                     onPointerEnter={() => setHover(a)}
                     onPointerLeave={() => setHover(null)}
                     style={{ cursor: "pointer" }}
-                    opacity={layerSettings.antennas?.opacity ?? 1}
+                    opacity={layerSettings['antennas']?.opacity ?? 1}
                   >
                     <circle
                       cx={a.x + ox}
