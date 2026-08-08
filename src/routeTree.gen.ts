@@ -17,6 +17,7 @@ import { Route as TemplatesRouteImport } from './routes/templates'
 import { Route as EditorProjectIdRouteImport } from './routes/editor.$projectId'
 import { Route as ReadyProjectIdRouteImport } from './routes/ready.$projectId'
 import { Route as RfProjectIdIndexRouteImport } from './routes/rf.$projectId.index'
+import { Route as RfProjectIdBomRouteImport } from './routes/rf.$projectId.bom'
 import { Route as RfProjectIdConfigRouteImport } from './routes/rf.$projectId.config'
 import { Route as RfProjectIdOptimizeRouteImport } from './routes/rf.$projectId.optimize'
 import { Route as RfProjectIdOverviewRouteImport } from './routes/rf.$projectId.overview'
@@ -64,6 +65,11 @@ const ReadyProjectIdRoute = ReadyProjectIdRouteImport.update({
 const RfProjectIdIndexRoute = RfProjectIdIndexRouteImport.update({
   id: '/rf/$projectId/',
   path: '/rf/$projectId/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RfProjectIdBomRoute = RfProjectIdBomRouteImport.update({
+  id: '/rf/$projectId/bom',
+  path: '/rf/$projectId/bom',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RfProjectIdConfigRoute = RfProjectIdConfigRouteImport.update({
@@ -115,6 +121,7 @@ export interface FileRoutesByFullPath {
   '/templates': typeof TemplatesRoute
   '/editor/$projectId': typeof EditorProjectIdRoute
   '/ready/$projectId': typeof ReadyProjectIdRoute
+  '/rf/$projectId/bom': typeof RfProjectIdBomRoute
   '/rf/$projectId/config': typeof RfProjectIdConfigRoute
   '/rf/$projectId/optimize': typeof RfProjectIdOptimizeRoute
   '/rf/$projectId/overview': typeof RfProjectIdOverviewRoute
@@ -133,6 +140,7 @@ export interface FileRoutesByTo {
   '/templates': typeof TemplatesRoute
   '/editor/$projectId': typeof EditorProjectIdRoute
   '/ready/$projectId': typeof ReadyProjectIdRoute
+  '/rf/$projectId/bom': typeof RfProjectIdBomRoute
   '/rf/$projectId/config': typeof RfProjectIdConfigRoute
   '/rf/$projectId/optimize': typeof RfProjectIdOptimizeRoute
   '/rf/$projectId/overview': typeof RfProjectIdOverviewRoute
@@ -152,6 +160,7 @@ export interface FileRoutesById {
   '/templates': typeof TemplatesRoute
   '/editor/$projectId': typeof EditorProjectIdRoute
   '/ready/$projectId': typeof ReadyProjectIdRoute
+  '/rf/$projectId/bom': typeof RfProjectIdBomRoute
   '/rf/$projectId/config': typeof RfProjectIdConfigRoute
   '/rf/$projectId/optimize': typeof RfProjectIdOptimizeRoute
   '/rf/$projectId/overview': typeof RfProjectIdOverviewRoute
@@ -172,6 +181,7 @@ export interface FileRouteTypes {
     | '/templates'
     | '/editor/$projectId'
     | '/ready/$projectId'
+    | '/rf/$projectId/bom'
     | '/rf/$projectId/config'
     | '/rf/$projectId/optimize'
     | '/rf/$projectId/overview'
@@ -190,6 +200,7 @@ export interface FileRouteTypes {
     | '/templates'
     | '/editor/$projectId'
     | '/ready/$projectId'
+    | '/rf/$projectId/bom'
     | '/rf/$projectId/config'
     | '/rf/$projectId/optimize'
     | '/rf/$projectId/overview'
@@ -208,6 +219,7 @@ export interface FileRouteTypes {
     | '/templates'
     | '/editor/$projectId'
     | '/ready/$projectId'
+    | '/rf/$projectId/bom'
     | '/rf/$projectId/config'
     | '/rf/$projectId/optimize'
     | '/rf/$projectId/overview'
@@ -227,6 +239,7 @@ export interface RootRouteChildren {
   TemplatesRoute: typeof TemplatesRoute
   EditorProjectIdRoute: typeof EditorProjectIdRoute
   ReadyProjectIdRoute: typeof ReadyProjectIdRoute
+  RfProjectIdBomRoute: typeof RfProjectIdBomRoute
   RfProjectIdConfigRoute: typeof RfProjectIdConfigRoute
   RfProjectIdOptimizeRoute: typeof RfProjectIdOptimizeRoute
   RfProjectIdOverviewRoute: typeof RfProjectIdOverviewRoute
@@ -296,6 +309,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RfProjectIdIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/rf/$projectId/bom': {
+      id: '/rf/$projectId/bom'
+      path: '/rf/$projectId/bom'
+      fullPath: '/rf/$projectId/bom'
+      preLoaderRoute: typeof RfProjectIdBomRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/rf/$projectId/config': {
       id: '/rf/$projectId/config'
       path: '/rf/$projectId/config'
@@ -363,6 +383,7 @@ const rootRouteChildren: RootRouteChildren = {
   TemplatesRoute: TemplatesRoute,
   EditorProjectIdRoute: EditorProjectIdRoute,
   ReadyProjectIdRoute: ReadyProjectIdRoute,
+  RfProjectIdBomRoute: RfProjectIdBomRoute,
   RfProjectIdConfigRoute: RfProjectIdConfigRoute,
   RfProjectIdOptimizeRoute: RfProjectIdOptimizeRoute,
   RfProjectIdOverviewRoute: RfProjectIdOverviewRoute,
@@ -376,13 +397,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

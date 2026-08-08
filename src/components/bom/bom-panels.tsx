@@ -217,12 +217,12 @@ export function CostTable({ items }: { items: BomItem[] }) {
       });
   }, [items, query, cat, sort]);
 
-  const th = (label: string, key: keyof BomItem, align = "left") => (
+  const th = (label: string, key: keyof BomItem) => (
     <th
       onClick={() =>
         setSort((s) => ({ key, dir: s.key === key && s.dir === -1 ? 1 : -1 }))
       }
-      className={`cursor-pointer whitespace-nowrap px-3 py-2 text-${align} text-[10px] font-bold uppercase tracking-wide text-muted-foreground transition-smooth hover:text-foreground`}
+      className="cursor-pointer whitespace-nowrap px-3 py-2 text-left text-[10px] font-bold uppercase tracking-wide text-muted-foreground transition-smooth hover:text-foreground"
     >
       {label}
       {sort.key === key ? (sort.dir === -1 ? " ↓" : " ↑") : ""}

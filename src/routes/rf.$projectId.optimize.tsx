@@ -338,14 +338,13 @@ function RfOptimize() {
               >
                 <FileDown className="size-4" /> Export Snapshot
               </button>
-              <button
-                onClick={() =>
-                  toast.info("Reports & BOM generation arrive in the next module — the Optimized RF Design is their input.")
-                }
+              <Link
+                to="/rf/$projectId/bom"
+                params={{ projectId }}
                 className="rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-soft transition-smooth hover:brightness-110"
               >
-                Continue to Reports
-              </button>
+                Continue to Engineering BOM &amp; Cost Estimation
+              </Link>
             </div>
           </div>
           <pre className="num mt-4 max-h-80 overflow-auto rounded-2xl border border-border bg-card p-4 text-[11px] leading-relaxed">
