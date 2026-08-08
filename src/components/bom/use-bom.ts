@@ -73,13 +73,15 @@ export function useBomGeneration(projectId: string, design: OptimizedRfDesign | 
   const chooseVendor = useCallback(
     (id: string) => {
       const v = vendorById(id);
+      const entry: BomLogEntry = {
+        at: Date.now(),
+        text: `Vendor selected: ${v.name} (${v.availability})`,
+        kind: "ok",
+      };
       saveBomState(projectId, {
         vendor: id,
         status: "running",
-        log: [
-          ...(useBomStateSnapshot(projectId)?.log ?? []),
-          { at: Date.now(), text: `Vendor selected: ${v.name} (${v.availability})`, kind: "ok" },
-        ].slice(-140),
+        log: [...readBomLog(projectId), entry].slice(-140),
       });
     },
     [projectId],
@@ -211,13 +213,14 @@ export function useBomGeneration(projectId: string, design: OptimizedRfDesign | 
 }
 
 /** non-reactive read used only for log appending inside callbacks */
-function useBomStateSnapshot(projectId: string) {
-  if (typeof window === "undefined") return null;
+function readBomLog(projectId: string): BomLogEntry[] {
+  if (typeof window === "undefined") return [];
   try {
     const raw = window.localStorage.getItem("apcp.bom.v1");
-    if (!raw) return null;
-    return (JSON.parse(raw) as Record<string, { log: BomLogEntry[] }>)[projectId] ?? null;
+    if (!raw) return [];
+    const all = JSON.parse(raw) as Record<string, { log?: BomLogEntry[] }>;
+    return all[projectId]?.log ?? [];
   } catch {
-    return null;
+    return [];
   }
 }
