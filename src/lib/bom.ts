@@ -1176,7 +1176,7 @@ export function applyOptimizations(
   if (applied.includes("alt-vendor")) {
     const alt = vendorById(cheapestVendorId);
     out = out.map((i) => ({
-      ...reprice(i, (i.unitPrice / vendorById(i.vendorId ?? "custom").factor) * alt.factor, i.quantity),
+      ...reprice(i, (i.unitPrice / currentVendor.factor) * alt.factor, i.quantity),
       vendor: alt.name,
       availability: alt.availability,
       leadTime: `${alt.leadWeeks} weeks`,
