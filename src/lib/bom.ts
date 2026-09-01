@@ -727,21 +727,43 @@ export function buildEngineeringBom(
   design: OptimizedRfDesign,
   vendor: BomVendor,
   items: BomItem[],
+  extra: { applied?: OptimizationId[]; versionNumber?: number } = {},
 ): EngineeringBom {
+  const applied = extra.applied ?? [];
   const detection = detectEquipment(design);
   const cost = computeCost(items);
-  const laborRows = computeLabor(detection.antennas);
+  const laborRows = computeLabor(detection.antennas).map((r) => ({
+    ...r,
+    total: Math.round(r.total * laborFactor(applied)),
+  }));
   const labor = laborTotal(laborRows);
   const power = computePower(detection);
   const rack = computeRack(detection);
   const cables = computeCables(detection);
+  const finance = financialSummary(cost, labor);
+  const overview = procurementOverview(vendor);
+  const comparison = compareVendors(design, detection);
+  const recommendations = buildCostOptimizations(items, labor, vendor);
   const totalQuantity = Number(items.reduce((s, i) => s + i.quantity, 0).toFixed(1));
+  const pid = design.projectInformation.id;
+  const equipmentList = Object.fromEntries(
+    BOM_CATEGORIES.map((c) => [c.id, items.filter((i) => i.category === c.id)]),
+  ) as Record<BomCategoryId, BomItem[]>;
+
   return {
     objectType: "EngineeringBom",
     timestamp: Date.now(),
-    version: "1.0.0",
+    version: "1.1.0",
+    versionNumber: extra.versionNumber ?? 1,
     projectInformation: design.projectInformation,
-    optimizedRfDesignReference: `${design.projectInformation.id}:optimized-rf-design:v${design.versionNumber}`,
+    references: {
+      digitalBuilding: `${pid}:digital-building`,
+      rfDesignRequirements: `${pid}:rf-design-requirements`,
+      rfProfile: `${pid}:rf-profile`,
+      initialRfDesign: `${pid}:initial-rf-design`,
+      optimizedRfDesign: `${pid}:optimized-rf-design:v${design.versionNumber}`,
+    },
+    optimizedRfDesignReference: `${pid}:optimized-rf-design:v${design.versionNumber}`,
     vendor: {
       id: vendor.id,
       name: vendor.name,
@@ -749,28 +771,63 @@ export function buildEngineeringBom(
       leadTime: vendor.leadWeeks ? `${vendor.leadWeeks} weeks` : "Manual",
       warranty: vendor.warranty,
     },
+    vendorComparison: comparison.map((r) => ({
+      vendorId: r.vendorId,
+      vendor: r.vendor.name,
+      estimatedCost: r.estimatedCost,
+      availability: r.availability,
+      leadTimeDays: r.leadTimeDays,
+      warranty: r.warranty,
+      note: r.note,
+    })),
     detection,
     items,
+    equipmentList,
+    cableList: cables,
+    fiberList: {
+      meters: detection.fiberMeters,
+      terminationBoxes: detection.equipmentRooms,
+      patchCords: detection.cabinets * 4,
+    },
     cost,
+    financialSummary: finance,
     labor: { rows: laborRows, total: labor },
     power,
     rack,
     cables,
+    aiCostOptimization: {
+      applied,
+      totalSaving: recommendations
+        .filter((r) => applied.includes(r.id))
+        .reduce((s, r) => s + r.saving, 0),
+      recommendations,
+    },
     procurementSummary: {
       equipmentItems: items.length,
       totalQuantity,
       estimatedEquipmentCost: cost.equipment + cost.network,
       estimatedLaborCost: labor,
       estimatedProjectCost: Number((cost.subtotal + labor).toFixed(2)),
-      readiness: vendor.id === "custom" ? 80 : 100,
+      grandTotal: finance.grandTotal,
+      readiness: vendor.id === "custom" ? 80 : overview.readiness,
       vendorStatus: vendor.availability,
+      overview,
     },
+    validation: validateProcurement({
+      items,
+      vendorId: vendor.id,
+      labor,
+      power,
+      rack,
+      cables,
+      cost,
+    }),
     pricingMetadata: {
       database: placeholderPricingDatabase.name,
       databaseVersion: placeholderPricingDatabase.version,
       currency: "USD",
       mode: "placeholder",
-      engine: "APCP BOM & Cost Estimation Engine v1.0.0-placeholder",
+      engine: "APCP BOM & Cost Estimation Engine v1.1.0-placeholder",
     },
   };
 }
