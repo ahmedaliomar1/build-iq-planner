@@ -1148,7 +1148,11 @@ export function buildCostOptimizations(
  * Local recalculation service (Module 5 architecture) applied to procurement:
  * only the line items affected by a recommendation are re-priced.
  */
-export function applyOptimizations(items: BomItem[], applied: OptimizationId[]): BomItem[] {
+export function applyOptimizations(
+  items: BomItem[],
+  applied: OptimizationId[],
+  currentVendor: BomVendor,
+): BomItem[] {
   let out = items;
   const reprice = (i: BomItem, unitPrice: number, quantity: number): BomItem => ({
     ...i,
