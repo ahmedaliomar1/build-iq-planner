@@ -666,25 +666,54 @@ export interface EngineeringBom {
   objectType: "EngineeringBom";
   timestamp: number;
   version: string;
+  versionNumber: number;
   projectInformation: OptimizedRfDesign["projectInformation"];
+  references: {
+    digitalBuilding: string;
+    rfDesignRequirements: string;
+    rfProfile: string;
+    initialRfDesign: string;
+    optimizedRfDesign: string;
+  };
   optimizedRfDesignReference: string;
   vendor: { id: string; name: string; availability: string; leadTime: string; warranty: string };
+  vendorComparison: {
+    vendorId: string;
+    vendor: string;
+    estimatedCost: number;
+    availability: string;
+    leadTimeDays: number;
+    warranty: string;
+    note: string;
+  }[];
   detection: EquipmentDetection;
   items: BomItem[];
+  equipmentList: Record<BomCategoryId, BomItem[]>;
+  cableList: CableSummary;
+  fiberList: { meters: number; terminationBoxes: number; patchCords: number };
   cost: CostBreakdown;
+  financialSummary: FinancialSummary;
   labor: { rows: LaborRole[]; total: number };
   power: PowerEstimate;
   rack: RackEstimate;
   cables: CableSummary;
+  aiCostOptimization: {
+    applied: OptimizationId[];
+    totalSaving: number;
+    recommendations: CostOptimization[];
+  };
   procurementSummary: {
     equipmentItems: number;
     totalQuantity: number;
     estimatedEquipmentCost: number;
     estimatedLaborCost: number;
     estimatedProjectCost: number;
+    grandTotal: number;
     readiness: number;
     vendorStatus: string;
+    overview: ProcurementOverview;
   };
+  validation: { checks: BomCheck[]; passed: boolean };
   pricingMetadata: {
     database: string;
     databaseVersion: string;
