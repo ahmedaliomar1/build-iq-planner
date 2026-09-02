@@ -3,8 +3,11 @@ import type { OptimizedRfDesign } from "@/lib/rf-optimization";
 import {
   BOM_STAGES,
   TOTAL_BOM_TASKS,
+  applyOptimizations,
   buildBomItems,
+  buildCostOptimizations,
   buildEngineeringBom,
+  compareVendors,
   computeCables,
   computeCost,
   computeLabor,
@@ -12,11 +15,17 @@ import {
   computeRack,
   detectEquipment,
   estimatedStageMs,
+  laborFactor,
   laborTotal,
+  money,
+  procurementOverview,
   saveBomState,
   useBomState,
+  validateProcurement,
   vendorById,
   type BomLogEntry,
+  type BomVersionRecord,
+  type OptimizationId,
 } from "@/lib/bom";
 
 /**
