@@ -854,6 +854,12 @@ export interface BomState {
   taskIndex: number;
   vendor: string | null;
   items: BomItem[];
+  /** items exactly as generated before any AI cost optimization */
+  baseItems: BomItem[];
+  applied: OptimizationId[];
+  undone: OptimizationId[];
+  versions: BomVersionRecord[];
+  savedVersion: number;
   startedAt: number | null;
   finishedAt: number | null;
   savedAt: number | null;
@@ -867,6 +873,11 @@ export const emptyBomState = (): BomState => ({
   taskIndex: 0,
   vendor: null,
   items: [],
+  baseItems: [],
+  applied: [],
+  undone: [],
+  versions: [],
+  savedVersion: 0,
   startedAt: null,
   finishedAt: null,
   savedAt: null,
