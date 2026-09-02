@@ -70,6 +70,8 @@ export function useBomGeneration(projectId: string, design: OptimizedRfDesign | 
       stageIndex: 0,
       taskIndex: 0,
       items: [],
+      applied: [],
+      undone: [],
       startedAt: Date.now(),
       finishedAt: null,
       log: [
