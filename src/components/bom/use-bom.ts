@@ -186,16 +186,65 @@ export function useBomGeneration(projectId: string, design: OptimizedRfDesign | 
     };
   }, [state, design, detection, vendor, projectId, pushLog]);
 
+  /* ---------------- Part 2: optimized items & procurement ---------------- */
+
+  /** effective BOM = generated items re-priced by the applied recommendations */
+  const items = useMemo(
+    () => (state.applied.length ? applyOptimizations(state.items, state.applied, vendor) : state.items),
+    [state.items, state.applied, vendor],
+  );
+
+  const laborRows = useMemo(
+    () =>
+      detection
+        ? computeLabor(detection.antennas).map((r) => ({
+            ...r,
+            total: Math.round(r.total * laborFactor(state.applied)),
+          }))
+        : [],
+    [detection, state.applied],
+  );
+  const labor = useMemo(() => laborTotal(laborRows), [laborRows]);
+
+  const comparison = useMemo(
+    () => (design && detection ? compareVendors(design, detection) : []),
+    [design, detection],
+  );
+
+  const overview = useMemo(() => procurementOverview(vendor), [vendor]);
+
+  const optimizations = useMemo(
+    () => buildCostOptimizations(state.items, laborTotal(computeLabor(detection?.antennas ?? 0)), vendor),
+    [state.items, detection, vendor],
+  );
+
+  const validation = useMemo(() => {
+    if (!detection) return { checks: [], passed: false };
+    return validateProcurement({
+      items,
+      vendorId: state.vendor,
+      labor,
+      power: computePower(detection),
+      rack: computeRack(detection),
+      cables: computeCables(detection),
+      cost: computeCost(items),
+    });
+  }, [items, detection, labor, state.vendor]);
+
   const bom = useMemo(
-    () => (design && state.status === "done" && state.items.length ? buildEngineeringBom(design, vendor, state.items) : null),
-    [design, state.status, state.items, vendor],
+    () =>
+      design && state.status === "done" && items.length
+        ? buildEngineeringBom(design, vendor, items, {
+            applied: state.applied,
+            versionNumber: Math.max(1, state.savedVersion || 1),
+          })
+        : null,
+    [design, state.status, items, vendor, state.applied, state.savedVersion],
   );
 
   const preview = useMemo(() => {
     if (!detection) return null;
-    const items = state.items;
     const cost = computeCost(items);
-    const labor = laborTotal(computeLabor(detection.antennas));
     return {
       detection,
       items,
@@ -206,7 +255,77 @@ export function useBomGeneration(projectId: string, design: OptimizedRfDesign | 
       cables: computeCables(detection),
       projectCost: cost.subtotal + labor,
     };
-  }, [detection, state.items]);
+  }, [detection, items, labor]);
+
+  /* ---------------- Part 2 actions ---------------- */
+
+  const applyOptimization = useCallback(
+    (id: OptimizationId) => {
+      const current = readBomState(projectId);
+      if (current.applied.includes(id)) return;
+      const rec = buildCostOptimizations(current.items, labor, vendor).find((r) => r.id === id);
+      saveBomState(projectId, {
+        applied: [...current.applied, id],
+        undone: [],
+        log: [
+          ...current.log,
+          {
+            at: Date.now(),
+            text: `AI cost optimization applied: ${rec?.title ?? id} — saving ${money(rec?.saving ?? 0)}`,
+            kind: "calc" as const,
+          },
+        ].slice(-140),
+      });
+    },
+    [projectId, labor, vendor],
+  );
+
+  const undoOptimization = useCallback(() => {
+    const current = readBomState(projectId);
+    if (!current.applied.length) return;
+    const last = current.applied[current.applied.length - 1]!;
+    saveBomState(projectId, {
+      applied: current.applied.slice(0, -1),
+      undone: [...current.undone, last],
+    });
+  }, [projectId]);
+
+  const redoOptimization = useCallback(() => {
+    const current = readBomState(projectId);
+    if (!current.undone.length) return;
+    const last = current.undone[current.undone.length - 1]!;
+    saveBomState(projectId, {
+      applied: [...current.applied, last],
+      undone: current.undone.slice(0, -1),
+    });
+  }, [projectId]);
+
+  const saveVersion = useCallback(
+    (grandTotal: number, label = "Approved Engineering BOM") => {
+      const current = readBomState(projectId);
+      const version = (current.savedVersion || 0) + 1;
+      const record: BomVersionRecord = {
+        version,
+        at: Date.now(),
+        vendor: vendorById(current.vendor).name,
+        items: items.length,
+        grandTotal,
+        optimizations: current.applied,
+        label,
+      };
+      saveBomState(projectId, {
+        savedAt: Date.now(),
+        savedVersion: version,
+        versions: [record, ...current.versions].slice(0, 20),
+        log: [
+          ...current.log,
+          { at: Date.now(), text: `Engineering BOM saved — version ${version}`, kind: "ok" as const },
+        ].slice(-140),
+      });
+      return record;
+    },
+    [projectId, items.length],
+  );
 
   return {
     state,
@@ -220,7 +339,40 @@ export function useBomGeneration(projectId: string, design: OptimizedRfDesign | 
     chooseVendor,
     bom,
     preview,
+    items,
+    laborRows,
+    labor,
+    comparison,
+    overview,
+    optimizations,
+    validation,
+    applyOptimization,
+    undoOptimization,
+    redoOptimization,
+    saveVersion,
   };
+}
+
+/** non-reactive read of the persisted BOM state for use inside callbacks */
+function readBomState(projectId: string) {
+  const empty = {
+    items: [] as ReturnType<typeof buildBomItems>,
+    applied: [] as OptimizationId[],
+    undone: [] as OptimizationId[],
+    versions: [] as BomVersionRecord[],
+    savedVersion: 0,
+    vendor: null as string | null,
+    log: [] as BomLogEntry[],
+  };
+  if (typeof window === "undefined") return empty;
+  try {
+    const raw = window.localStorage.getItem("apcp.bom.v1");
+    if (!raw) return empty;
+    const all = JSON.parse(raw) as Record<string, Partial<typeof empty>>;
+    return { ...empty, ...(all[projectId] ?? {}) };
+  } catch {
+    return empty;
+  }
 }
 
 /** non-reactive read used only for log appending inside callbacks */
