@@ -255,12 +255,76 @@ function BomRoute() {
           <CablePanel cables={bom.cables} />
         </div>
 
+        {/* Step 10 */}
+        <VendorComparison
+          rows={gen.comparison}
+          selected={state.vendor}
+          onSelect={(id) => gen.chooseVendor(id)}
+        />
+
+        {/* Step 11 */}
+        <ProcurementOverviewPanel overview={gen.overview} />
+
+        {/* Step 12 */}
+        <AiCostOptimization
+          options={gen.optimizations}
+          applied={state.applied}
+          canUndo={state.applied.length > 0}
+          canRedo={state.undone.length > 0}
+          onApply={gen.applyOptimization}
+          onUndo={gen.undoOptimization}
+          onRedo={gen.redoOptimization}
+        />
+
+        <CostSummary finance={bom.financialSummary} />
+        <BomViewer items={bom.items} />
+        <ProcurementValidation
+          checks={gen.validation.checks}
+          passed={gen.validation.passed}
+        />
+        <BomVersions versions={state.versions} />
+
+        <div className="flex flex-wrap items-center gap-3 rounded-2xl border border-border bg-card p-4 shadow-soft">
+          <div className="mr-auto">
+            <h3 className="text-sm font-bold tracking-tight">Save Engineering BOM</h3>
+            <p className="text-[11px] text-muted-foreground">
+              {state.savedVersion
+                ? `Last saved version ${state.savedVersion} · grand total ${money(
+                    bom.financialSummary.grandTotal,
+                  )}`
+                : "Approve the procurement package to unlock the final reports module."}
+            </p>
+          </div>
+          <button
+            onClick={() => {
+              if (!gen.validation.passed) {
+                toast.error("Resolve the failed engineering checks first");
+                return;
+              }
+              const rec = gen.saveVersion(bom.financialSummary.grandTotal);
+              toast.success(`Engineering BOM saved — version ${rec.version}`);
+            }}
+            disabled={!gen.validation.passed}
+            className="rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-soft transition-smooth hover:brightness-110 disabled:opacity-40"
+          >
+            Save Engineering BOM
+          </button>
+          <button
+            disabled={!state.savedVersion}
+            onClick={() => toast.info("Final Reports (Module 7) is not available yet")}
+            className="inline-flex items-center gap-2 rounded-xl border border-border px-5 py-2.5 text-sm font-semibold transition-smooth hover:bg-accent disabled:opacity-40"
+          >
+            Continue to Final Reports <ArrowRight className="size-4" />
+          </button>
+        </div>
+
         <div className="rounded-2xl border border-border bg-card p-4 shadow-soft">
           <h3 className="text-sm font-bold tracking-tight">Engineering BOM Object</h3>
           <pre className="num mt-3 max-h-80 overflow-auto rounded-xl border border-border bg-background p-3 text-[11px] leading-relaxed">
             {JSON.stringify(bom, (k, v) => (k === "items" ? `[${bom.items.length} BOM line items]` : v), 2)}
           </pre>
         </div>
+
       </div>
     </AppShell>
   );
