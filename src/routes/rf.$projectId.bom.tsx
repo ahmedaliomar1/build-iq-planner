@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowLeft, CheckCircle2, Download, FileDown, PackageSearch } from "lucide-react";
+import { ArrowLeft, ArrowRight, CheckCircle2, Download, FileDown, PackageSearch } from "lucide-react";
 import { toast } from "sonner";
 import { AppShell } from "@/components/app-shell";
 import {
@@ -8,6 +8,15 @@ import {
   ProcurementDashboard,
   VendorSelection,
 } from "@/components/bom/bom-progress";
+import {
+  AiCostOptimization,
+  BomVersions,
+  BomViewer,
+  CostSummary,
+  ProcurementOverviewPanel,
+  ProcurementValidation,
+  VendorComparison,
+} from "@/components/bom/bom-part2";
 import {
   CablePanel,
   CostBreakdownCards,
