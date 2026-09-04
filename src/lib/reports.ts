@@ -528,8 +528,8 @@ export function buildChapter(id: ChapterId, ctx: ReportContext): ReportChapter {
           rows: [
             ["Mounting kits", num(optimized.optimizedAntennaLayout.length)],
             ["Ethernet (Cat6)", `${bom.cables.cat6} m`],
-            ["Fiber", `${bom.fiberList.meters} m`],
-            ["Racks", num(bom.rack.racks)],
+            ["Fiber", `${bom.cables.fiber} m`],
+            ["Cabinets", num(bom.rack.cabinets)],
           ],
         },
         {
