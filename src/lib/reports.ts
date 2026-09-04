@@ -14,7 +14,7 @@ import type { RfConfig } from "./rf-config";
 import type { RfProfileConfig } from "./rf-profile";
 import type { InitialRfDesign, RfLayerId } from "./rf-simulation";
 import type { OptimizedRfDesign } from "./rf-optimization";
-import { money, money2, categoryMeta, type EngineeringBom } from "./bom";
+import { money, money2, categoryMeta, TAX_RATE, CONTINGENCY_RATE, type EngineeringBom } from "./bom";
 
 /* -------------------- workflow stages -------------------- */
 
@@ -166,7 +166,7 @@ export const CHAPTER_LABELS: Record<ChapterId, string> = {
 };
 
 function techLabel(ctx: ReportContext) {
-  return ctx.optimized.projectInformation.technology || (ctx.config.tech === "5g" ? "Private 5G" : "Private LTE");
+  return ctx.optimized.projectInformation.technology || (ctx.config.technology === "5g" ? "Private 5G" : "Private LTE");
 }
 
 export function buildChapter(id: ChapterId, ctx: ReportContext): ReportChapter {
@@ -285,7 +285,7 @@ export function buildChapter(id: ChapterId, ctx: ReportContext): ReportChapter {
             ["Rooms", num(rooms)],
             ["Walls", num(walls)],
             ["Columns", num(model.objects.filter((o) => o.kind === "column").length)],
-            ["Openings", num(model.objects.filter((o) => o.kind === "opening").length)],
+            ["Openings", num(model.objects.filter((o) => o.kind === "door" || o.kind === "window").length)],
             ["Scale", `${model.scale} px/m`],
           ],
         },
@@ -309,16 +309,16 @@ export function buildChapter(id: ChapterId, ctx: ReportContext): ReportChapter {
             ["Deployment purpose", config.purpose || "—"],
             ["Services", config.services.join(", ") || "—"],
             ["Coverage vs cost", `${config.coverageBias}/100`],
-            ["Capacity priority", config.capacityPriority || "—"],
+            ["Capacity priority", config.capacity ?? "—"],
             ["Preferred vendor", bom.vendor.name],
           ],
         },
         {
           heading: "Critical & Restricted Areas",
           rows: [
-            ["Critical areas", num(Object.keys(config.priorities ?? {}).length)],
-            ["Restricted zones", num(config.restrictedAreas?.length ?? 0)],
-            ["Design goals", (config.designGoals ?? []).join(", ") || "—"],
+            ["Critical areas", num(Object.keys(config.roomPriorities ?? {}).length)],
+            ["Restricted zones", num(config.restricted?.length ?? 0)],
+            ["Design goals", (config.goals ?? []).join(", ") || "—"],
           ],
         },
       ]);
@@ -329,11 +329,11 @@ export function buildChapter(id: ChapterId, ctx: ReportContext): ReportChapter {
           heading: "Frequency Profile",
           rows: [
             ["Band", profile.band ?? "—"],
-            ["Channel bandwidth", profile.bandwidth ? `${profile.bandwidth} MHz` : "—"],
+            ["Channel bandwidth", profile.bandwidth && profile.bandwidth !== "auto" ? `${profile.bandwidth} MHz` : "Auto"],
             ["Antenna category", profile.antennaCategory ?? "—"],
-            ["Propagation environment", profile.environment ?? "—"],
-            ["Ceiling height", profile.ceilingHeight ? `${profile.ceilingHeight} m` : "—"],
-            ["Floors", num(profile.floors ?? 1)],
+            ["Propagation environment", profile.propagation ?? "—"],
+            ["Ceiling height", `${config.ceiling.height} m`],
+            ["Floors", num(profile.floors.length)],
           ],
         },
         {
@@ -405,7 +405,7 @@ export function buildChapter(id: ChapterId, ctx: ReportContext): ReportChapter {
           heading: "Engineering Validation",
           table: {
             head: ["Check", "Status", "Detail"],
-            rows: optimized.validationReport.items.map((i) => [i.label, i.passed ? "Pass" : "Review", i.detail]),
+            rows: optimized.validationReport.items.map((i) => [i.label, i.pass ? "Pass" : "Review", i.detail]),
           },
         },
         {
@@ -437,18 +437,20 @@ export function buildChapter(id: ChapterId, ctx: ReportContext): ReportChapter {
         {
           heading: "Cable Summary",
           rows: [
-            ["Ethernet", `${bom.cables.ethernetMeters} m`],
-            ["Fiber", `${bom.fiberList.meters} m`],
-            ["Power cable", `${bom.cables.powerMeters} m`],
-            ["Trays / conduit", `${bom.cables.trayMeters} m`],
+            ["Ethernet (Cat6)", `${bom.cables.cat6} m`],
+            ["Fiber", `${bom.cables.fiber} m`],
+            ["Power cable", `${bom.cables.power} m`],
+            ["Ground cable", `${bom.cables.ground} m`],
+            ["Cabling complexity", bom.cables.complexity],
           ],
         },
         {
           heading: "Rack Information",
           rows: [
-            ["Racks", num(bom.rack.racks)],
-            ["Used units", `${bom.rack.usedUnits} U`],
-            ["Spare units", `${bom.rack.spareUnits} U`],
+            ["Cabinets", num(bom.rack.cabinets)],
+            ["Used units", `${bom.rack.used} U`],
+            ["Spare units", `${bom.rack.remaining} U`],
+            ["Utilization", `${bom.rack.utilization}%`],
           ],
         },
       ]);
@@ -467,8 +469,8 @@ export function buildChapter(id: ChapterId, ctx: ReportContext): ReportChapter {
               ["Accessories", money2(bom.cost.accessories)],
               ["Installation labor", money2(bom.labor.total)],
               ["Subtotal", money2(fin.subtotal)],
-              [`Tax (${(fin.taxRate * 100).toFixed(0)}%)`, money2(fin.tax)],
-              [`Contingency (${(fin.contingencyRate * 100).toFixed(0)}%)`, money2(fin.contingency)],
+              [`Tax (${(TAX_RATE * 100).toFixed(0)}%)`, money2(fin.tax)],
+              [`Contingency (${(CONTINGENCY_RATE * 100).toFixed(0)}%)`, money2(fin.contingency)],
               ["Grand total", money2(fin.grandTotal)],
             ],
           },
@@ -525,7 +527,7 @@ export function buildChapter(id: ChapterId, ctx: ReportContext): ReportChapter {
           heading: "Required Materials",
           rows: [
             ["Mounting kits", num(optimized.optimizedAntennaLayout.length)],
-            ["Ethernet", `${bom.cables.ethernetMeters} m`],
+            ["Ethernet (Cat6)", `${bom.cables.cat6} m`],
             ["Fiber", `${bom.fiberList.meters} m`],
             ["Racks", num(bom.rack.racks)],
           ],
