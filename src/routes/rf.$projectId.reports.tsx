@@ -82,13 +82,13 @@ function ReportsRoute() {
     if (!project || !initial || !optimized || !bom) return null;
     return {
       project,
-      config: cfg.config,
-      profile: profile.profile,
+      config: cfg,
+      profile,
       initial,
       optimized,
       bom,
     };
-  }, [project, cfg.config, profile.profile, initial, optimized, bom]);
+  }, [project, cfg, profile, initial, optimized, bom]);
 
   const gen = useReportGeneration(projectId, ctx);
   const [previewId, setPreviewId] = useState<ReportId | null>(null);
@@ -124,7 +124,7 @@ function ReportsRoute() {
         <ReportsStartScreen
           project={project.name}
           technology={ctx.initial.projectInformation.technology}
-          deployment={ctx.config.deploymentPurpose || "Enterprise coverage"}
+          deployment={ctx.config.purpose ?? "Enterprise coverage"}
           coverage={ctx.optimized.kpis.coverage}
           capacity={ctx.optimized.kpis.capacity}
           bomStatus={`${ctx.bom.items.length} line items`}
