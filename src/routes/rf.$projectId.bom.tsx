@@ -318,13 +318,22 @@ function BomRoute() {
           >
             Save Engineering BOM
           </button>
-          <button
-            disabled={!state.savedVersion}
-            onClick={() => toast.info("Final Reports (Module 7) is not available yet")}
-            className="inline-flex items-center gap-2 rounded-xl border border-border px-5 py-2.5 text-sm font-semibold transition-smooth hover:bg-accent disabled:opacity-40"
-          >
-            Continue to Final Reports <ArrowRight className="size-4" />
-          </button>
+          {state.savedVersion ? (
+            <Link
+              to="/rf/$projectId/reports"
+              params={{ projectId }}
+              className="inline-flex items-center gap-2 rounded-xl border border-border px-5 py-2.5 text-sm font-semibold transition-smooth hover:bg-accent"
+            >
+              Continue to Final Reports <ArrowRight className="size-4" />
+            </Link>
+          ) : (
+            <button
+              disabled
+              className="inline-flex items-center gap-2 rounded-xl border border-border px-5 py-2.5 text-sm font-semibold opacity-40"
+            >
+              Continue to Final Reports <ArrowRight className="size-4" />
+            </button>
+          )}
         </div>
 
         <div className="rounded-2xl border border-border bg-card p-4 shadow-soft">
