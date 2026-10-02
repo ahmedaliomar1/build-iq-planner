@@ -229,8 +229,8 @@ export function validatePackage(
     ok(
       "initial",
       "Initial RF Design",
-      ctx.initial.antennaLayout.length > 0,
-      `${ctx.initial.antennaLayout.length} simulated antennas`,
+      ctx.initial.selectedAntennaLayout.length > 0,
+      `${ctx.initial.selectedAntennaLayout.length} simulated antennas`,
       "Run the RF simulation engine again.",
     ),
     ok(
