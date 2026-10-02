@@ -222,8 +222,8 @@ export function validatePackage(
     ok(
       "profile",
       "RF Profile",
-      ctx.profile.bands.length > 0,
-      `${ctx.profile.bands.length} frequency bands configured`,
+      Boolean(ctx.profile.band),
+      `Band ${ctx.profile.band ?? "—"} configured`,
       "Complete the RF Parameter Configuration wizard.",
     ),
     ok(
