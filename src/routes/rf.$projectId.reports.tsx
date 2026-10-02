@@ -228,11 +228,20 @@ function ReportsRoute() {
           }}
         />
 
-        <div className="rounded-2xl border border-border bg-card p-4 shadow-soft">
-          <h3 className="text-sm font-bold tracking-tight">Next — Export Center</h3>
-          <p className="mt-1 text-xs text-muted-foreground">
-            Package generation, ZIP builder and the project archive arrive in Module 7 Part 2.
-          </p>
+        <div className="flex items-center gap-3 rounded-2xl border border-border bg-card p-4 shadow-soft">
+          <div>
+            <h3 className="text-sm font-bold tracking-tight">Next — Export Center</h3>
+            <p className="mt-1 text-xs text-muted-foreground">
+              Build the ZIP package and save the Final RF Design Package.
+            </p>
+          </div>
+          <Link
+            to="/rf/$projectId/export"
+            params={{ projectId }}
+            className="ml-auto rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
+          >
+            Open Export Center
+          </Link>
         </div>
       </div>
 

@@ -19,6 +19,7 @@ import { Route as ReadyProjectIdRouteImport } from './routes/ready.$projectId'
 import { Route as RfProjectIdIndexRouteImport } from './routes/rf.$projectId.index'
 import { Route as RfProjectIdBomRouteImport } from './routes/rf.$projectId.bom'
 import { Route as RfProjectIdConfigRouteImport } from './routes/rf.$projectId.config'
+import { Route as RfProjectIdExportRouteImport } from './routes/rf.$projectId.export'
 import { Route as RfProjectIdOptimizeRouteImport } from './routes/rf.$projectId.optimize'
 import { Route as RfProjectIdOverviewRouteImport } from './routes/rf.$projectId.overview'
 import { Route as RfProjectIdPrepareRouteImport } from './routes/rf.$projectId.prepare'
@@ -78,6 +79,11 @@ const RfProjectIdConfigRoute = RfProjectIdConfigRouteImport.update({
   path: '/rf/$projectId/config',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RfProjectIdExportRoute = RfProjectIdExportRouteImport.update({
+  id: '/rf/$projectId/export',
+  path: '/rf/$projectId/export',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RfProjectIdOptimizeRoute = RfProjectIdOptimizeRouteImport.update({
   id: '/rf/$projectId/optimize',
   path: '/rf/$projectId/optimize',
@@ -129,6 +135,7 @@ export interface FileRoutesByFullPath {
   '/ready/$projectId': typeof ReadyProjectIdRoute
   '/rf/$projectId/bom': typeof RfProjectIdBomRoute
   '/rf/$projectId/config': typeof RfProjectIdConfigRoute
+  '/rf/$projectId/export': typeof RfProjectIdExportRoute
   '/rf/$projectId/optimize': typeof RfProjectIdOptimizeRoute
   '/rf/$projectId/overview': typeof RfProjectIdOverviewRoute
   '/rf/$projectId/prepare': typeof RfProjectIdPrepareRoute
@@ -149,6 +156,7 @@ export interface FileRoutesByTo {
   '/ready/$projectId': typeof ReadyProjectIdRoute
   '/rf/$projectId/bom': typeof RfProjectIdBomRoute
   '/rf/$projectId/config': typeof RfProjectIdConfigRoute
+  '/rf/$projectId/export': typeof RfProjectIdExportRoute
   '/rf/$projectId/optimize': typeof RfProjectIdOptimizeRoute
   '/rf/$projectId/overview': typeof RfProjectIdOverviewRoute
   '/rf/$projectId/prepare': typeof RfProjectIdPrepareRoute
@@ -170,6 +178,7 @@ export interface FileRoutesById {
   '/ready/$projectId': typeof ReadyProjectIdRoute
   '/rf/$projectId/bom': typeof RfProjectIdBomRoute
   '/rf/$projectId/config': typeof RfProjectIdConfigRoute
+  '/rf/$projectId/export': typeof RfProjectIdExportRoute
   '/rf/$projectId/optimize': typeof RfProjectIdOptimizeRoute
   '/rf/$projectId/overview': typeof RfProjectIdOverviewRoute
   '/rf/$projectId/prepare': typeof RfProjectIdPrepareRoute
@@ -192,6 +201,7 @@ export interface FileRouteTypes {
     | '/ready/$projectId'
     | '/rf/$projectId/bom'
     | '/rf/$projectId/config'
+    | '/rf/$projectId/export'
     | '/rf/$projectId/optimize'
     | '/rf/$projectId/overview'
     | '/rf/$projectId/prepare'
@@ -212,6 +222,7 @@ export interface FileRouteTypes {
     | '/ready/$projectId'
     | '/rf/$projectId/bom'
     | '/rf/$projectId/config'
+    | '/rf/$projectId/export'
     | '/rf/$projectId/optimize'
     | '/rf/$projectId/overview'
     | '/rf/$projectId/prepare'
@@ -232,6 +243,7 @@ export interface FileRouteTypes {
     | '/ready/$projectId'
     | '/rf/$projectId/bom'
     | '/rf/$projectId/config'
+    | '/rf/$projectId/export'
     | '/rf/$projectId/optimize'
     | '/rf/$projectId/overview'
     | '/rf/$projectId/prepare'
@@ -253,6 +265,7 @@ export interface RootRouteChildren {
   ReadyProjectIdRoute: typeof ReadyProjectIdRoute
   RfProjectIdBomRoute: typeof RfProjectIdBomRoute
   RfProjectIdConfigRoute: typeof RfProjectIdConfigRoute
+  RfProjectIdExportRoute: typeof RfProjectIdExportRoute
   RfProjectIdOptimizeRoute: typeof RfProjectIdOptimizeRoute
   RfProjectIdOverviewRoute: typeof RfProjectIdOverviewRoute
   RfProjectIdPrepareRoute: typeof RfProjectIdPrepareRoute
@@ -336,6 +349,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RfProjectIdConfigRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/rf/$projectId/export': {
+      id: '/rf/$projectId/export'
+      path: '/rf/$projectId/export'
+      fullPath: '/rf/$projectId/export'
+      preLoaderRoute: typeof RfProjectIdExportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/rf/$projectId/optimize': {
       id: '/rf/$projectId/optimize'
       path: '/rf/$projectId/optimize'
@@ -405,6 +425,7 @@ const rootRouteChildren: RootRouteChildren = {
   ReadyProjectIdRoute: ReadyProjectIdRoute,
   RfProjectIdBomRoute: RfProjectIdBomRoute,
   RfProjectIdConfigRoute: RfProjectIdConfigRoute,
+  RfProjectIdExportRoute: RfProjectIdExportRoute,
   RfProjectIdOptimizeRoute: RfProjectIdOptimizeRoute,
   RfProjectIdOverviewRoute: RfProjectIdOverviewRoute,
   RfProjectIdPrepareRoute: RfProjectIdPrepareRoute,

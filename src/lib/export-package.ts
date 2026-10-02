@@ -222,15 +222,15 @@ export function validatePackage(
     ok(
       "profile",
       "RF Profile",
-      ctx.profile.bands.length > 0,
-      `${ctx.profile.bands.length} frequency bands configured`,
+      Boolean(ctx.profile.band),
+      `Band ${ctx.profile.band ?? "—"} configured`,
       "Complete the RF Parameter Configuration wizard.",
     ),
     ok(
       "initial",
       "Initial RF Design",
-      ctx.initial.antennaLayout.length > 0,
-      `${ctx.initial.antennaLayout.length} simulated antennas`,
+      ctx.initial.selectedAntennaLayout.length > 0,
+      `${ctx.initial.selectedAntennaLayout.length} simulated antennas`,
       "Run the RF simulation engine again.",
     ),
     ok(
