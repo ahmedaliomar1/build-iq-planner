@@ -13,7 +13,7 @@ export const simulationService = {
   async getSimulationStatus(projectId: string): Promise<SimulationResponse> {
     if (!USE_MOCK) return api.get(`/projects/${projectId}/simulation/status`);
     const s = readMock<SimState>("apcp.rfsim.v1", projectId);
-    const status = s?.status === "done" ? "success" : s?.status === "running" ? "processing" : "idle";
+    const status = s?.status === "complete" ? "success" : s?.status === "running" ? "processing" : "idle";
     return { projectId, status, progress: status === "success" ? 100 : 0 };
   },
   async getInitialRFDesign(projectId: string): Promise<InitialRFDesign | null> {

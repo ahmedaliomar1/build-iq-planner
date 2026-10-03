@@ -30,9 +30,4 @@ export const rfService = {
     saveRfProfile(projectId, data);
     return this.getRFProfile(projectId);
   },
-  async validateRFProfile(projectId: string, ...args: Parameters<typeof validateRfProfile> extends [unknown, ...infer R] ? R : never) {
-    if (!USE_MOCK) return api.post<ReturnType<typeof validateRfProfile>>(`/projects/${projectId}/rf/profile/validate`);
-    const profile = await this.getRFProfile(projectId);
-    return validateRfProfile(profile, ...args);
-  },
 };
