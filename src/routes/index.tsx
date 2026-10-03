@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Building2, Clock, Plus, Sparkles, Trash2 } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
 import { deleteProject, useProjects } from "@/lib/project-store";
+import { workflowStatus } from "@/services/projectService";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -94,7 +95,7 @@ function Dashboard() {
                       <span
                         className={`rounded-full px-2.5 py-1 text-[11px] font-semibold ${s.cls}`}
                       >
-                        {s.label}
+                        {workflowStatus(p.id, p.status) === "Draft" ? s.label : workflowStatus(p.id, p.status)}
                       </span>
                     </div>
                     <h3 className="mt-4 truncate font-semibold">{p.name}</h3>
