@@ -65,12 +65,12 @@ export function workflowStatus(projectId: string, base: Project["status"]): Proj
       return false;
     }
   };
-  if (has("apcp.export.v1", (v) => v.status === "done")) return "Completed";
-  if (has("apcp.reports.v1", (v) => v.status === "done")) return "Reports Ready";
-  if (has("apcp.bom.v1", (v) => v.status === "done")) return "BOM Ready";
-  if (has("apcp.rfopt.v1", (v) => Array.isArray(v.antennas) && v.antennas.length > 0)) return "Optimization";
-  if (has("apcp.rfsim.v1", (v) => v.status === "done")) return "Simulation Completed";
-  if (has("apcp.rfsim.v1", (v) => v.status === "running")) return "Simulation Running";
+  if (has("apcp.export.v1", (v) => v["status"] === "done")) return "Completed";
+  if (has("apcp.reports.v1", (v) => v["status"] === "done")) return "Reports Ready";
+  if (has("apcp.bom.v1", (v) => v["status"] === "done")) return "BOM Ready";
+  if (has("apcp.rfopt.v1", (v) => Array.isArray(v["antennas"]) && v["antennas"].length > 0)) return "Optimization";
+  if (has("apcp.rfsim.v1", (v) => v["status"] === "done")) return "Simulation Completed";
+  if (has("apcp.rfsim.v1", (v) => v["status"] === "running")) return "Simulation Running";
   if (has("apcp.rfprofile.v1", () => true)) return "RF Profile Ready";
   if (has("apcp.rfconfig.v1", () => true)) return "RF Configuration";
   if (base === "ready") return "Building Validated";

@@ -41,6 +41,7 @@ export const optimizationService = {
   async saveOptimizedDesign(projectId: string, patch: Partial<OptState>) {
     if (!USE_MOCK) return api.put(`/projects/${projectId}/optimization`, patch);
     saveOptState(projectId, patch);
+    return null;
   },
   async getDesignHistory(projectId: string) {
     if (!USE_MOCK) return api.get(`/projects/${projectId}/optimization/history`);
@@ -50,5 +51,6 @@ export const optimizationService = {
     if (!USE_MOCK) return api.post(`/projects/${projectId}/optimization/rollback`, { versionIndex });
     const v = read(projectId)?.versions?.[versionIndex];
     if (v) await write(projectId, v.antennas);
+    return null;
   },
 };
