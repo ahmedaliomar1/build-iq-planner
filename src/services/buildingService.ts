@@ -30,7 +30,7 @@ export const buildingService = {
   async validateDigitalBuilding(projectId: string): Promise<{ valid: boolean; issues: string[] }> {
     if (!USE_MOCK) return api.post(`/projects/${projectId}/building/validate`);
     const model = await this.getDigitalBuilding(projectId);
-    const walls = model?.objects.filter((o) => o.type === "wall").length ?? 0;
+    const walls = model?.objects.filter((o) => o.kind === "wall").length ?? 0;
     return walls > 0 ? { valid: true, issues: [] } : { valid: false, issues: ["No walls detected"] };
   },
   async saveDigitalBuilding(projectId: string, model: DigitalBuilding, label: string): Promise<void> {
