@@ -118,7 +118,7 @@ function ReportsRoute() {
     );
   }
 
-  if (gen.state.status === "idle") {
+  if (gen.state.status === "idle" || gen.state.status === "cancelled") {
     return (
       <AppShell breadcrumb={crumbs}>
         <ReportsStartScreen
@@ -145,6 +145,17 @@ function ReportsRoute() {
           remainingMs={gen.remainingMs}
           kpis={gen.kpis}
         />
+        <div className="flex justify-center pb-8">
+          <button
+            onClick={() => {
+              gen.cancel();
+              toast.info("Report generation cancelled");
+            }}
+            className="rounded-xl border border-border px-4 py-2 text-sm font-semibold transition-smooth hover:bg-accent"
+          >
+            Cancel generation
+          </button>
+        </div>
       </AppShell>
     );
   }

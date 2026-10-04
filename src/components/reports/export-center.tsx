@@ -203,11 +203,13 @@ export function PackagingWorkflow({
   progress,
   remainingMs,
   current,
+  onCancel,
 }: {
   state: ExportState;
   progress: number;
   remainingMs: number;
   current: string;
+  onCancel?: () => void;
 }) {
   const r = 52;
   const c = 2 * Math.PI * r;
@@ -237,6 +239,11 @@ export function PackagingWorkflow({
           <p className="text-xs text-muted-foreground">Overall Progress</p>
           <p className="text-sm font-semibold">Current: {current}</p>
           <p className="text-xs text-muted-foreground">Remaining ≈ {fmtMs(remainingMs)}</p>
+          {onCancel && (
+            <button onClick={onCancel} className="rounded-lg border border-border px-3 py-1.5 text-xs font-semibold hover:bg-accent">
+              Cancel
+            </button>
+          )}
         </div>
         <div className={card}>
           <ul className="grid gap-1.5 sm:grid-cols-2">

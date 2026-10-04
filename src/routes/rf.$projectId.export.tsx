@@ -105,6 +105,10 @@ function ExportRoute() {
           progress={ex.progress}
           remainingMs={ex.remainingMs}
           current={ex.currentTask.label}
+          onCancel={() => {
+            ex.cancel();
+            toast.info("Package generation cancelled — nothing was saved");
+          }}
         />
       </AppShell>
     );
@@ -168,6 +172,11 @@ function ExportRoute() {
             Package the approved design of {project.name} into the Final RF Design Package.
           </p>
         </header>
+        {ex.state.status === "cancelled" && (
+          <p className="rounded-xl border border-warning/40 bg-warning-soft px-4 py-2 text-sm text-warning">
+            The last package generation was cancelled. Adjust your selection and generate again.
+          </p>
+        )}
         <ExportSummary
           count={ex.state.selected.length}
           sizeKb={ex.sizeKb}

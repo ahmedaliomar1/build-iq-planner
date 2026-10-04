@@ -1,8 +1,8 @@
 import { Link } from "@tanstack/react-router";
 import { Archive, ArchiveRestore, ArrowRight, Building2, Clock, Copy, FileText, Trash2 } from "lucide-react";
 import { toast } from "sonner";
-import { projectService, projectSummary, type Project } from "@/services/projectService";
-import type { ProjectWorkflowStatus } from "@/types";
+import { projectService, projectSummary } from "@/services/projectService";
+import type { Project, ProjectWorkflowStatus } from "@/types";
 
 const tone = (s: ProjectWorkflowStatus) =>
   s === "Completed" || s === "Export Ready" || s === "Building Validated"

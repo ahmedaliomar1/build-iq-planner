@@ -791,7 +791,7 @@ export interface ReportLogEntry {
 }
 
 export interface ReportsState {
-  status: "idle" | "running" | "done";
+  status: "idle" | "running" | "done" | "cancelled";
   stageIndex: number;
   taskIndex: number;
   startedAt: number | null;

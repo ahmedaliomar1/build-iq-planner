@@ -177,6 +177,13 @@ export function useExportCenter(
     });
   }, [projectId, info]);
 
+  const cancel = useCallback(() => {
+    saveExportState(projectId, {
+      status: "cancelled",
+      log: [...state.log, { at: Date.now(), kind: "info" as const, text: "Package generation cancelled" }],
+    });
+  }, [projectId, state.log]);
+
   const reset = useCallback(() => resetExportState(projectId), [projectId]);
 
   const download = useCallback(() => {
@@ -225,6 +232,7 @@ export function useExportCenter(
     setInfo,
     start,
     reset,
+    cancel,
     download,
     duplicatePackage,
     removePackage,
