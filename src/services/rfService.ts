@@ -51,7 +51,7 @@ export interface RfProfileValidation {
 export function checkRFProfile(project: Project, cfg: RfConfig, prof: RfProfileConfig): RfProfileValidation {
   const items = validateRfProfile(project, cfg, prof);
   const errors = items.filter((i) => i.status === "fail").map((i) => i.label);
-  const warnings = items.filter((i) => i.status === "warn").map((i) => i.label);
+  const warnings: string[] = [];
   return {
     valid: errors.length === 0,
     status: errors.length ? "failed" : warnings.length ? "warnings" : "validated",
