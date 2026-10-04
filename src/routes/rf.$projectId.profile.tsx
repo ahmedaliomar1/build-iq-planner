@@ -21,7 +21,7 @@ import {
   buildRfProfileObject,
   saveRfProfile,
   useRfProfile,
-  validateRfProfile,
+  checkRFProfile,
   type RfProfileConfig,
 } from "@/services/rfService";
 
@@ -102,7 +102,7 @@ function RfProfileWizard() {
     );
   }
 
-  const validation = validateRfProfile(project, cfg, prof);
+  const validation = checkRFProfile(project, cfg, prof).items;
   const blocked = validation.some((v) => v.status === "fail");
 
   const error =

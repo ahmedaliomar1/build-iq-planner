@@ -35,7 +35,7 @@ import {
   saveRfProfile,
   suggestMaterial,
   unknownWalls,
-  validateRfProfile,
+  checkRFProfile,
   wallConfidence,
   type RfProfileConfig,
 } from "@/services/rfService";
@@ -1007,7 +1007,7 @@ export function ValidationStep({
   prof: RfProfileConfig;
   onFix: (step: number) => void;
 }) {
-  const items = validateRfProfile(project, cfg, prof);
+  const items = checkRFProfile(project, cfg, prof).items;
   const failed = items.filter((i) => i.status === "fail");
 
   return (
@@ -1092,7 +1092,7 @@ export function RfProfileSummary({
   const band = BANDS.find((b) => b.id === prof.band);
   const env = PROPAGATION_ENVIRONMENTS.find((e) => e.id === prof.propagation);
   const unknown = unknownWalls(project.model, prof.materialOverrides);
-  const ok = validateRfProfile(project, cfg, prof).every((v) => v.status === "pass");
+  const ok = checkRFProfile(project, cfg, prof).items.every((v) => v.status === "pass");
 
   const rows: [string, string, number][] = [
     ["Technology", cfg.technology === "lte" ? "Private LTE" : "Private 5G", 1],
