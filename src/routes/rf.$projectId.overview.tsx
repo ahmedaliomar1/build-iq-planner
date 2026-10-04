@@ -1,9 +1,9 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { Check } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
-import { useProject } from "@/lib/project-store";
-import { buildingStats, totalDevices, useRfConfig } from "@/lib/rf-config";
-import { useRfProfile } from "@/lib/rf-profile";
+import { useProject } from "@/services/projectService";
+import { buildingStats, totalDevices, useRfConfig } from "@/services/rfService";
+import { useRfProfile } from "@/services/rfService";
 
 export const Route = createFileRoute("/rf/$projectId/overview")({
   head: () => ({

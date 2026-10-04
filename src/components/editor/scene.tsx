@@ -6,7 +6,7 @@ import {
   type OpeningObj,
   type RoomObj,
   type WallObj,
-} from "@/lib/building-model";
+} from "@/services/buildingService";
 import { polygonArea, polygonCentroid, wallLength } from "@/lib/geometry";
 
 export function layerOf(kind: string): LayerId {

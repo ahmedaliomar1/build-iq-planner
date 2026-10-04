@@ -23,3 +23,6 @@ export const reportService = {
     return buildReportDocument(id, ctx, "v1.0", Date.now());
   },
 };
+
+/* Domain data + reactive store, exposed only through this service. */
+export * from "@/lib/reports";

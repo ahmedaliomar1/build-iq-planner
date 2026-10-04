@@ -14,7 +14,7 @@ import {
   totalStageTasks,
   type SimState,
   type SimStage,
-} from "@/lib/rf-simulation";
+} from "@/services/simulationService";
 
 function StageIcon({ status }: { status: "done" | "active" | "todo" }) {
   if (status === "done")

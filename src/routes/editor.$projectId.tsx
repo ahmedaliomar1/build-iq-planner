@@ -36,14 +36,14 @@ import type {
   BuildingModel,
   BuildingObject,
   MaterialId,
-} from "@/lib/building-model";
+} from "@/services/buildingService";
 import {
   dist,
   uid,
   validateModel,
   type ValidationIssue,
 } from "@/lib/geometry";
-import { saveModel, updateProject, useProject } from "@/lib/project-store";
+import { saveModel, updateProject, useProject } from "@/services/projectService";
 
 export const Route = createFileRoute("/editor/$projectId")({
   head: () => ({

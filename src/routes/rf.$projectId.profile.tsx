@@ -2,8 +2,8 @@ import { useCallback, useEffect, useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { ArrowLeft, ArrowRight, Check, Save } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
-import { useProject } from "@/lib/project-store";
-import { useRfConfig } from "@/lib/rf-config";
+import { useProject } from "@/services/projectService";
+import { useRfConfig } from "@/services/rfService";
 import {
   AntennaStep,
   BandwidthStep,
@@ -21,9 +21,9 @@ import {
   buildRfProfileObject,
   saveRfProfile,
   useRfProfile,
-  validateRfProfile,
+  checkRFProfile,
   type RfProfileConfig,
-} from "@/lib/rf-profile";
+} from "@/services/rfService";
 
 export const Route = createFileRoute("/rf/$projectId/profile")({
   head: () => ({
@@ -102,7 +102,7 @@ function RfProfileWizard() {
     );
   }
 
-  const validation = validateRfProfile(project, cfg, prof);
+  const validation = checkRFProfile(project, cfg, prof).items;
   const blocked = validation.some((v) => v.status === "fail");
 
   const error =

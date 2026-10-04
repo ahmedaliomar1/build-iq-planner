@@ -15,10 +15,10 @@ import {
   VersionsPanel,
 } from "@/components/rf/opt-panels";
 import { useOptimization } from "@/components/rf/use-optimization";
-import { useProject } from "@/lib/project-store";
-import { useRfConfig } from "@/lib/rf-config";
-import { useRfProfile } from "@/lib/rf-profile";
-import { downloadFile, useSimState } from "@/lib/rf-simulation";
+import { useProject } from "@/services/projectService";
+import { useRfConfig } from "@/services/rfService";
+import { useRfProfile } from "@/services/rfService";
+import { downloadFile, useSimState } from "@/services/simulationService";
 import {
   CATEGORY_OPTIONS,
   buildOptimizedDesign,
@@ -31,7 +31,7 @@ import {
   type AiSuggestion,
   type LayerSettings,
   type OptAntenna,
-} from "@/lib/rf-optimization";
+} from "@/services/optimizationService";
 
 export const Route = createFileRoute("/rf/$projectId/optimize")({
   head: () => ({

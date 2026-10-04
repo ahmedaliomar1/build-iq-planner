@@ -19,3 +19,6 @@ export const exportService = {
     return true;
   },
 };
+
+/* Domain data + reactive store, exposed only through this service. */
+export * from "@/lib/export-package";

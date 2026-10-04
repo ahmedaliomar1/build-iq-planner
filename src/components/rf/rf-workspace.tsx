@@ -17,7 +17,7 @@ import {
   TrendingUp,
   Wifi,
 } from "lucide-react";
-import type { BuildingModel } from "@/lib/building-model";
+import type { BuildingModel } from "@/services/buildingService";
 import { Scene } from "@/components/editor/scene";
 import { GridDefs, useViewport } from "@/components/editor/viewport";
 import {
@@ -26,7 +26,7 @@ import {
   type InitialRfDesign,
   type RfLayer,
   type RfLayerId,
-} from "@/lib/rf-simulation";
+} from "@/services/simulationService";
 
 const RF_LAYERS: { id: RfLayerId; label: string }[] = [
   { id: "coverage", label: "Coverage" },

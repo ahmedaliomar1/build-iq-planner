@@ -114,6 +114,7 @@ export interface Project {
   createdAt: number;
   updatedAt: number;
   status: "draft" | "analyzing" | "review" | "editing" | "ready";
+  archived?: boolean;
   model: BuildingModel;
   versions: ProjectVersion[];
 }

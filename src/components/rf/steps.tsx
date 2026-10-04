@@ -1,6 +1,6 @@
 import { useState, type ReactNode } from "react";
 import { Check, Loader2, Sparkles, GripVertical, ArrowUp, ArrowDown } from "lucide-react";
-import { MATERIALS, type MaterialId, type WallObj } from "@/lib/building-model";
+import { MATERIALS, type MaterialId, type WallObj } from "@/services/buildingService";
 import {
   AI_QUESTIONS,
   CAPACITY_CARDS,
@@ -14,7 +14,7 @@ import {
   type DeviceCounts,
   type NetworkTech,
   type RfConfig,
-} from "@/lib/rf-config";
+} from "@/services/rfService";
 
 export function StepShell({
   title,

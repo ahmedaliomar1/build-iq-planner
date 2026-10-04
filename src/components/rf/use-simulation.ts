@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef } from "react";
-import type { Project } from "@/lib/building-model";
-import type { RfConfig } from "@/lib/rf-config";
-import type { RfProfileConfig } from "@/lib/rf-profile";
+import type { Project } from "@/services/buildingService";
+import type { RfConfig } from "@/services/rfService";
+import type { RfProfileConfig } from "@/services/rfService";
 import {
   OPTIMIZATION_ITERATIONS,
   SIM_STAGES,
@@ -16,7 +16,7 @@ import {
   resetSimState,
   type SimLogEntry,
   type SimulationContext,
-} from "@/lib/rf-simulation";
+} from "@/services/simulationService";
 
 const MAX_LOG = 120;
 

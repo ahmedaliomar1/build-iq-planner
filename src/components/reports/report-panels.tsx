@@ -18,9 +18,9 @@ import {
   Trash2,
   X,
 } from "lucide-react";
-import type { BuildingModel } from "@/lib/building-model";
-import type { OptAntenna } from "@/lib/rf-optimization";
-import type { RfLayer, RfLayerId } from "@/lib/rf-simulation";
+import type { BuildingModel } from "@/services/buildingService";
+import type { OptAntenna } from "@/services/optimizationService";
+import type { RfLayer, RfLayerId } from "@/services/simulationService";
 import {
   CHAPTER_LABELS,
   MAP_DEFS,
@@ -35,7 +35,7 @@ import {
   type ReportDocument,
   type ReportId,
   type ReportRecord,
-} from "@/lib/reports";
+} from "@/services/reportService";
 import { ReportMap, downloadMapPng } from "./report-map";
 
 /* ---------------------------- report cards ---------------------------- */

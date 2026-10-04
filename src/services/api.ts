@@ -22,7 +22,13 @@ export class ApiError extends Error implements APIError {
 }
 
 const friendly = (status: number) =>
-  status === 0
+  status === 408
+    ? "The server took too long to respond. Please try again."
+    : status === 422 || status === 400
+      ? "Some of the submitted information is invalid. Please review it and try again."
+      : status === 499
+        ? "The operation was cancelled."
+        : status === 0
     ? "Can't reach the server. Check your connection and try again."
     : status === 404
       ? "The requested item could not be found."
@@ -55,10 +61,24 @@ async function request<T>(method: string, path: string, opts: Options = {}): Pro
       throw new ApiError({ status: res.status, code: `HTTP_${res.status}`, message: friendly(res.status), details });
     }
     const type = res.headers.get("content-type") ?? "";
-    if (type.includes("application/json")) return (await res.json()) as T;
+    if (type.includes("application/json")) {
+      try {
+        return (await res.json()) as T;
+      } catch {
+        throw new ApiError({ status: res.status, code: "MALFORMED", message: "The server sent an unreadable response." });
+      }
+    }
     return (await res.blob()) as unknown as T;
   } catch (e) {
     if (e instanceof ApiError) throw e;
+    if (e instanceof DOMException && e.name === "AbortError") {
+      const cancelled = Boolean(rest.signal?.aborted);
+      throw new ApiError({
+        status: cancelled ? 499 : 408,
+        code: cancelled ? "CANCELLED" : "TIMEOUT",
+        message: friendly(cancelled ? 499 : 408),
+      });
+    }
     throw new ApiError({ status: 0, code: "NETWORK", message: friendly(0), details: e });
   } finally {
     clearTimeout(timer);

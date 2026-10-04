@@ -13,4 +13,4 @@
 - Components → hooks/pages → `src/services/*` → `src/services/api.ts` → FastAPI. Why: backend can replace mocks without touching UI.
 - No `fetch` outside `src/services/api.ts`; base URL comes only from `VITE_API_BASE_URL` (empty = mock mode). Why: single configurable HTTP boundary.
 - Shared backend-facing types live in `src/types/index.ts` (re-exports of `src/lib` domain types). Why: one vocabulary across UI and services.
-- Per-stage state persists in localStorage stores in `src/lib/*`; services read them as the mock backend. Why: one source of truth per stage.
+- Per-stage state persists in localStorage stores in `src/lib/*`; each service re-exports its lib module, and UI imports only from `src/services/*`, never `src/lib/<domain>` directly. Why: one source of truth per stage and a single swap point for FastAPI.

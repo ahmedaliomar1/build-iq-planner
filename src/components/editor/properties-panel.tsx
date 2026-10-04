@@ -8,7 +8,7 @@ import {
   type OpeningObj,
   type RoomObj,
   type WallObj,
-} from "@/lib/building-model";
+} from "@/services/buildingService";
 import { polygonArea, polygonPerimeter, wallLength } from "@/lib/geometry";
 
 function Row({ label, children }: { label: string; children: React.ReactNode }) {

@@ -1,8 +1,8 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { ArrowLeft, Check, Radio } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
-import { useProject } from "@/lib/project-store";
-import { buildRequirementsPackage, useRfConfig } from "@/lib/rf-config";
+import { useProject } from "@/services/projectService";
+import { buildRequirementsPackage, useRfConfig } from "@/services/rfService";
 
 export const Route = createFileRoute("/rf/$projectId/ready")({
   head: () => ({

@@ -16,7 +16,7 @@ import {
   type ReportId,
   type ReportLogEntry,
   type ReportRecord,
-} from "@/lib/reports";
+} from "@/services/reportService";
 
 const MAX_LOG = 140;
 
@@ -158,6 +158,13 @@ export function useReportGeneration(projectId: string, ctx: ReportContext | null
     });
   }, [projectId]);
 
+  const cancel = useCallback(() => {
+    saveReportsState(projectId, {
+      status: "cancelled",
+      log: push(state.log, "Report generation cancelled", "info"),
+    });
+  }, [projectId, state.log, push]);
+
   const regenerate = useCallback(
     (reportId: ReportId) => {
       if (!ctx) return;
@@ -221,6 +228,7 @@ export function useReportGeneration(projectId: string, ctx: ReportContext | null
     completedTasks,
     kpis: reportKpis(state),
     start,
+    cancel,
     regenerate,
     duplicate,
     remove,

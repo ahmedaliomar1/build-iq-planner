@@ -567,7 +567,7 @@ export interface PackageRecord {
 }
 
 export interface ExportState {
-  status: "idle" | "running" | "done";
+  status: "idle" | "running" | "done" | "cancelled";
   taskIndex: number;
   startedAt: number | null;
   finishedAt: number | null;

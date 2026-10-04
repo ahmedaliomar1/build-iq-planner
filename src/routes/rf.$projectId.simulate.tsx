@@ -6,16 +6,16 @@ import { AppShell } from "@/components/app-shell";
 import { SimulationProgress } from "@/components/rf/sim-progress";
 import { RfPlanningWorkspace } from "@/components/rf/rf-workspace";
 import { useSimulationRunner } from "@/components/rf/use-simulation";
-import { useProject } from "@/lib/project-store";
-import { useRfConfig } from "@/lib/rf-config";
-import { BANDS, useRfProfile } from "@/lib/rf-profile";
+import { useProject } from "@/services/projectService";
+import { useRfConfig } from "@/services/rfService";
+import { BANDS, useRfProfile } from "@/services/rfService";
 import {
   designToCsv,
   designToReport,
   downloadFile,
   saveSimState,
   type RfLayerId,
-} from "@/lib/rf-simulation";
+} from "@/services/simulationService";
 
 export const Route = createFileRoute("/rf/$projectId/simulate")({
   head: () => ({

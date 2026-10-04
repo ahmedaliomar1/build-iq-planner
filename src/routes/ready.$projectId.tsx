@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { ArrowLeft, Check, Radio } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
-import { useProject } from "@/lib/project-store";
+import { useProject } from "@/services/projectService";
 
 export const Route = createFileRoute("/ready/$projectId")({
   head: () => ({
