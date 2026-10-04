@@ -81,55 +81,9 @@ function Dashboard() {
             <EmptyState />
           ) : (
             <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-              {projects.map((p) => {
-                const s = STATUS[p.status] ?? STATUS["draft"]!;
-                return (
-                  <li
-                    key={p.id}
-                    className="group animate-rise rounded-2xl border border-border bg-card p-5 shadow-soft transition-smooth hover:-translate-y-0.5 hover:shadow-lift"
-                  >
-                    <div className="flex items-start justify-between gap-3">
-                      <span className="grid size-10 place-items-center rounded-xl bg-secondary text-muted-foreground">
-                        <Building2 className="size-5" strokeWidth={1.8} />
-                      </span>
-                      <span
-                        className={`rounded-full px-2.5 py-1 text-[11px] font-semibold ${s.cls}`}
-                      >
-                        {workflowStatus(p.id, p.status) === "Draft" ? s.label : workflowStatus(p.id, p.status)}
-                      </span>
-                    </div>
-                    <h3 className="mt-4 truncate font-semibold">{p.name}</h3>
-                    <p className="mt-1 text-xs text-muted-foreground">
-                      {p.buildingType} · {p.country} ·{" "}
-                      {p.network === "5g"
-                        ? "Private 5G"
-                        : p.network === "lte"
-                          ? "Private LTE"
-                          : "Auto"}
-                    </p>
-                    <p className="num mt-3 flex items-center gap-1.5 text-[11px] text-muted-foreground">
-                      <Clock className="size-3.5" />
-                      {new Date(p.updatedAt).toLocaleString()}
-                    </p>
-                    <div className="mt-4 flex items-center gap-2">
-                      <Link
-                        to="/editor/$projectId"
-                        params={{ projectId: p.id }}
-                        className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-xl border border-border px-3 py-2 text-xs font-semibold transition-smooth hover:bg-accent hover:text-accent-foreground"
-                      >
-                        Open editor <ArrowRight className="size-3.5" />
-                      </Link>
-                      <button
-                        onClick={() => deleteProject(p.id)}
-                        aria-label={`Delete ${p.name}`}
-                        className="grid size-9 place-items-center rounded-xl border border-border text-muted-foreground transition-smooth hover:border-danger hover:text-danger"
-                      >
-                        <Trash2 className="size-4" />
-                      </button>
-                    </div>
-                  </li>
-                );
-              })}
+              {projects.map((p) => (
+                <ProjectCard key={p.id} project={p} />
+              ))}
             </ul>
           )}
         </section>
