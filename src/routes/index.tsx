@@ -1,8 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Building2, Clock, Plus, Sparkles, Trash2 } from "lucide-react";
+import { Plus, Sparkles } from "lucide-react";
+import { ProjectCard } from "@/components/project-card";
 import { AppShell } from "@/components/app-shell";
-import { deleteProject, useProjects } from "@/services/projectService";
-import { workflowStatus } from "@/services/projectService";
+import { useProjects } from "@/services/projectService";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -24,16 +24,8 @@ export const Route = createFileRoute("/")({
   component: Dashboard,
 });
 
-const STATUS: Record<string, { label: string; cls: string }> = {
-  draft: { label: "Draft", cls: "bg-secondary text-muted-foreground" },
-  analyzing: { label: "AI Analysis", cls: "bg-warning-soft text-warning" },
-  review: { label: "Review", cls: "bg-warning-soft text-warning" },
-  editing: { label: "Editing", cls: "bg-primary-soft text-primary" },
-  ready: { label: "Digital Twin Ready", cls: "bg-success-soft text-success" },
-};
-
 function Dashboard() {
-  const projects = useProjects();
+  const projects = useProjects().filter((p) => !p.archived);
 
   return (
     <AppShell breadcrumb={["Workspace", "Dashboard"]}>

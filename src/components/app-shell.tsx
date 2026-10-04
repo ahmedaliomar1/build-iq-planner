@@ -5,6 +5,7 @@ import {
   LayoutDashboard,
   FolderKanban,
   LayoutTemplate,
+  Archive,
   Settings,
   Signal,
 } from "lucide-react";
@@ -13,6 +14,7 @@ import type { ReactNode } from "react";
 const NAV = [
   { to: "/", label: "Dashboard", icon: LayoutDashboard },
   { to: "/projects", label: "Projects", icon: FolderKanban },
+  { to: "/archive", label: "Archive", icon: Archive },
   { to: "/templates", label: "Templates", icon: LayoutTemplate },
   { to: "/settings", label: "Settings", icon: Settings },
 ] as const;
