@@ -1,7 +1,7 @@
 import { useMemo, useRef } from "react";
-import type { BuildingModel } from "@/lib/building-model";
-import { modelBounds, type RfLayer } from "@/lib/rf-simulation";
-import type { OptAntenna } from "@/lib/rf-optimization";
+import type { BuildingModel } from "@/services/buildingService";
+import { modelBounds, type RfLayer } from "@/services/simulationService";
+import type { OptAntenna } from "@/services/optimizationService";
 
 const HEAT = ["#dc2626", "#f97316", "#facc15", "#84cc16", "#16a34a"];
 const PRIORITY_FILL = ["transparent", "#38bdf8", "#facc15", "#f97316", "#dc2626"];

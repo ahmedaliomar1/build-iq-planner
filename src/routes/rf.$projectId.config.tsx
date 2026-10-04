@@ -2,8 +2,8 @@ import { useEffect, useMemo, useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { ArrowLeft, ArrowRight, Check, Save } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
-import { useProject } from "@/lib/project-store";
-import type { WallObj } from "@/lib/building-model";
+import { useProject } from "@/services/projectService";
+import type { WallObj } from "@/services/buildingService";
 import {
   CapacityStep,
   CeilingStep,
@@ -24,7 +24,7 @@ import {
   totalDevices,
   useRfConfig,
   type RfConfig,
-} from "@/lib/rf-config";
+} from "@/services/rfService";
 
 export const Route = createFileRoute("/rf/$projectId/config")({
   head: () => ({

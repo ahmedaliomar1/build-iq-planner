@@ -54,3 +54,6 @@ export const optimizationService = {
     return null;
   },
 };
+
+/* Domain data + reactive store, exposed only through this service. */
+export * from "@/lib/rf-optimization";

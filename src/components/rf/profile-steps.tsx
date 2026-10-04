@@ -14,11 +14,11 @@ import {
   Trash2,
   X,
 } from "lucide-react";
-import type { MaterialId, Project, WallObj } from "@/lib/building-model";
-import { materialById } from "@/lib/building-model";
+import type { MaterialId, Project, WallObj } from "@/services/buildingService";
+import { materialById } from "@/services/buildingService";
 import { Scene } from "@/components/editor/scene";
 import { GridDefs, useViewport } from "@/components/editor/viewport";
-import type { RfConfig } from "@/lib/rf-config";
+import type { RfConfig } from "@/services/rfService";
 import {
   ANTENNA_CATEGORIES,
   BANDS,
@@ -38,7 +38,7 @@ import {
   validateRfProfile,
   wallConfidence,
   type RfProfileConfig,
-} from "@/lib/rf-profile";
+} from "@/services/rfService";
 
 type Update = (p: Partial<RfProfileConfig>) => void;
 

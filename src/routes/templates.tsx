@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Building2 } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
-import { BUILDING_TYPES } from "@/lib/building-model";
+import { BUILDING_TYPES } from "@/services/buildingService";
 
 export const Route = createFileRoute("/templates")({
   head: () => ({

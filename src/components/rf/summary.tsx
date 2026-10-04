@@ -1,5 +1,5 @@
 import { Pencil } from "lucide-react";
-import type { Project } from "@/lib/building-model";
+import type { Project } from "@/services/buildingService";
 import {
   PRIORITY_META,
   PURPOSES,
@@ -8,7 +8,7 @@ import {
   coverageLabel,
   totalDevices,
   type RfConfig,
-} from "@/lib/rf-config";
+} from "@/services/rfService";
 
 export function RfSummary({
   project,

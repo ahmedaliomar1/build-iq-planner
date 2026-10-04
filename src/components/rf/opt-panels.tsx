@@ -30,8 +30,8 @@ import {
   type OptAntenna,
   type OptVersion,
   type ValidationReport,
-} from "@/lib/rf-optimization";
-import type { RfLayerId } from "@/lib/rf-simulation";
+} from "@/services/optimizationService";
+import type { RfLayerId } from "@/services/simulationService";
 
 /* ---------------- layer manager ---------------- */
 

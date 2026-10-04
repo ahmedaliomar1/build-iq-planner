@@ -7,7 +7,7 @@ import {
   type BomLogEntry,
   type BomState,
   type BomVendor,
-} from "@/lib/bom";
+} from "@/services/bomService";
 
 /* -------------------- animated counter -------------------- */
 

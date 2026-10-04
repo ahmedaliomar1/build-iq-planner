@@ -33,3 +33,6 @@ export const bomService = {
     return null;
   },
 };
+
+/* Domain data + reactive store, exposed only through this service. */
+export * from "@/lib/bom";

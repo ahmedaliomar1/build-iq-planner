@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import type { Project } from "@/lib/building-model";
-import type { RfConfig } from "@/lib/rf-config";
-import type { RfProfileConfig } from "@/lib/rf-profile";
+import type { Project } from "@/services/buildingService";
+import type { RfConfig } from "@/services/rfService";
+import type { RfProfileConfig } from "@/services/rfService";
 import {
   placeholderRfEngine,
   simulationSeed,
@@ -9,7 +9,7 @@ import {
   type RfLayer,
   type RfLayerId,
   type SimulationContext,
-} from "@/lib/rf-simulation";
+} from "@/services/simulationService";
 import {
   RF_LAYER_LABELS,
   buildSuggestions,
@@ -22,7 +22,7 @@ import {
   type OptAntenna,
   type OptChange,
   type OptVersion,
-} from "@/lib/rf-optimization";
+} from "@/services/optimizationService";
 
 const STEP_MS = 420;
 

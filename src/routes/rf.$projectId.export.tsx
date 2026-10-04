@@ -17,13 +17,13 @@ import {
 import { useExportCenter } from "@/components/reports/use-export";
 import { useReportGeneration } from "@/components/reports/use-reports";
 import { useBomGeneration } from "@/components/bom/use-bom";
-import { useProject } from "@/lib/project-store";
-import { useRfConfig } from "@/lib/rf-config";
-import { useRfProfile } from "@/lib/rf-profile";
-import { useSimState } from "@/lib/rf-simulation";
-import { buildOptimizedDesign, useOptState, validateOptimization } from "@/lib/rf-optimization";
-import { estimatedExportMs } from "@/lib/export-package";
-import type { ReportContext } from "@/lib/reports";
+import { useProject } from "@/services/projectService";
+import { useRfConfig } from "@/services/rfService";
+import { useRfProfile } from "@/services/rfService";
+import { useSimState } from "@/services/simulationService";
+import { buildOptimizedDesign, useOptState, validateOptimization } from "@/services/optimizationService";
+import { estimatedExportMs } from "@/services/exportService";
+import type { ReportContext } from "@/services/reportService";
 
 export const Route = createFileRoute("/rf/$projectId/export")({
   head: () => ({

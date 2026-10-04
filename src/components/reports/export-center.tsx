@@ -23,8 +23,8 @@ import {
   type PackageCheck,
   type PackageInfo,
   type PackageRecord,
-} from "@/lib/export-package";
-import { reportDate } from "@/lib/reports";
+} from "@/services/exportService";
+import { reportDate } from "@/services/reportService";
 import { cn } from "@/lib/utils";
 
 const card = "rounded-2xl border border-border bg-card p-4 shadow-soft";

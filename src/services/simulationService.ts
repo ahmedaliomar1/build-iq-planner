@@ -25,3 +25,6 @@ export const simulationService = {
     return (await this.getInitialRFDesign(projectId))?.kpis ?? null;
   },
 };
+
+/* Domain data + reactive store, exposed only through this service. */
+export * from "@/lib/rf-simulation";

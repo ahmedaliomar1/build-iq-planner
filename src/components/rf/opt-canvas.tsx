@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Lock, Maximize, Minus, Plus } from "lucide-react";
-import type { BuildingModel } from "@/lib/building-model";
+import type { BuildingModel } from "@/services/buildingService";
 import { Scene } from "@/components/editor/scene";
 import { GridDefs, useViewport } from "@/components/editor/viewport";
-import { modelBounds, type RfLayer, type RfLayerId } from "@/lib/rf-simulation";
-import type { LayerSettings, OptAntenna } from "@/lib/rf-optimization";
+import { modelBounds, type RfLayer, type RfLayerId } from "@/services/simulationService";
+import type { LayerSettings, OptAntenna } from "@/services/optimizationService";
 
 const HEAT = ["#dc2626", "#f97316", "#facc15", "#84cc16", "#16a34a"];
 const PRIORITY_FILL = ["transparent", "#38bdf8", "#facc15", "#f97316", "#dc2626"];

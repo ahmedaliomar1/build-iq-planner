@@ -6,7 +6,7 @@ import {
   type ReportKpis,
   type ReportStage,
   type ReportsState,
-} from "@/lib/reports";
+} from "@/services/reportService";
 
 function StatusDot({ status }: { status: "done" | "active" | "todo" }) {
   if (status === "done")

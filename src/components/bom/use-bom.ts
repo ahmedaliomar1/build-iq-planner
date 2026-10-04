@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef } from "react";
-import type { OptimizedRfDesign } from "@/lib/rf-optimization";
+import type { OptimizedRfDesign } from "@/services/optimizationService";
 import {
   BOM_STAGES,
   TOTAL_BOM_TASKS,
@@ -26,7 +26,7 @@ import {
   type BomLogEntry,
   type BomVersionRecord,
   type OptimizationId,
-} from "@/lib/bom";
+} from "@/services/bomService";
 
 /**
  * Module 6 workflow runner. Drives the staged BOM generation pipeline,

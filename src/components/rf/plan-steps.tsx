@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Trash2 } from "lucide-react";
-import type { BuildingModel, RoomObj } from "@/lib/building-model";
+import type { BuildingModel, RoomObj } from "@/services/buildingService";
 import { polygonCentroid } from "@/lib/geometry";
 import { Scene } from "@/components/editor/scene";
 import { GridDefs, useViewport } from "@/components/editor/viewport";
@@ -9,7 +9,7 @@ import {
   RESTRICTION_TYPES,
   type Priority,
   type RestrictedArea,
-} from "@/lib/rf-config";
+} from "@/services/rfService";
 import { uid } from "@/lib/geometry";
 
 const PRIORITIES: Priority[] = ["critical", "high", "medium", "low"];

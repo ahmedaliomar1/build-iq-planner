@@ -23,9 +23,9 @@ import {
   COUNTRIES,
   type BuildingModel,
   type UploadedFile,
-} from "@/lib/building-model";
+} from "@/services/buildingService";
 import { generateAiModel } from "@/lib/geometry";
-import { createProject, saveModel, updateProject } from "@/lib/project-store";
+import { createProject, saveModel, updateProject } from "@/services/projectService";
 
 export const Route = createFileRoute("/new")({
   head: () => ({

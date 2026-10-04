@@ -17,15 +17,15 @@ import {
   downloadDocument,
 } from "@/components/reports/report-panels";
 import { useReportGeneration } from "@/components/reports/use-reports";
-import { useProject } from "@/lib/project-store";
-import { useRfConfig } from "@/lib/rf-config";
-import { useRfProfile } from "@/lib/rf-profile";
-import { useSimState } from "@/lib/rf-simulation";
+import { useProject } from "@/services/projectService";
+import { useRfConfig } from "@/services/rfService";
+import { useRfProfile } from "@/services/rfService";
+import { useSimState } from "@/services/simulationService";
 import {
   buildOptimizedDesign,
   useOptState,
   validateOptimization,
-} from "@/lib/rf-optimization";
+} from "@/services/optimizationService";
 import { useBomGeneration } from "@/components/bom/use-bom";
 import {
   ESTIMATED_REPORT_MS,
@@ -33,7 +33,7 @@ import {
   resetReportsState,
   type ReportContext,
   type ReportId,
-} from "@/lib/reports";
+} from "@/services/reportService";
 
 export const Route = createFileRoute("/rf/$projectId/reports")({
   head: () => ({

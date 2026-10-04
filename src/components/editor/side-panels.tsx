@@ -9,7 +9,7 @@ import {
   LockOpen,
   Search,
 } from "lucide-react";
-import { MATERIALS, type LayerState } from "@/lib/building-model";
+import { MATERIALS, type LayerState } from "@/services/buildingService";
 import { VALIDATION_CHECKS, type ValidationIssue } from "@/lib/geometry";
 
 export function LayersPanel({

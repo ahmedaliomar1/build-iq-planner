@@ -39,3 +39,6 @@ export const buildingService = {
     saveModel(projectId, model, label);
   },
 };
+
+/* Domain data + reactive store, exposed only through this service. */
+export * from "@/lib/building-model";

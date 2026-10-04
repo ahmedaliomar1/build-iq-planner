@@ -27,16 +27,16 @@ import {
   RackPanel,
 } from "@/components/bom/bom-panels";
 import { useBomGeneration } from "@/components/bom/use-bom";
-import { useProject } from "@/lib/project-store";
-import { useRfConfig } from "@/lib/rf-config";
-import { downloadFile, useSimState } from "@/lib/rf-simulation";
+import { useProject } from "@/services/projectService";
+import { useRfConfig } from "@/services/rfService";
+import { downloadFile, useSimState } from "@/services/simulationService";
 import {
   buildOptimizedDesign,
   costLabel,
   useOptState,
   validateOptimization,
-} from "@/lib/rf-optimization";
-import { bomToCsv, money, resetBomState, saveBomState, ESTIMATED_BOM_MS } from "@/lib/bom";
+} from "@/services/optimizationService";
+import { bomToCsv, money, resetBomState, saveBomState, ESTIMATED_BOM_MS } from "@/services/bomService";
 
 export const Route = createFileRoute("/rf/$projectId/bom")({
   head: () => ({

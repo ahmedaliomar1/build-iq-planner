@@ -16,8 +16,8 @@ import {
   type ExportFormatId,
   type PackageInfo,
   type PackageRecord,
-} from "@/lib/export-package";
-import type { ReportContext, ReportsState } from "@/lib/reports";
+} from "@/services/exportService";
+import type { ReportContext, ReportsState } from "@/services/reportService";
 
 const MAX_LOG = 140;
 

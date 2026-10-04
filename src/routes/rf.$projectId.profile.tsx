@@ -2,8 +2,8 @@ import { useCallback, useEffect, useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { ArrowLeft, ArrowRight, Check, Save } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
-import { useProject } from "@/lib/project-store";
-import { useRfConfig } from "@/lib/rf-config";
+import { useProject } from "@/services/projectService";
+import { useRfConfig } from "@/services/rfService";
 import {
   AntennaStep,
   BandwidthStep,
@@ -23,7 +23,7 @@ import {
   useRfProfile,
   validateRfProfile,
   type RfProfileConfig,
-} from "@/lib/rf-profile";
+} from "@/services/rfService";
 
 export const Route = createFileRoute("/rf/$projectId/profile")({
   head: () => ({

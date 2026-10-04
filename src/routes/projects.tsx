@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { AppShell } from "@/components/app-shell";
 import { EmptyState } from "./index";
-import { useProjects } from "@/lib/project-store";
+import { useProjects } from "@/services/projectService";
 
 export const Route = createFileRoute("/projects")({
   head: () => ({

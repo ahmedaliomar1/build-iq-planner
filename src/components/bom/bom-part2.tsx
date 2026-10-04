@@ -27,7 +27,7 @@ import {
   type OptimizationId,
   type ProcurementOverview,
   type VendorComparisonRow,
-} from "@/lib/bom";
+} from "@/services/bomService";
 import { Counter, StatCard } from "./bom-progress";
 
 /* ==================================================================

@@ -77,3 +77,6 @@ export function workflowStatus(projectId: string, base: Project["status"]): Proj
   if (base === "analyzing" || base === "review" || base === "editing") return "Building Analysis";
   return "Draft";
 }
+
+/* Domain data + reactive store, exposed only through this service. */
+export * from "@/lib/project-store";

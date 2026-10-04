@@ -1,9 +1,9 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { ArrowLeft, Check, Radio } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
-import { useProject } from "@/lib/project-store";
-import { useRfConfig } from "@/lib/rf-config";
-import { BANDS, buildRfProfileObject, useRfProfile } from "@/lib/rf-profile";
+import { useProject } from "@/services/projectService";
+import { useRfConfig } from "@/services/rfService";
+import { BANDS, buildRfProfileObject, useRfProfile } from "@/services/rfService";
 
 export const Route = createFileRoute("/rf/$projectId/profile-ready")({
   head: () => ({

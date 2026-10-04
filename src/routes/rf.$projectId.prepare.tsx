@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Check, Loader2 } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
-import { useProject } from "@/lib/project-store";
-import { PREPARE_TASKS, saveRfProfile } from "@/lib/rf-profile";
+import { useProject } from "@/services/projectService";
+import { PREPARE_TASKS, saveRfProfile } from "@/services/rfService";
 
 export const Route = createFileRoute("/rf/$projectId/prepare")({
   head: () => ({

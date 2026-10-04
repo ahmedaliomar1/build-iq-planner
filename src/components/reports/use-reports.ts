@@ -16,7 +16,7 @@ import {
   type ReportId,
   type ReportLogEntry,
   type ReportRecord,
-} from "@/lib/reports";
+} from "@/services/reportService";
 
 const MAX_LOG = 140;
 

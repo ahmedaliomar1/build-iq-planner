@@ -31,3 +31,9 @@ export const rfService = {
     return this.getRFProfile(projectId);
   },
 };
+
+/* Domain data + reactive store, exposed only through this service. */
+export * from "@/lib/rf-config";
+
+/* Domain data + reactive store, exposed only through this service. */
+export * from "@/lib/rf-profile";

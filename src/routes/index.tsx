@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Building2, Clock, Plus, Sparkles, Trash2 } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
-import { deleteProject, useProjects } from "@/lib/project-store";
+import { deleteProject, useProjects } from "@/services/projectService";
 import { workflowStatus } from "@/services/projectService";
 
 export const Route = createFileRoute("/")({
