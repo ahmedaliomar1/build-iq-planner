@@ -6,6 +6,7 @@ const KEY = "apcp.projects.v1";
 
 let cache: Project[] | null = null;
 const listeners = new Set<() => void>();
+const EMPTY: Project[] = [];
 
 function read(): Project[] {
   if (cache) return cache;
@@ -36,7 +37,7 @@ export function useProjects(): Project[] {
   return useSyncExternalStore(
     subscribe,
     () => read(),
-    () => [] as Project[],
+    () => EMPTY,
   );
 }
 
