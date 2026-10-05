@@ -83,7 +83,7 @@ function RfWizard() {
   const update = (p: Partial<RfConfig>) => saveRfConfig(projectId, p);
 
   const walls = useMemo(
-    () => (project?.model.objects.filter((o): o is WallObj => o.kind === "wall") ?? []),
+    () => project?.model.objects.filter((o): o is WallObj => o.kind === "wall") ?? [],
     [project],
   );
 
@@ -146,9 +146,7 @@ function RfWizard() {
   const progress = ((step + 1) / STEP_TITLES.length) * 100;
 
   return (
-    <AppShell
-      breadcrumb={["Workspace", "Projects", project.name, "RF Design Configuration"]}
-    >
+    <AppShell breadcrumb={["Workspace", "Projects", project.name, "RF Design Configuration"]}>
       <div className="mx-auto max-w-6xl space-y-6 p-4 md:p-8">
         <header className="rounded-3xl border border-border bg-card p-5 shadow-soft">
           <div className="flex flex-wrap items-center gap-3">
@@ -206,9 +204,7 @@ function RfWizard() {
           {step === 6 && (
             <div className="animate-rise space-y-4">
               <div>
-                <h2 className="text-xl font-bold tracking-tight md:text-2xl">
-                  Critical Areas
-                </h2>
+                <h2 className="text-xl font-bold tracking-tight md:text-2xl">Critical Areas</h2>
                 <p className="mt-1 text-sm text-muted-foreground">
                   Click rooms on the digital twin to assign coverage priority.
                 </p>
@@ -241,9 +237,7 @@ function RfWizard() {
           {step === 9 && <WallReviewStep walls={walls} cfg={cfg} update={update} />}
           {step === 10 && <VendorStep cfg={cfg} update={update} />}
           {step === 11 && <GoalsStep cfg={cfg} update={update} />}
-          {step === 12 && (
-            <RfSummary project={project} cfg={cfg} onEditStep={(i) => goto(i)} />
-          )}
+          {step === 12 && <RfSummary project={project} cfg={cfg} onEditStep={(i) => goto(i)} />}
         </section>
 
         <footer className="sticky bottom-0 flex flex-wrap items-center gap-3 rounded-3xl border border-border bg-card/95 p-4 backdrop-blur">
@@ -255,9 +249,7 @@ function RfWizard() {
             <ArrowLeft className="size-4" /> Previous
           </button>
 
-          {error && (
-            <span className="text-xs font-semibold text-warning">{error}</span>
-          )}
+          {error && <span className="text-xs font-semibold text-warning">{error}</span>}
 
           {step < STEP_TITLES.length - 1 ? (
             <button
@@ -273,10 +265,7 @@ function RfWizard() {
                 const pkg = buildRequirementsPackage(project, cfg);
                 saveRfConfig(projectId, {
                   generatedAt: pkg.timestamp,
-                  completed: Array.from(
-                    { length: STEP_TITLES.length },
-                    (_unused, i: number) => i,
-                  ),
+                  completed: Array.from({ length: STEP_TITLES.length }, (_unused, i: number) => i),
                 });
                 navigate({ to: "/rf/$projectId/ready", params: { projectId } });
               }}

@@ -79,8 +79,8 @@ function ReadyPage() {
           </div>
 
           <p className="mt-6 text-[11px] text-muted-foreground">
-            Stored as a digital building model: geometry, objects, materials, measurements,
-            rooms, layers, metadata, AI labels, scale and version history.
+            Stored as a digital building model: geometry, objects, materials, measurements, rooms,
+            layers, metadata, AI labels, scale and version history.
           </p>
         </div>
       </div>

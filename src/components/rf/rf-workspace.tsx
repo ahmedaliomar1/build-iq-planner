@@ -481,7 +481,9 @@ export function RfPlanningWorkspace({
         </div>
         <div className="ml-auto flex flex-wrap items-center gap-3">
           {saved && (
-            <span className="text-xs font-semibold text-success">✓ RF Design Saved Successfully</span>
+            <span className="text-xs font-semibold text-success">
+              ✓ RF Design Saved Successfully
+            </span>
           )}
           <button
             onClick={onSave}

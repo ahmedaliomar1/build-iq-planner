@@ -37,7 +37,8 @@ export const Route = createFileRoute("/rf/$projectId/profile")({
       { property: "og:title", content: "RF Parameter Configuration — AI Private Cellular Planner" },
       {
         property: "og:description",
-        content: "Build the engineering RF Profile that powers later link budget and planning modules.",
+        content:
+          "Build the engineering RF Profile that powers later link budget and planning modules.",
       },
     ],
   }),
@@ -165,9 +166,7 @@ function RfProfileWizard() {
 
         <section className="rounded-3xl border border-border bg-background p-4 md:p-6">
           {step === 0 && <KnowledgeBaseStep project={project} prof={prof} update={update} />}
-          {step === 1 && (
-            <FrequencyStep project={project} cfg={cfg} prof={prof} update={update} />
-          )}
+          {step === 1 && <FrequencyStep project={project} cfg={cfg} prof={prof} update={update} />}
           {step === 2 && <BandwidthStep prof={prof} update={update} />}
           {step === 3 && <AntennaStep prof={prof} update={update} />}
           {step === 4 && (

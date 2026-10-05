@@ -169,7 +169,11 @@ export function TechnologyStep({
             onClick={run}
             className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition-smooth hover:brightness-110 disabled:opacity-40"
           >
-            {thinking ? <Loader2 className="size-4 animate-spin" /> : <Sparkles className="size-4" />}
+            {thinking ? (
+              <Loader2 className="size-4 animate-spin" />
+            ) : (
+              <Sparkles className="size-4" />
+            )}
             {thinking ? "Analyzing requirements…" : "Run AI Recommendation"}
           </button>
 
@@ -212,7 +216,9 @@ export function TechnologyStep({
                     key={t}
                     onClick={() => update({ technology: t })}
                     className={`rounded-xl border px-4 py-2 text-xs font-semibold transition-smooth ${
-                      cfg.technology === t ? "border-primary text-primary" : "border-border hover:bg-accent"
+                      cfg.technology === t
+                        ? "border-primary text-primary"
+                        : "border-border hover:bg-accent"
                     }`}
                   >
                     Override: {t === "5g" ? "Private 5G" : "Private LTE"}
@@ -548,14 +554,7 @@ export function CeilingStep({
 
 /* ---------------- Step 10 ---------------- */
 
-const REVIEW_MATERIALS: MaterialId[] = [
-  "concrete",
-  "brick",
-  "glass",
-  "metal",
-  "gypsum",
-  "wood",
-];
+const REVIEW_MATERIALS: MaterialId[] = ["concrete", "brick", "glass", "metal", "gypsum", "wood"];
 
 export function WallReviewStep({
   walls,

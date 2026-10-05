@@ -14,7 +14,14 @@ import type { RfConfig } from "./rf-config";
 import type { RfProfileConfig } from "./rf-profile";
 import type { InitialRfDesign, RfLayerId } from "./rf-simulation";
 import type { OptimizedRfDesign } from "./rf-optimization";
-import { money, money2, categoryMeta, TAX_RATE, CONTINGENCY_RATE, type EngineeringBom } from "./bom";
+import {
+  money,
+  money2,
+  categoryMeta,
+  TAX_RATE,
+  CONTINGENCY_RATE,
+  type EngineeringBom,
+} from "./bom";
 
 /* -------------------- workflow stages -------------------- */
 
@@ -86,10 +93,7 @@ export const REPORT_STAGES: ReportStage[] = [
 
 export const TOTAL_REPORT_TASKS = REPORT_STAGES.reduce((n, s) => n + s.tasks.length, 0);
 export const estimatedReportStageMs = (s: ReportStage) => s.tasks.length * s.pace;
-export const ESTIMATED_REPORT_MS = REPORT_STAGES.reduce(
-  (n, s) => n + estimatedReportStageMs(s),
-  0,
-);
+export const ESTIMATED_REPORT_MS = REPORT_STAGES.reduce((n, s) => n + estimatedReportStageMs(s), 0);
 
 /* -------------------- engineering context -------------------- */
 
@@ -166,7 +170,10 @@ export const CHAPTER_LABELS: Record<ChapterId, string> = {
 };
 
 function techLabel(ctx: ReportContext) {
-  return ctx.optimized.projectInformation.technology || (ctx.config.technology === "5g" ? "Private 5G" : "Private LTE");
+  return (
+    ctx.optimized.projectInformation.technology ||
+    (ctx.config.technology === "5g" ? "Private 5G" : "Private LTE")
+  );
 }
 
 export function buildChapter(id: ChapterId, ctx: ReportContext): ReportChapter {
@@ -230,14 +237,21 @@ export function buildChapter(id: ChapterId, ctx: ReportContext): ReportChapter {
               ["Coverage", pct(k.coverage), "95.0%", k.coverage >= 95 ? "Pass" : "Review"],
               ["Capacity", pct(k.capacity), "90.0%", k.capacity >= 90 ? "Pass" : "Review"],
               ["Dead zones", num(k.deadZones), "0", k.deadZones === 0 ? "Pass" : "Review"],
-              ["BOM validation", bom.validation.passed ? "Passed" : "Open items", "Passed", bom.validation.passed ? "Pass" : "Review"],
+              [
+                "BOM validation",
+                bom.validation.passed ? "Passed" : "Open items",
+                "Passed",
+                bom.validation.passed ? "Pass" : "Review",
+              ],
             ],
           },
         },
         {
           heading: "Recommendations",
           bullets: optimized.engineeringRecommendations.length
-            ? optimized.engineeringRecommendations.slice(0, 6).map((r) => `${r.title} — ${r.improvement} (${r.area})`)
+            ? optimized.engineeringRecommendations
+                .slice(0, 6)
+                .map((r) => `${r.title} — ${r.improvement} (${r.area})`)
             : ["No outstanding engineering recommendations. Design is ready for deployment."],
         },
         {
@@ -246,7 +260,10 @@ export function buildChapter(id: ChapterId, ctx: ReportContext): ReportChapter {
             ["Digital Twin", "Validated"],
             ["RF Requirements", "Approved"],
             ["RF Profile", "Approved"],
-            ["Optimized RF Design", optimized.validationReport.passed ? "Approved" : "Under review"],
+            [
+              "Optimized RF Design",
+              optimized.validationReport.passed ? "Approved" : "Under review",
+            ],
             ["Engineering BOM", `Version ${bom.version}`],
           ],
         },
@@ -285,7 +302,10 @@ export function buildChapter(id: ChapterId, ctx: ReportContext): ReportChapter {
             ["Rooms", num(rooms)],
             ["Walls", num(walls)],
             ["Columns", num(model.objects.filter((o) => o.kind === "column").length)],
-            ["Openings", num(model.objects.filter((o) => o.kind === "door" || o.kind === "window").length)],
+            [
+              "Openings",
+              num(model.objects.filter((o) => o.kind === "door" || o.kind === "window").length),
+            ],
             ["Scale", `${model.scale} px/m`],
           ],
         },
@@ -294,8 +314,14 @@ export function buildChapter(id: ChapterId, ctx: ReportContext): ReportChapter {
           rows: [
             ["Processed walls", num(initial.simulationResults.processedGeometry.walls)],
             ["Processed rooms", num(initial.simulationResults.processedGeometry.rooms)],
-            ["Material loss", `${initial.simulationResults.environment.materialLossDb.toFixed(1)} dB`],
-            ["Penetration index", initial.simulationResults.environment.penetrationIndex.toFixed(2)],
+            [
+              "Material loss",
+              `${initial.simulationResults.environment.materialLossDb.toFixed(1)} dB`,
+            ],
+            [
+              "Penetration index",
+              initial.simulationResults.environment.penetrationIndex.toFixed(2),
+            ],
           ],
         },
       ]);
@@ -329,7 +355,12 @@ export function buildChapter(id: ChapterId, ctx: ReportContext): ReportChapter {
           heading: "Frequency Profile",
           rows: [
             ["Band", profile.band ?? "—"],
-            ["Channel bandwidth", profile.bandwidth && profile.bandwidth !== "auto" ? `${profile.bandwidth} MHz` : "Auto"],
+            [
+              "Channel bandwidth",
+              profile.bandwidth && profile.bandwidth !== "auto"
+                ? `${profile.bandwidth} MHz`
+                : "Auto",
+            ],
             ["Antenna category", profile.antennaCategory ?? "—"],
             ["Propagation environment", profile.propagation ?? "—"],
             ["Ceiling height", `${config.ceiling.height} m`],
@@ -370,10 +401,30 @@ export function buildChapter(id: ChapterId, ctx: ReportContext): ReportChapter {
           table: {
             head: ["Metric", "Initial design", "Optimized design", "Delta"],
             rows: [
-              ["SINR (dB)", initial.kpis.avgSinr.toFixed(1), k.avgSinr.toFixed(1), (k.avgSinr - initial.kpis.avgSinr).toFixed(1)],
-              ["RSRP (dBm)", initial.kpis.avgRsrp.toFixed(1), k.avgRsrp.toFixed(1), (k.avgRsrp - initial.kpis.avgRsrp).toFixed(1)],
-              ["RSRQ (dB)", initial.kpis.avgRsrq.toFixed(1), k.avgRsrq.toFixed(1), (k.avgRsrq - initial.kpis.avgRsrq).toFixed(1)],
-              ["Coverage (%)", initial.kpis.coverage.toFixed(1), k.coverage.toFixed(1), (k.coverage - initial.kpis.coverage).toFixed(1)],
+              [
+                "SINR (dB)",
+                initial.kpis.avgSinr.toFixed(1),
+                k.avgSinr.toFixed(1),
+                (k.avgSinr - initial.kpis.avgSinr).toFixed(1),
+              ],
+              [
+                "RSRP (dBm)",
+                initial.kpis.avgRsrp.toFixed(1),
+                k.avgRsrp.toFixed(1),
+                (k.avgRsrp - initial.kpis.avgRsrp).toFixed(1),
+              ],
+              [
+                "RSRQ (dB)",
+                initial.kpis.avgRsrq.toFixed(1),
+                k.avgRsrq.toFixed(1),
+                (k.avgRsrq - initial.kpis.avgRsrq).toFixed(1),
+              ],
+              [
+                "Coverage (%)",
+                initial.kpis.coverage.toFixed(1),
+                k.coverage.toFixed(1),
+                (k.coverage - initial.kpis.coverage).toFixed(1),
+              ],
             ],
           },
         },
@@ -405,7 +456,11 @@ export function buildChapter(id: ChapterId, ctx: ReportContext): ReportChapter {
           heading: "Engineering Validation",
           table: {
             head: ["Check", "Status", "Detail"],
-            rows: optimized.validationReport.items.map((i) => [i.label, i.pass ? "Pass" : "Review", i.detail]),
+            rows: optimized.validationReport.items.map((i) => [
+              i.label,
+              i.pass ? "Pass" : "Review",
+              i.detail,
+            ]),
           },
         },
         {
@@ -573,9 +628,15 @@ export function buildChapter(id: ChapterId, ctx: ReportContext): ReportChapter {
         {
           heading: "Engines",
           rows: [
-            ["Simulation engine", `${initial.simulationMetadata.engine} ${initial.simulationMetadata.engineVersion}`],
+            [
+              "Simulation engine",
+              `${initial.simulationMetadata.engine} ${initial.simulationMetadata.engineVersion}`,
+            ],
             ["Recalculation service", optimized.simulationMetadata.recalculationService],
-            ["Pricing database", `${bom.pricingMetadata.database} ${bom.pricingMetadata.databaseVersion}`],
+            [
+              "Pricing database",
+              `${bom.pricingMetadata.database} ${bom.pricingMetadata.databaseVersion}`,
+            ],
             ["Currency", bom.pricingMetadata.currency],
           ],
         },
@@ -664,8 +725,7 @@ export const REPORT_DEFS: ReportDefinition[] = [
   },
 ];
 
-export const reportDef = (id: ReportId) =>
-  REPORT_DEFS.find((r) => r.id === id) ?? REPORT_DEFS[0]!;
+export const reportDef = (id: ReportId) => REPORT_DEFS.find((r) => r.id === id) ?? REPORT_DEFS[0]!;
 
 /* -------------------- report documents -------------------- */
 
@@ -679,7 +739,13 @@ export interface ReportDocument {
   id: ReportId;
   title: string;
   subtitle: string;
-  cover: { project: string; technology: string; version: string; generatedAt: number; author: string };
+  cover: {
+    project: string;
+    technology: string;
+    version: string;
+    generatedAt: number;
+    author: string;
+  };
   toc: { title: string; page: number }[];
   pages: ReportPage[];
   figures: number;
@@ -727,10 +793,7 @@ export function buildReportDocument(
   };
   pages.push(appendix);
 
-  const tables = pages.reduce(
-    (n, p) => n + p.sections.filter((s) => s.table || s.rows).length,
-    0,
-  );
+  const tables = pages.reduce((n, p) => n + p.sections.filter((s) => s.table || s.rows).length, 0);
 
   return {
     id,
@@ -760,14 +823,49 @@ export interface MapDefinition {
 }
 
 export const MAP_DEFS: MapDefinition[] = [
-  { id: "coverage", title: "Coverage Map", description: "Predicted signal coverage footprint", layer: "coverage" },
-  { id: "capacity", title: "Capacity Map", description: "Throughput distribution per grid cell", layer: "capacity" },
-  { id: "sinr", title: "SINR Map", description: "Signal to interference and noise ratio", layer: "sinr" },
+  {
+    id: "coverage",
+    title: "Coverage Map",
+    description: "Predicted signal coverage footprint",
+    layer: "coverage",
+  },
+  {
+    id: "capacity",
+    title: "Capacity Map",
+    description: "Throughput distribution per grid cell",
+    layer: "capacity",
+  },
+  {
+    id: "sinr",
+    title: "SINR Map",
+    description: "Signal to interference and noise ratio",
+    layer: "sinr",
+  },
   { id: "rsrp", title: "RSRP Map", description: "Reference signal received power", layer: "rsrp" },
-  { id: "rsrq", title: "RSRQ Map", description: "Reference signal received quality", layer: "rsrq" },
-  { id: "interference", title: "Interference Map", description: "Cell overlap and interference risk", layer: "interference" },
-  { id: "critical", title: "Critical Areas Map", description: "Priority areas defined in RF requirements", layer: "critical" },
-  { id: "antenna", title: "Antenna Layout Map", description: "Approved antenna positions and coverage radii", layer: null },
+  {
+    id: "rsrq",
+    title: "RSRQ Map",
+    description: "Reference signal received quality",
+    layer: "rsrq",
+  },
+  {
+    id: "interference",
+    title: "Interference Map",
+    description: "Cell overlap and interference risk",
+    layer: "interference",
+  },
+  {
+    id: "critical",
+    title: "Critical Areas Map",
+    description: "Priority areas defined in RF requirements",
+    layer: "critical",
+  },
+  {
+    id: "antenna",
+    title: "Antenna Layout Map",
+    description: "Approved antenna positions and coverage radii",
+    layer: null,
+  },
 ];
 
 /* -------------------- report library state -------------------- */
@@ -918,20 +1016,25 @@ const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replac
 export function documentToHtml(doc: ReportDocument) {
   const body = doc.pages
     .map(
-      (p) => `<section class="page"><h2>${esc(p.title)}</h2>${p.sections
-        .map((s) => {
-          const rows = s.rows
-            ? `<table>${s.rows.map(([k, v]) => `<tr><th>${esc(k)}</th><td>${esc(v)}</td></tr>`).join("")}</table>`
-            : "";
-          const bullets = s.bullets ? `<ul>${s.bullets.map((b) => `<li>${esc(b)}</li>`).join("")}</ul>` : "";
-          const table = s.table
-            ? `<table><thead><tr>${s.table.head.map((h) => `<th>${esc(h)}</th>`).join("")}</tr></thead><tbody>${s.table.rows
-                .map((r) => `<tr>${r.map((c) => `<td>${esc(c)}</td>`).join("")}</tr>`)
-                .join("")}</tbody></table>`
-            : "";
-          return `<h3>${esc(s.heading)}</h3>${s.text ? `<p>${esc(s.text)}</p>` : ""}${rows}${bullets}${table}`;
-        })
-        .join("")}<footer>${esc(doc.title)} · ${esc(doc.cover.project)} · Page ${p.index}</footer></section>`,
+      (p) =>
+        `<section class="page"><h2>${esc(p.title)}</h2>${p.sections
+          .map((s) => {
+            const rows = s.rows
+              ? `<table>${s.rows.map(([k, v]) => `<tr><th>${esc(k)}</th><td>${esc(v)}</td></tr>`).join("")}</table>`
+              : "";
+            const bullets = s.bullets
+              ? `<ul>${s.bullets.map((b) => `<li>${esc(b)}</li>`).join("")}</ul>`
+              : "";
+            const table = s.table
+              ? `<table><thead><tr>${s.table.head.map((h) => `<th>${esc(h)}</th>`).join("")}</tr></thead><tbody>${s.table.rows
+                  .map((r) => `<tr>${r.map((c) => `<td>${esc(c)}</td>`).join("")}</tr>`)
+                  .join("")}</tbody></table>`
+              : "";
+            return `<h3>${esc(s.heading)}</h3>${s.text ? `<p>${esc(s.text)}</p>` : ""}${rows}${bullets}${table}`;
+          })
+          .join(
+            "",
+          )}<footer>${esc(doc.title)} · ${esc(doc.cover.project)} · Page ${p.index}</footer></section>`,
     )
     .join("");
 
@@ -960,7 +1063,9 @@ export function documentToExcelXml(doc: ReportDocument) {
       if (s.table)
         return `<tr><td colspan="${s.table.head.length}"><b>${esc(s.heading)}</b></td></tr><tr>${s.table.head
           .map((h) => `<th>${esc(h)}</th>`)
-          .join("")}</tr>${s.table.rows.map((r) => `<tr>${r.map((c) => `<td>${esc(c)}</td>`).join("")}</tr>`).join("")}`;
+          .join(
+            "",
+          )}</tr>${s.table.rows.map((r) => `<tr>${r.map((c) => `<td>${esc(c)}</td>`).join("")}</tr>`).join("")}`;
       if (s.rows)
         return `<tr><td colspan="2"><b>${esc(s.heading)}</b></td></tr>${s.rows
           .map(([k, v]) => `<tr><td>${esc(k)}</td><td>${esc(v)}</td></tr>`)
@@ -1005,7 +1110,12 @@ export function reportKpis(state: ReportsState): ReportKpis {
     chaptersCompleted: state.chaptersDone.length,
     mapsGenerated: state.mapsDone.length,
     documentsReady: ready,
-    packageStatus: state.status === "done" ? "Ready to export" : state.status === "running" ? "Generating" : "Not generated",
+    packageStatus:
+      state.status === "done"
+        ? "Ready to export"
+        : state.status === "running"
+          ? "Generating"
+          : "Not generated",
     projectCompletion: Math.min(100, completion),
   };
 }

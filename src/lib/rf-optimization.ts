@@ -102,14 +102,7 @@ export const HEIGHT_MAX = 6;
 /* -------------------- change descriptor -------------------- */
 
 export type OptChangeKind =
-  | "move"
-  | "add"
-  | "delete"
-  | "replace"
-  | "power"
-  | "height"
-  | "lock"
-  | "recommendation";
+  "move" | "add" | "delete" | "replace" | "power" | "height" | "lock" | "recommendation";
 
 export interface OptChange {
   kind: OptChangeKind;
@@ -215,7 +208,10 @@ export function buildSuggestions(
     });
   }
   if (interference) {
-    const target = antennas.find((a) => a.id === interference.id.replace("warn-int-", "")) ?? antennas[1] ?? antennas[0];
+    const target =
+      antennas.find((a) => a.id === interference.id.replace("warn-int-", "")) ??
+      antennas[1] ??
+      antennas[0];
     if (target) {
       out.push({
         id: "sug-move",
@@ -643,7 +639,9 @@ export function optimizedToReport(design: OptimizedRfDesign) {
     "",
     "VALIDATION",
     "----------",
-    ...design.validationReport.items.map((i) => `${i.pass ? "PASS" : "FAIL"}  ${i.label} — ${i.detail}`),
+    ...design.validationReport.items.map(
+      (i) => `${i.pass ? "PASS" : "FAIL"}  ${i.label} — ${i.detail}`,
+    ),
     "",
     "DESIGN HISTORY",
     "--------------",

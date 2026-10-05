@@ -214,7 +214,11 @@ function ReportsRoute() {
           </div>
         </section>
 
-        <MapsCenter model={project.model} layers={layers} antennas={ctx.optimized.optimizedAntennaLayout} />
+        <MapsCenter
+          model={project.model}
+          layers={layers}
+          antennas={ctx.optimized.optimizedAntennaLayout}
+        />
 
         <ChapterBuilder chapters={chapters} completed={gen.state.chaptersDone} />
 

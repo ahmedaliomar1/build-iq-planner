@@ -181,9 +181,7 @@ export function BomWorkflow({
                         }`}
                       >
                         <span>{task.label}</span>
-                        <span className="num text-[11px]">
-                          {tdone ? "✓" : trun ? "…" : ""}
-                        </span>
+                        <span className="num text-[11px]">{tdone ? "✓" : trun ? "…" : ""}</span>
                       </li>
                     );
                   })}
@@ -283,7 +281,9 @@ function VendorCard({
     <button
       onClick={onClick}
       className={`rounded-2xl border p-4 text-left transition-smooth ${
-        active ? "border-primary bg-primary/5 shadow-soft" : "border-border bg-background hover:bg-accent"
+        active
+          ? "border-primary bg-primary/5 shadow-soft"
+          : "border-border bg-background hover:bg-accent"
       }`}
     >
       <span className="grid size-10 place-items-center rounded-xl border border-border bg-card text-xs font-bold">

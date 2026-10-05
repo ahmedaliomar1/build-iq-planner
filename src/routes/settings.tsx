@@ -7,7 +7,8 @@ export const Route = createFileRoute("/settings")({
       { title: "Settings — AI Private Cellular Planner" },
       {
         name: "description",
-        content: "Workspace preferences: units, autosave interval, AI analysis and validation defaults.",
+        content:
+          "Workspace preferences: units, autosave interval, AI analysis and validation defaults.",
       },
       { property: "og:title", content: "Settings — AI Private Cellular Planner" },
       {

@@ -74,9 +74,7 @@ export function MaterialsPanel({
   const [cat, setCat] = useState("All");
   const cats = ["All", ...new Set(MATERIALS.map((m) => m.category))];
   const list = MATERIALS.filter(
-    (m) =>
-      (cat === "All" || m.category === cat) &&
-      m.name.toLowerCase().includes(q.toLowerCase()),
+    (m) => (cat === "All" || m.category === cat) && m.name.toLowerCase().includes(q.toLowerCase()),
   );
 
   return (
@@ -144,9 +142,7 @@ export function ValidationPanel({
     <div className="p-3">
       <div
         className={`rounded-xl px-3 py-2.5 text-xs font-bold ${
-          issues.length === 0
-            ? "bg-success-soft text-success"
-            : "bg-warning-soft text-warning"
+          issues.length === 0 ? "bg-success-soft text-success" : "bg-warning-soft text-warning"
         }`}
       >
         {issues.length === 0
@@ -188,9 +184,7 @@ export function ValidationPanel({
                   <p className="mt-1 text-[11px] leading-relaxed text-muted-foreground">
                     {f.detail}
                   </p>
-                  <p className="mt-1 text-[11px] font-semibold text-primary">
-                    Fix: {f.suggestion}
-                  </p>
+                  <p className="mt-1 text-[11px] font-semibold text-primary">Fix: {f.suggestion}</p>
                 </button>
               ))}
             </li>

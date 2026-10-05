@@ -125,11 +125,7 @@ export function useBomGeneration(projectId: string, design: OptimizedRfDesign | 
 
       if (stage.id === "bom") {
         items = buildBomItems(design, detection, vendorById("custom"));
-        log = pushLog(
-          `Bill of Materials generated — ${items.length} line items`,
-          "calc",
-          log,
-        );
+        log = pushLog(`Bill of Materials generated — ${items.length} line items`, "calc", log);
       }
       if (stage.id === "pricing") {
         items = buildBomItems(design, detection, vendor);
@@ -151,7 +147,11 @@ export function useBomGeneration(projectId: string, design: OptimizedRfDesign | 
         );
       }
       if (stage.id === "power") {
-        log = pushLog(`Estimated total power: ${computePower(detection).totalWatts} W`, "calc", log);
+        log = pushLog(
+          `Estimated total power: ${computePower(detection).totalWatts} W`,
+          "calc",
+          log,
+        );
       }
       if (stage.id === "rack") {
         const r = computeRack(detection);
@@ -159,7 +159,11 @@ export function useBomGeneration(projectId: string, design: OptimizedRfDesign | 
       }
       if (stage.id === "cable") {
         const c = computeCables(detection);
-        log = pushLog(`Cable summary: ${c.totalMeters} m — ${c.complexity} complexity`, "calc", log);
+        log = pushLog(
+          `Cable summary: ${c.totalMeters} m — ${c.complexity} complexity`,
+          "calc",
+          log,
+        );
       }
 
       timer.current = setTimeout(() => {
@@ -202,7 +206,8 @@ export function useBomGeneration(projectId: string, design: OptimizedRfDesign | 
 
   /** effective BOM = generated items re-priced by the applied recommendations */
   const items = useMemo(
-    () => (state.applied.length ? applyOptimizations(state.items, state.applied, vendor) : state.items),
+    () =>
+      state.applied.length ? applyOptimizations(state.items, state.applied, vendor) : state.items,
     [state.items, state.applied, vendor],
   );
 
@@ -226,7 +231,12 @@ export function useBomGeneration(projectId: string, design: OptimizedRfDesign | 
   const overview = useMemo(() => procurementOverview(vendor), [vendor]);
 
   const optimizations = useMemo(
-    () => buildCostOptimizations(state.items, laborTotal(computeLabor(detection?.antennas ?? 0)), vendor),
+    () =>
+      buildCostOptimizations(
+        state.items,
+        laborTotal(computeLabor(detection?.antennas ?? 0)),
+        vendor,
+      ),
     [state.items, detection, vendor],
   );
 
@@ -331,7 +341,11 @@ export function useBomGeneration(projectId: string, design: OptimizedRfDesign | 
         versions: [record, ...current.versions].slice(0, 20),
         log: [
           ...current.log,
-          { at: Date.now(), text: `Engineering BOM saved — version ${version}`, kind: "ok" as const },
+          {
+            at: Date.now(),
+            text: `Engineering BOM saved — version ${version}`,
+            kind: "ok" as const,
+          },
         ].slice(-140),
       });
       return record;

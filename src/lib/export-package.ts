@@ -195,7 +195,14 @@ export function validatePackage(
   reports: ReportsState,
   selected: string[],
 ): { checks: PackageCheck[]; passed: boolean } {
-  const ok = (id: string, label: string, passed: boolean, detail: string, resolution: string, reportId?: ReportId): PackageCheck => ({
+  const ok = (
+    id: string,
+    label: string,
+    passed: boolean,
+    detail: string,
+    resolution: string,
+    reportId?: ReportId,
+  ): PackageCheck => ({
     id,
     label,
     passed,
@@ -360,7 +367,11 @@ export function buildPackageFiles(
           project: ctx.project.name,
           renderedAt: Date.now(),
           layer: layer
-            ? { label: (layer as { label?: string }).label, min: (layer as { min?: number }).min, max: (layer as { max?: number }).max }
+            ? {
+                label: (layer as { label?: string }).label,
+                min: (layer as { min?: number }).min,
+                max: (layer as { max?: number }).max,
+              }
             : null,
         },
         null,
@@ -693,7 +704,8 @@ export function buildZip(entries: { path: string; content: string }[]): Blob {
   const central: Uint8Array[] = [];
   let offset = 0;
 
-  const u32 = (v: number) => new Uint8Array([v & 255, (v >> 8) & 255, (v >> 16) & 255, (v >>> 24) & 255]);
+  const u32 = (v: number) =>
+    new Uint8Array([v & 255, (v >> 8) & 255, (v >> 16) & 255, (v >>> 24) & 255]);
   const u16 = (v: number) => new Uint8Array([v & 255, (v >> 8) & 255]);
   const concat = (parts: Uint8Array[]) => {
     const size = parts.reduce((n, p) => n + p.length, 0);

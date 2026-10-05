@@ -14,14 +14,7 @@ function cellColor(layer: RfLayer, v: number, raw: number) {
   return HEAT[Math.min(HEAT.length - 1, Math.max(0, Math.floor(v * HEAT.length)))]!;
 }
 
-export type OptTool =
-  | "select"
-  | "move"
-  | "add"
-  | "delete"
-  | "replace"
-  | "measure"
-  | "box";
+export type OptTool = "select" | "move" | "add" | "delete" | "replace" | "measure" | "box";
 
 export interface CanvasApi {
   zoomIn: () => void;
@@ -97,11 +90,11 @@ export function OptCanvas({
         ...l,
         visible:
           l.id === "walls"
-            ? layerSettings['walls']?.visible !== false
+            ? layerSettings["walls"]?.visible !== false
             : l.id === "labels"
-              ? layerSettings['rooms']?.visible !== false
+              ? layerSettings["rooms"]?.visible !== false
               : l.id === "columns"
-                ? layerSettings['materials']?.visible !== false
+                ? layerSettings["materials"]?.visible !== false
                 : l.visible,
       })),
     }),
@@ -134,7 +127,11 @@ export function OptCanvas({
   const onPointerMove = (e: React.PointerEvent) => {
     const p = vp.toModel(e.clientX, e.clientY);
     if (measure && dragStart.current) {
-      setMeasure({ ...dragStart.current && { x1: dragStart.current.x, y1: dragStart.current.y }, x2: p.x, y2: p.y } as typeof measure);
+      setMeasure({
+        ...(dragStart.current && { x1: dragStart.current.x, y1: dragStart.current.y }),
+        x2: p.x,
+        y2: p.y,
+      } as typeof measure);
       return;
     }
     if (box && dragStart.current) {
@@ -154,7 +151,9 @@ export function OptCanvas({
       const x2 = Math.max(box.x1, box.x2);
       const y1 = Math.min(box.y1, box.y2);
       const y2 = Math.max(box.y1, box.y2);
-      const ids = antennas.filter((a) => a.x >= x1 && a.x <= x2 && a.y >= y1 && a.y <= y2).map((a) => a.id);
+      const ids = antennas
+        .filter((a) => a.x >= x1 && a.x <= x2 && a.y >= y1 && a.y <= y2)
+        .map((a) => a.id);
       onSelect(ids);
       setBox(null);
       dragStart.current = null;
@@ -228,7 +227,7 @@ export function OptCanvas({
 
             <Scene model={viewModel} showDimensions={false} />
 
-            {layerSettings['antennas']?.visible !== false &&
+            {layerSettings["antennas"]?.visible !== false &&
               antennas.map((a) => {
                 const sel = selectedIds.includes(a.id);
                 const ox = sel && drag ? drag.dx : 0;
@@ -240,7 +239,7 @@ export function OptCanvas({
                     onPointerEnter={() => setHover(a)}
                     onPointerLeave={() => setHover(null)}
                     style={{ cursor: "pointer" }}
-                    opacity={layerSettings['antennas']?.opacity ?? 1}
+                    opacity={layerSettings["antennas"]?.opacity ?? 1}
                   >
                     <circle
                       cx={a.x + ox}
@@ -262,7 +261,12 @@ export function OptCanvas({
                       strokeWidth={0.18}
                     />
                     {a.locked && (
-                      <text x={a.x + ox + 1.2} y={a.y + oy - 0.9} fontSize={1.1} fill="var(--warning)">
+                      <text
+                        x={a.x + ox + 1.2}
+                        y={a.y + oy - 0.9}
+                        fontSize={1.1}
+                        fill="var(--warning)"
+                      >
                         ●
                       </text>
                     )}

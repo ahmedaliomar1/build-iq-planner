@@ -104,9 +104,7 @@ export function useReportGeneration(projectId: string, ctx: ReportContext | null
           : state.chaptersDone;
 
       const mapsDone =
-        s.id === "builder" && task.id === "figures"
-          ? MAP_DEFS.map((m) => m.id)
-          : state.mapsDone;
+        s.id === "builder" && task.id === "figures" ? MAP_DEFS.map((m) => m.id) : state.mapsDone;
 
       if (s.id === "builder" && task.id === "figures") {
         log = push(log, `${MAP_DEFS.length} engineering maps rendered`, "calc");
@@ -154,7 +152,13 @@ export function useReportGeneration(projectId: string, ctx: ReportContext | null
     saveReportsState(projectId, {
       status: "running",
       startedAt: Date.now(),
-      log: [{ at: Date.now(), kind: "info", text: "Report generation started — collecting engineering objects" }],
+      log: [
+        {
+          at: Date.now(),
+          kind: "info",
+          text: "Report generation started — collecting engineering objects",
+        },
+      ],
     });
   }, [projectId]);
 
@@ -215,7 +219,12 @@ export function useReportGeneration(projectId: string, ctx: ReportContext | null
     (reportId: ReportId) => {
       if (!ctx) return null;
       const rec = state.reports.find((r) => r.reportId === reportId);
-      return buildReportDocument(reportId, ctx, rec?.version ?? "v1.0", rec?.generatedAt ?? Date.now());
+      return buildReportDocument(
+        reportId,
+        ctx,
+        rec?.version ?? "v1.0",
+        rec?.generatedAt ?? Date.now(),
+      );
     },
     [ctx, state.reports],
   );

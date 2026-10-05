@@ -27,7 +27,8 @@ export function RfSummary({
   const rows: { label: string; value: string; step: number }[] = [
     {
       label: "Technology",
-      value: cfg.technology === "5g" ? "Private 5G" : cfg.technology === "lte" ? "Private LTE" : "—",
+      value:
+        cfg.technology === "5g" ? "Private 5G" : cfg.technology === "lte" ? "Private LTE" : "—",
       step: 0,
     },
     { label: "Deployment Purpose", value: purpose, step: 1 },
@@ -117,10 +118,12 @@ export function RfSummary({
             Room priorities
           </p>
           <ul className="mt-3 flex flex-wrap gap-2">
-            {(project.model.objects.filter((o) => o.kind === "room") as {
-              id: string;
-              name: string;
-            }[])
+            {(
+              project.model.objects.filter((o) => o.kind === "room") as {
+                id: string;
+                name: string;
+              }[]
+            )
               .filter((r) => cfg.roomPriorities[r.id])
               .map((r) => {
                 const p = cfg.roomPriorities[r.id]!;

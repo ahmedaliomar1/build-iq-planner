@@ -2,12 +2,7 @@ import { useSyncExternalStore } from "react";
 import type { BuildingModel, MaterialId, Project, WallObj } from "./building-model";
 import { materialById } from "./building-model";
 import { polygonArea } from "./geometry";
-import {
-  buildRequirementsPackage,
-  buildingStats,
-  totalDevices,
-  type RfConfig,
-} from "./rf-config";
+import { buildRequirementsPackage, buildingStats, totalDevices, type RfConfig } from "./rf-config";
 
 /* -------------------- knowledge base -------------------- */
 
@@ -86,7 +81,11 @@ export const BANDS: BandOption[] = [
 ];
 
 export const BANDWIDTHS: { id: string; label: string; note: string }[] = [
-  { id: "auto", label: "Auto", note: "Let the planning engine size the channel from capacity targets." },
+  {
+    id: "auto",
+    label: "Auto",
+    note: "Let the planning engine size the channel from capacity targets.",
+  },
   { id: "20", label: "20 MHz", note: "Coverage-first. Lowest noise floor per RB, best cell edge." },
   { id: "40", label: "40 MHz", note: "Balanced throughput and cell-edge performance." },
   { id: "50", label: "50 MHz", note: "Common TDD allocation for private 5G licences." },
@@ -144,27 +143,97 @@ export const PROPAGATION_ENVIRONMENTS: {
   note: string;
   buildingTypes: string[];
 }[] = [
-  { id: "factory", label: "Factory", note: "Dense metal clutter, high ceilings, strong multipath.", buildingTypes: ["Factory"] },
-  { id: "office", label: "Office", note: "Gypsum partitions, regular room grid, moderate loss.", buildingTypes: ["Office", "University"] },
-  { id: "hospital", label: "Hospital", note: "Shielded rooms, dense concrete cores, corridors.", buildingTypes: ["Hospital"] },
-  { id: "warehouse", label: "Warehouse", note: "Open volumes with high racking obstruction.", buildingTypes: ["Warehouse"] },
-  { id: "airport", label: "Airport", note: "Very large open halls with glass facades.", buildingTypes: ["Airport", "Mall"] },
-  { id: "mixed", label: "Mixed Environment", note: "Combination of open and partitioned areas.", buildingTypes: [] },
+  {
+    id: "factory",
+    label: "Factory",
+    note: "Dense metal clutter, high ceilings, strong multipath.",
+    buildingTypes: ["Factory"],
+  },
+  {
+    id: "office",
+    label: "Office",
+    note: "Gypsum partitions, regular room grid, moderate loss.",
+    buildingTypes: ["Office", "University"],
+  },
+  {
+    id: "hospital",
+    label: "Hospital",
+    note: "Shielded rooms, dense concrete cores, corridors.",
+    buildingTypes: ["Hospital"],
+  },
+  {
+    id: "warehouse",
+    label: "Warehouse",
+    note: "Open volumes with high racking obstruction.",
+    buildingTypes: ["Warehouse"],
+  },
+  {
+    id: "airport",
+    label: "Airport",
+    note: "Very large open halls with glass facades.",
+    buildingTypes: ["Airport", "Mall"],
+  },
+  {
+    id: "mixed",
+    label: "Mixed Environment",
+    note: "Combination of open and partitioned areas.",
+    buildingTypes: [],
+  },
 ];
 
 export const REGULATIONS: Record<
   string,
   { regulator: string; allowed: string[]; restricted: string[]; maxEirp: string }
 > = {
-  "Saudi Arabia": { regulator: "CST", allowed: ["n78", "n41", "n28"], restricted: [], maxEirp: "33 dBm/20 MHz indoor" },
-  Egypt: { regulator: "NTRA", allowed: ["n78", "b3"], restricted: ["n258"], maxEirp: "30 dBm/20 MHz indoor" },
-  "United Arab Emirates": { regulator: "TDRA", allowed: ["n78", "n41"], restricted: [], maxEirp: "33 dBm/20 MHz indoor" },
-  Qatar: { regulator: "CRA", allowed: ["n78", "n41"], restricted: ["n258"], maxEirp: "30 dBm/20 MHz indoor" },
-  Kuwait: { regulator: "CITRA", allowed: ["n78"], restricted: ["n258"], maxEirp: "30 dBm/20 MHz indoor" },
-  Germany: { regulator: "BNetzA", allowed: ["n78", "n258"], restricted: [], maxEirp: "36 dBm/50 MHz indoor" },
+  "Saudi Arabia": {
+    regulator: "CST",
+    allowed: ["n78", "n41", "n28"],
+    restricted: [],
+    maxEirp: "33 dBm/20 MHz indoor",
+  },
+  Egypt: {
+    regulator: "NTRA",
+    allowed: ["n78", "b3"],
+    restricted: ["n258"],
+    maxEirp: "30 dBm/20 MHz indoor",
+  },
+  "United Arab Emirates": {
+    regulator: "TDRA",
+    allowed: ["n78", "n41"],
+    restricted: [],
+    maxEirp: "33 dBm/20 MHz indoor",
+  },
+  Qatar: {
+    regulator: "CRA",
+    allowed: ["n78", "n41"],
+    restricted: ["n258"],
+    maxEirp: "30 dBm/20 MHz indoor",
+  },
+  Kuwait: {
+    regulator: "CITRA",
+    allowed: ["n78"],
+    restricted: ["n258"],
+    maxEirp: "30 dBm/20 MHz indoor",
+  },
+  Germany: {
+    regulator: "BNetzA",
+    allowed: ["n78", "n258"],
+    restricted: [],
+    maxEirp: "36 dBm/50 MHz indoor",
+  },
   France: { regulator: "ARCEP", allowed: ["n78"], restricted: [], maxEirp: "33 dBm/20 MHz indoor" },
-  "United Kingdom": { regulator: "Ofcom", allowed: ["n77", "n78", "n258"], restricted: [], maxEirp: "36 dBm/20 MHz indoor" },
-  "United States": { regulator: "FCC", allowed: ["b48", "n48", "n258"], restricted: ["n78"], maxEirp: "30 dBm/10 MHz (CBRS GAA)" },
+  "United Kingdom": {
+    regulator: "Ofcom",
+    allowed: ["n77", "n78", "n258"],
+    restricted: [],
+    maxEirp: "36 dBm/20 MHz indoor",
+  },
+  "United States": {
+    regulator: "FCC",
+    allowed: ["b48", "n48", "n258"],
+    restricted: ["n78"],
+    maxEirp: "30 dBm/10 MHz (CBRS GAA)",
+  },
   Japan: { regulator: "MIC", allowed: ["n79", "n257"], restricted: [], maxEirp: "24 dBm indoor" },
 };
 
@@ -186,11 +255,19 @@ export const RF_STANDARDS = {
 };
 
 export const KB_LIBRARIES = [
-  { id: "materials", label: "Material Database", detail: "412 building materials with RF loss models" },
+  {
+    id: "materials",
+    label: "Material Database",
+    detail: "412 building materials with RF loss models",
+  },
   { id: "frequency", label: "Frequency Database", detail: "3GPP FR1 / FR2 band definitions" },
   { id: "antenna", label: "Antenna Database", detail: "Category patterns and gain envelopes" },
   { id: "propagation", label: "Propagation Models", detail: "ITU-R P.1238, 3GPP InF / InH" },
-  { id: "regulations", label: "Country Regulations", detail: "Spectrum and EIRP limits by country" },
+  {
+    id: "regulations",
+    label: "Country Regulations",
+    detail: "Spectrum and EIRP limits by country",
+  },
   { id: "standards", label: "RF Standards", detail: "Release 18 indoor deployment profiles" },
   { id: "vendor", label: "Vendor Catalog", detail: "Radio product families by vendor" },
 ];
@@ -568,11 +645,7 @@ export function validateRfProfile(
 
 /* -------------------- output object -------------------- */
 
-export function buildRfProfileObject(
-  project: Project,
-  cfg: RfConfig,
-  prof: RfProfileConfig,
-) {
+export function buildRfProfileObject(project: Project, cfg: RfConfig, prof: RfProfileConfig) {
   const pkg = buildRequirementsPackage(project, cfg);
   const band = BANDS.find((b) => b.id === prof.band) ?? null;
   const reg = regulationFor(project.country);
@@ -604,11 +677,20 @@ export function buildRfProfileObject(
     },
     rfDesignRequirements: pkg,
     selectedTechnology: cfg.technology === "lte" ? "Private LTE" : "Private 5G",
-    selectedFrequencyBand: band && { band: band.label, frequencyMhz: band.freq, mode: prof.bandMode },
+    selectedFrequencyBand: band && {
+      band: band.label,
+      frequencyMhz: band.freq,
+      mode: prof.bandMode,
+    },
     channelBandwidth: prof.bandwidth === "auto" ? "Auto" : `${prof.bandwidth} MHz`,
     propagationEnvironment: env && { id: env.id, label: env.label, mode: prof.propagationMode },
     antennaCategory: prof.antennaCategory,
-    materialLibrary: dist.map((d) => ({ material: d.id, name: d.name, walls: d.count, percent: d.pct })),
+    materialLibrary: dist.map((d) => ({
+      material: d.id,
+      name: d.name,
+      walls: d.count,
+      percent: d.pct,
+    })),
     obstacleLibrary: obstacles,
     countryRegulations: { country: project.country, ...reg },
     rfStandards: RF_STANDARDS,

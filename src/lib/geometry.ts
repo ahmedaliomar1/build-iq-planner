@@ -161,11 +161,7 @@ export function generateAiModel(buildingType: string): BuildingModel {
   // doors + windows attached to walls
   const walls = objects.filter((o): o is WallObj => o.kind === "wall");
   const openings: OpeningObj[] = [];
-  const attach = (
-    wall: WallObj,
-    t: number,
-    kind: "door" | "window",
-  ): OpeningObj => {
+  const attach = (wall: WallObj, t: number, kind: "door" | "window"): OpeningObj => {
     const base: OpeningObj = {
       id: uid(kind),
       kind,

@@ -4,7 +4,7 @@ import type { APIError } from "@/types";
  * Centralized API client. Every HTTP call to the FastAPI backend goes
  * through here — never call fetch() from components or pages.
  */
-const API_BASE_URL: string = (import.meta.env['VITE_API_BASE_URL'] as string | undefined) ?? "";
+const API_BASE_URL: string = (import.meta.env["VITE_API_BASE_URL"] as string | undefined) ?? "";
 
 /** Mock mode stays on until a backend URL is configured. */
 export const USE_MOCK = !API_BASE_URL;
@@ -29,12 +29,12 @@ const friendly = (status: number) =>
       : status === 499
         ? "The operation was cancelled."
         : status === 0
-    ? "Can't reach the server. Check your connection and try again."
-    : status === 404
-      ? "The requested item could not be found."
-      : status >= 500
-        ? "The server had a problem. Please try again in a moment."
-        : "The request could not be completed.";
+          ? "Can't reach the server. Check your connection and try again."
+          : status === 404
+            ? "The requested item could not be found."
+            : status >= 500
+              ? "The server had a problem. Please try again in a moment."
+              : "The request could not be completed.";
 
 type Options = Omit<RequestInit, "body"> & { body?: unknown; timeoutMs?: number };
 
@@ -47,7 +47,10 @@ async function request<T>(method: string, path: string, opts: Options = {}): Pro
     const res = await fetch(`${API_BASE_URL}${path}`, {
       method,
       signal: rest.signal ?? controller.signal,
-      headers: { ...(isForm || body === undefined ? {} : { "Content-Type": "application/json" }), ...headers },
+      headers: {
+        ...(isForm || body === undefined ? {} : { "Content-Type": "application/json" }),
+        ...headers,
+      },
       body: body === undefined ? null : isForm ? (body as FormData) : JSON.stringify(body),
       ...rest,
     });
@@ -58,14 +61,23 @@ async function request<T>(method: string, path: string, opts: Options = {}): Pro
       } catch {
         /* non-JSON error body */
       }
-      throw new ApiError({ status: res.status, code: `HTTP_${res.status}`, message: friendly(res.status), details });
+      throw new ApiError({
+        status: res.status,
+        code: `HTTP_${res.status}`,
+        message: friendly(res.status),
+        details,
+      });
     }
     const type = res.headers.get("content-type") ?? "";
     if (type.includes("application/json")) {
       try {
         return (await res.json()) as T;
       } catch {
-        throw new ApiError({ status: res.status, code: "MALFORMED", message: "The server sent an unreadable response." });
+        throw new ApiError({
+          status: res.status,
+          code: "MALFORMED",
+          message: "The server sent an unreadable response.",
+        });
       }
     }
     return (await res.blob()) as unknown as T;

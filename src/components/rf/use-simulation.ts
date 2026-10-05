@@ -34,10 +34,7 @@ export function useSimulationRunner(
     [project, config, profile],
   );
 
-  const candidates = useMemo(
-    () => (ctx ? placeholderRfEngine.generateCandidates(ctx) : []),
-    [ctx],
-  );
+  const candidates = useMemo(() => (ctx ? placeholderRfEngine.generateCandidates(ctx) : []), [ctx]);
 
   /* ---- derived progress ---- */
   const doneBefore = useMemo(
@@ -51,7 +48,10 @@ export function useSimulationRunner(
       : state.task;
   const tasksDone = state.status === "complete" ? TOTAL_TASKS : doneBefore + withinStage;
   const progress = Math.min(100, (tasksDone / TOTAL_TASKS) * 100);
-  const remainingMs = Math.max(0, ESTIMATED_TOTAL_MS - (tasksDone / TOTAL_TASKS) * ESTIMATED_TOTAL_MS);
+  const remainingMs = Math.max(
+    0,
+    ESTIMATED_TOTAL_MS - (tasksDone / TOTAL_TASKS) * ESTIMATED_TOTAL_MS,
+  );
   const candidateCount =
     state.stage > 2 || state.status === "complete"
       ? candidates.length
@@ -117,7 +117,11 @@ export function useSimulationRunner(
         iteration: 1,
         elapsedMs,
         log: s.gate
-          ? push(log, `${candidates.length} candidate locations found — awaiting confirmation`, "warn")
+          ? push(
+              log,
+              `${candidates.length} candidate locations found — awaiting confirmation`,
+              "warn",
+            )
           : log,
       });
     }, s.pace);
@@ -132,7 +136,9 @@ export function useSimulationRunner(
     resetSimState(projectId);
     saveSimState(projectId, {
       status: "running",
-      log: [{ at: Date.now(), level: "info", text: "Simulation started — loading engineering context" }],
+      log: [
+        { at: Date.now(), level: "info", text: "Simulation started — loading engineering context" },
+      ],
     });
   }, [projectId]);
 

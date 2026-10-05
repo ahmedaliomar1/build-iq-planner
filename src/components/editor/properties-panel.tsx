@@ -28,9 +28,7 @@ const inputCls =
 function Stat({ label, value }: { label: string; value: string }) {
   return (
     <div className="rounded-lg border border-border bg-background px-3 py-2">
-      <p className="text-[10px] font-bold uppercase tracking-wide text-muted-foreground">
-        {label}
-      </p>
+      <p className="text-[10px] font-bold uppercase tracking-wide text-muted-foreground">{label}</p>
       <p className="num mt-0.5 text-sm font-semibold">{value}</p>
     </div>
   );
@@ -223,9 +221,7 @@ export function PropertiesPanel({
       </div>
       {materialSelect(
         o.material,
-        isDoor
-          ? MATERIALS.filter((m) => ["metal", "wood", "glass"].includes(m.id))
-          : MATERIALS,
+        isDoor ? MATERIALS.filter((m) => ["metal", "wood", "glass"].includes(m.id)) : MATERIALS,
       )}
       {isDoor ? (
         <Row label="Opening Direction">
@@ -284,13 +280,7 @@ export function PropertiesPanel({
             stroke="var(--primary)"
             strokeWidth="1.5"
           />
-          <text
-            x="60"
-            y="52"
-            textAnchor="middle"
-            fontSize="9"
-            fill="var(--muted-foreground)"
-          >
+          <text x="60" y="52" textAnchor="middle" fontSize="9" fill="var(--muted-foreground)">
             {o.width.toFixed(2)} × {o.height.toFixed(2)} m
           </text>
         </svg>

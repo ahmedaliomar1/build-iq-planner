@@ -21,7 +21,11 @@ import { useProject } from "@/services/projectService";
 import { useRfConfig } from "@/services/rfService";
 import { useRfProfile } from "@/services/rfService";
 import { useSimState } from "@/services/simulationService";
-import { buildOptimizedDesign, useOptState, validateOptimization } from "@/services/optimizationService";
+import {
+  buildOptimizedDesign,
+  useOptState,
+  validateOptimization,
+} from "@/services/optimizationService";
 import { estimatedExportMs } from "@/services/exportService";
 import type { ReportContext } from "@/services/reportService";
 
@@ -31,7 +35,8 @@ export const Route = createFileRoute("/rf/$projectId/export")({
       { title: "Export Center — AI Private Cellular Planner" },
       {
         name: "description",
-        content: "Package every report, map and engineering object into the Final RF Design Package.",
+        content:
+          "Package every report, map and engineering object into the Final RF Design Package.",
       },
       { property: "og:title", content: "Export Center — AI Private Cellular Planner" },
       {
@@ -138,10 +143,18 @@ function ExportRoute() {
           onDownload={ex.download}
           actions={
             <>
-              <Link to="/rf/$projectId/reports" params={{ projectId }} className={btn}>Open Report Library</Link>
-              <Link to="/" className={btn}>Back to Dashboard</Link>
-              <Link to="/new" className={btn}>Create New Project</Link>
-              <button onClick={ex.reset} className={btn}>Export Again</button>
+              <Link to="/rf/$projectId/reports" params={{ projectId }} className={btn}>
+                Open Report Library
+              </Link>
+              <Link to="/" className={btn}>
+                Back to Dashboard
+              </Link>
+              <Link to="/new" className={btn}>
+                Create New Project
+              </Link>
+              <button onClick={ex.reset} className={btn}>
+                Export Again
+              </button>
             </>
           }
         />
@@ -150,9 +163,15 @@ function ExportRoute() {
             state={ex.state}
             actions={
               <>
-                <button onClick={() => navigate({ to: "/" })} className={btn}>Open Dashboard</button>
-                <button onClick={ex.download} className={btn}>Download Package</button>
-                <Link to="/new" className={btn}>Start New Project</Link>
+                <button onClick={() => navigate({ to: "/" })} className={btn}>
+                  Open Dashboard
+                </button>
+                <button onClick={ex.download} className={btn}>
+                  Download Package
+                </button>
+                <Link to="/new" className={btn}>
+                  Start New Project
+                </Link>
               </>
             }
           />
@@ -166,7 +185,9 @@ function ExportRoute() {
     <AppShell breadcrumb={crumbs}>
       <div className="animate-rise space-y-5 p-4 md:p-6">
         <header>
-          <p className="text-xs font-semibold uppercase tracking-wide text-primary">Module 7 · Part 2</p>
+          <p className="text-xs font-semibold uppercase tracking-wide text-primary">
+            Module 7 · Part 2
+          </p>
           <h1 className="text-xl font-bold tracking-tight md:text-2xl">Export Center</h1>
           <p className="mt-1 text-sm text-muted-foreground">
             Package the approved design of {project.name} into the Final RF Design Package.
@@ -182,7 +203,11 @@ function ExportRoute() {
           sizeKb={ex.sizeKb}
           estimatedMs={estimatedExportMs(ex.state.selected)}
         />
-        <ExportSelector selected={ex.state.selected} onToggle={ex.toggleItem} onSetAll={ex.setSelected} />
+        <ExportSelector
+          selected={ex.state.selected}
+          onToggle={ex.toggleItem}
+          onSetAll={ex.setSelected}
+        />
         <FormatCards formats={ex.state.formats} onToggle={ex.toggleFormat} />
         <PackageInfoForm info={ex.info} projectId={projectId} onChange={ex.setInfo} />
         <ValidationPanel

@@ -68,7 +68,9 @@ export function ReportCards({
               </span>
               <div className="min-w-0">
                 <h3 className="text-sm font-bold tracking-tight">{def.title}</h3>
-                <p className="text-[11px] uppercase tracking-wide text-muted-foreground">{def.type}</p>
+                <p className="text-[11px] uppercase tracking-wide text-muted-foreground">
+                  {def.type}
+                </p>
               </div>
               <span
                 className={`ml-auto rounded-full px-2.5 py-1 text-[11px] font-semibold ${
@@ -324,7 +326,9 @@ export function ReportPreview({
                 key={p.index}
                 onClick={() => setPage(p.index)}
                 className={`mb-2 w-full rounded-xl border p-2 text-left transition-smooth ${
-                  p.index === page ? "border-primary bg-primary-soft" : "border-border bg-card hover:bg-accent"
+                  p.index === page
+                    ? "border-primary bg-primary-soft"
+                    : "border-border bg-card hover:bg-accent"
                 }`}
               >
                 <div className="mb-1 h-16 rounded-md border border-border bg-background p-1">
@@ -439,7 +443,10 @@ export function MapsCenter({
         {MAP_DEFS.map((m) => {
           const layer = m.layer ? (layers[m.layer] ?? null) : null;
           return (
-            <figure key={m.id} className="overflow-hidden rounded-2xl border border-border bg-background">
+            <figure
+              key={m.id}
+              className="overflow-hidden rounded-2xl border border-border bg-background"
+            >
               <div className="aspect-4/3 bg-card">
                 <ReportMap
                   model={model}
@@ -533,7 +540,8 @@ export function ReportLibrary({
     const filtered = records.filter(
       (r) =>
         (type === "all" || r.type === type) &&
-        (r.name.toLowerCase().includes(q.toLowerCase()) || r.type.toLowerCase().includes(q.toLowerCase())),
+        (r.name.toLowerCase().includes(q.toLowerCase()) ||
+          r.type.toLowerCase().includes(q.toLowerCase())),
     );
     return filtered.sort((a, b) =>
       sort === "name"

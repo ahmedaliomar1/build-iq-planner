@@ -91,9 +91,7 @@ export function EquipmentBrowser({ items }: { items: BomItem[] }) {
           <option value="name">Sort: name</option>
         </select>
         <button
-          onClick={() =>
-            setOpen(Object.fromEntries(BOM_CATEGORIES.map((c) => [c.id, !allOpen])))
-          }
+          onClick={() => setOpen(Object.fromEntries(BOM_CATEGORIES.map((c) => [c.id, !allOpen])))}
           className="h-9 rounded-xl border border-border px-3 text-xs font-semibold transition-smooth hover:bg-accent"
         >
           {allOpen ? "Collapse all" : "Expand all"}
@@ -102,7 +100,9 @@ export function EquipmentBrowser({ items }: { items: BomItem[] }) {
 
       <div className="divide-y divide-border">
         {groups.length === 0 && (
-          <p className="p-6 text-center text-xs text-muted-foreground">No equipment matches the filters.</p>
+          <p className="p-6 text-center text-xs text-muted-foreground">
+            No equipment matches the filters.
+          </p>
         )}
         {groups.map(([cat, list]) => {
           const expanded = open[cat] !== false;
@@ -139,7 +139,9 @@ export function EquipmentBrowser({ items }: { items: BomItem[] }) {
                       <p className="mt-1 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
                         {i.subcategory} · {i.vendor}
                       </p>
-                      <p className="mt-1.5 text-[11px] leading-snug text-muted-foreground">{i.source}</p>
+                      <p className="mt-1.5 text-[11px] leading-snug text-muted-foreground">
+                        {i.source}
+                      </p>
                       <div className="mt-2 flex items-center justify-between text-[11px]">
                         <span className="text-muted-foreground">{i.status}</span>
                         <span className="num font-semibold">{money2(i.totalPrice)}</span>
@@ -208,7 +210,9 @@ export function CostTable({ items }: { items: BomItem[] }) {
     const q = query.trim().toLowerCase();
     return items
       .filter((i) => (cat === "all" ? true : i.category === cat))
-      .filter((i) => !q || i.name.toLowerCase().includes(q) || i.subcategory.toLowerCase().includes(q))
+      .filter(
+        (i) => !q || i.name.toLowerCase().includes(q) || i.subcategory.toLowerCase().includes(q),
+      )
       .sort((a, b) => {
         const av = a[sort.key];
         const bv = b[sort.key];
@@ -219,9 +223,7 @@ export function CostTable({ items }: { items: BomItem[] }) {
 
   const th = (label: string, key: keyof BomItem) => (
     <th
-      onClick={() =>
-        setSort((s) => ({ key, dir: s.key === key && s.dir === -1 ? 1 : -1 }))
-      }
+      onClick={() => setSort((s) => ({ key, dir: s.key === key && s.dir === -1 ? 1 : -1 }))}
       className="cursor-pointer whitespace-nowrap px-3 py-2 text-left text-[10px] font-bold uppercase tracking-wide text-muted-foreground transition-smooth hover:text-foreground"
     >
       {label}
@@ -268,9 +270,14 @@ export function CostTable({ items }: { items: BomItem[] }) {
           </thead>
           <tbody>
             {rows.map((i) => (
-              <tr key={i.id} className="border-b border-border/60 transition-smooth hover:bg-accent/50">
+              <tr
+                key={i.id}
+                className="border-b border-border/60 transition-smooth hover:bg-accent/50"
+              >
                 <td className="px-3 py-2 font-medium">{i.name}</td>
-                <td className="px-3 py-2 text-muted-foreground">{categoryMeta(i.category).label}</td>
+                <td className="px-3 py-2 text-muted-foreground">
+                  {categoryMeta(i.category).label}
+                </td>
                 <td className="num px-3 py-2">{i.quantity}</td>
                 <td className="px-3 py-2 text-muted-foreground">{i.unit}</td>
                 <td className="num px-3 py-2">{money2(i.unitPrice)}</td>
@@ -327,7 +334,8 @@ export function LaborPanel({ rows, total }: { rows: LaborRole[]; total: number }
         </span>
       </div>
       <p className="mt-2 text-[11px] text-muted-foreground">
-        Regional labor cost profiles arrive in a future version — Version 1 uses reference day rates.
+        Regional labor cost profiles arrive in a future version — Version 1 uses reference day
+        rates.
       </p>
     </div>
   );

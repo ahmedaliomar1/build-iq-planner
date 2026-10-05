@@ -45,9 +45,7 @@ function Dashboard() {
               <span className="inline-flex items-center gap-1.5 rounded-full bg-primary-soft px-3 py-1 text-xs font-semibold text-primary">
                 <Sparkles className="size-3.5" /> Phase 1 · Digital Twin
               </span>
-              <h1 className="mt-4 text-3xl font-bold tracking-tight md:text-4xl">
-                Welcome Back
-              </h1>
+              <h1 className="mt-4 text-3xl font-bold tracking-tight md:text-4xl">Welcome Back</h1>
               <p className="mt-2 text-sm text-muted-foreground md:text-base">
                 Create or continue your Private Cellular Planning projects.
               </p>
@@ -64,9 +62,7 @@ function Dashboard() {
         <section>
           <div className="mb-4 flex items-end justify-between">
             <h2 className="text-lg font-semibold tracking-tight">Projects</h2>
-            <span className="num text-xs text-muted-foreground">
-              {projects.length} total
-            </span>
+            <span className="num text-xs text-muted-foreground">{projects.length} total</span>
           </div>
 
           {projects.length === 0 ? (

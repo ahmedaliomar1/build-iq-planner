@@ -1,21 +1,7 @@
-export type MaterialId =
-  | "concrete"
-  | "brick"
-  | "glass"
-  | "wood"
-  | "gypsum"
-  | "metal"
-  | "custom";
+export type MaterialId = "concrete" | "brick" | "glass" | "wood" | "gypsum" | "metal" | "custom";
 
 export type LayerId =
-  | "walls"
-  | "doors"
-  | "windows"
-  | "columns"
-  | "furniture"
-  | "labels"
-  | "electrical"
-  | "hvac";
+  "walls" | "doors" | "windows" | "columns" | "furniture" | "labels" | "electrical" | "hvac";
 
 export interface Material {
   id: MaterialId;
@@ -192,8 +178,7 @@ export const MATERIALS: Material[] = [
   },
 ];
 
-export const materialById = (id: MaterialId) =>
-  MATERIALS.find((m) => m.id === id) ?? MATERIALS[0]!;
+export const materialById = (id: MaterialId) => MATERIALS.find((m) => m.id === id) ?? MATERIALS[0]!;
 
 export const ROOM_USAGES = [
   "Office",

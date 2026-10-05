@@ -55,9 +55,11 @@ export function useOptimization(
   const [recalc, setRecalc] = useState<{ steps: RfLayerId[]; index: number; label: string } | null>(
     null,
   );
-  const pending = useRef<{ antennas: OptAntenna[]; change: OptChange; affected: RfLayerId[] } | null>(
-    null,
-  );
+  const pending = useRef<{
+    antennas: OptAntenna[];
+    change: OptChange;
+    affected: RfLayerId[];
+  } | null>(null);
 
   /* ---------- bootstrap from the Initial RF Design ---------- */
   useEffect(() => {
@@ -130,7 +132,16 @@ export function useOptimization(
       STEP_MS,
     );
     return () => clearTimeout(t);
-  }, [recalc, ctx, layers, initial, projectId, state.versions, state.modifications, state.kpis.simulationSeconds]);
+  }, [
+    recalc,
+    ctx,
+    layers,
+    initial,
+    projectId,
+    state.versions,
+    state.modifications,
+    state.kpis.simulationSeconds,
+  ]);
 
   /* ---------- editing operations ---------- */
 
@@ -259,7 +270,10 @@ export function useOptimization(
       .map((a) => Number(a.id.replace("ant-", "")))
       .filter((n) => Number.isFinite(n));
     const n = (used.length ? Math.max(...used) : 0) + 1;
-    return { id: `ant-${String(n).padStart(2, "0")}`, label: `Antenna ${String(n).padStart(2, "0")}` };
+    return {
+      id: `ant-${String(n).padStart(2, "0")}`,
+      label: `Antenna ${String(n).padStart(2, "0")}`,
+    };
   }, [state.antennas]);
 
   const roomNameAt = useCallback(
