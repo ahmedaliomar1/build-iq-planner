@@ -409,9 +409,9 @@ function EditorPage() {
         </button>
       </header>
 
-      <div className="flex min-h-0 flex-1">
+      <div className="flex min-h-0 flex-1 flex-wrap overflow-y-auto md:flex-nowrap md:overflow-visible">
         {/* left toolbox */}
-        <aside className="flex w-20 shrink-0 flex-col items-center gap-1.5 border-r border-border bg-card py-3">
+        <aside className="flex h-[60vh] w-20 shrink-0 flex-col overflow-y-auto md:h-auto items-center gap-1.5 border-r border-border bg-card py-3">
           {TOOLBOX.map((t) => (
             <button
               key={t.id}
@@ -463,7 +463,7 @@ function EditorPage() {
           onPointerDown={onCanvasDown}
           onPointerMove={onCanvasMove}
           onPointerUp={onCanvasUp}
-          className="relative min-w-0 flex-1 touch-none select-none bg-canvas"
+          className="relative h-[60vh] min-w-0 flex-1 touch-none md:h-auto select-none bg-canvas"
           style={{ cursor: tool === "select" || tool === "move" ? "grab" : "crosshair" }}
         >
           <svg className="absolute inset-0 size-full">
@@ -572,7 +572,7 @@ function EditorPage() {
         </div>
 
         {/* right panel */}
-        <aside className="flex w-80 shrink-0 flex-col border-l border-border bg-card">
+        <aside className="flex w-full shrink-0 flex-col border-t border-border md:w-80 md:border-t-0 md:border-l border-border bg-card">
           <div className="flex shrink-0 gap-1 border-b border-border p-2">
             {(["properties", "layers", "materials", "validation"] as const).map((p) => (
               <button
