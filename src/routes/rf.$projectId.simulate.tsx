@@ -72,14 +72,18 @@ function RfSimulate() {
 
   const exportDesign = (format: "pdf" | "json" | "csv") => {
     if (!state.design) return;
-    const base = `${project?.name ?? "project"}-initial-rf-design`.replace(/\s+/g, "-").toLowerCase();
+    const base = `${project?.name ?? "project"}-initial-rf-design`
+      .replace(/\s+/g, "-")
+      .toLowerCase();
     if (format === "json") {
       downloadFile(`${base}.json`, JSON.stringify(state.design, null, 2), "application/json");
     } else if (format === "csv") {
       downloadFile(`${base}.csv`, designToCsv(state.design), "text/csv");
     } else {
       downloadFile(`${base}-report.txt`, designToReport(state.design), "text/plain");
-      toast.info("Placeholder engineering report exported — PDF rendering arrives with the final report module.");
+      toast.info(
+        "Placeholder engineering report exported — PDF rendering arrives with the final report module.",
+      );
     }
   };
 

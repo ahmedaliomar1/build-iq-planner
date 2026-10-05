@@ -1,5 +1,14 @@
 import { Link } from "@tanstack/react-router";
-import { Archive, ArchiveRestore, ArrowRight, Building2, Clock, Copy, FileText, Trash2 } from "lucide-react";
+import {
+  Archive,
+  ArchiveRestore,
+  ArrowRight,
+  Building2,
+  Clock,
+  Copy,
+  FileText,
+  Trash2,
+} from "lucide-react";
 import { toast } from "sonner";
 import { projectService, projectSummary } from "@/services/projectService";
 import type { Project, ProjectWorkflowStatus } from "@/types";
@@ -19,12 +28,16 @@ const tech = (p: Project, t: string | null) =>
 /** Shared project card used by the dashboard and the project archive. */
 export function ProjectCard({ project: p }: { project: Project }) {
   const s = projectSummary(p);
-  const done = s.status === "Completed" || s.status === "Export Ready" || s.status === "Reports Ready";
+  const done =
+    s.status === "Completed" || s.status === "Export Ready" || s.status === "Reports Ready";
   const kpis: [string, string][] = [
     ["Coverage", s.coverage != null ? `${s.coverage}%` : "—"],
     ["Capacity", s.capacity != null ? `${s.capacity}%` : "—"],
     ["Antennas", s.antennas != null ? String(s.antennas) : "—"],
-    ["Est. cost", s.estimatedCost != null ? `$${Math.round(s.estimatedCost).toLocaleString()}` : "—"],
+    [
+      "Est. cost",
+      s.estimatedCost != null ? `$${Math.round(s.estimatedCost).toLocaleString()}` : "—",
+    ],
   ];
   const icon =
     "grid size-9 place-items-center rounded-xl border border-border text-muted-foreground transition-smooth hover:bg-accent hover:text-foreground";
@@ -55,7 +68,9 @@ export function ProjectCard({ project: p }: { project: Project }) {
       )}
       <p className="num mt-3 flex items-center gap-1.5 text-[11px] text-muted-foreground">
         <Clock className="size-3.5" />
-        {s.completedAt ? `Completed ${new Date(s.completedAt).toLocaleDateString()}` : new Date(p.updatedAt).toLocaleString()}
+        {s.completedAt
+          ? `Completed ${new Date(s.completedAt).toLocaleDateString()}`
+          : new Date(p.updatedAt).toLocaleString()}
       </p>
       <div className="mt-4 flex flex-wrap items-center gap-2">
         <Link
@@ -66,14 +81,22 @@ export function ProjectCard({ project: p }: { project: Project }) {
           Open project <ArrowRight className="size-3.5" />
         </Link>
         {done && (
-          <Link to="/rf/$projectId/reports" params={{ projectId: p.id }} aria-label="View reports" title="View reports" className={icon}>
+          <Link
+            to="/rf/$projectId/reports"
+            params={{ projectId: p.id }}
+            aria-label="View reports"
+            title="View reports"
+            className={icon}
+          >
             <FileText className="size-4" />
           </Link>
         )}
         <button
           title="Duplicate"
           aria-label={`Duplicate ${p.name}`}
-          onClick={() => projectService.duplicateProject(p.id).then(() => toast.success("Project duplicated"))}
+          onClick={() =>
+            projectService.duplicateProject(p.id).then(() => toast.success("Project duplicated"))
+          }
           className={icon}
         >
           <Copy className="size-4" />

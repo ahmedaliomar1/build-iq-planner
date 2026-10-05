@@ -150,12 +150,7 @@ export const ESTIMATED_BOM_MS = BOM_STAGES.reduce((n, s) => n + estimatedStageMs
 /* -------------------- catalog taxonomy -------------------- */
 
 export type BomCategoryId =
-  | "radio"
-  | "antenna"
-  | "network"
-  | "transmission"
-  | "installation"
-  | "accessories";
+  "radio" | "antenna" | "network" | "transmission" | "installation" | "accessories";
 
 export const BOM_CATEGORIES: { id: BomCategoryId; label: string; note: string }[] = [
   { id: "radio", label: "Radio Equipment", note: "Radios, RRUs, AAUs, DU / CU" },
@@ -283,42 +278,255 @@ export interface PricingDatabase {
 }
 
 /** reference (vendor-neutral) unit prices — placeholder catalog */
-const REFERENCE: Record<string, Omit<PriceRecord, "sku" | "availability" | "leadTime" | "warranty" | "version">> = {
-  "radio-indoor": { name: "Indoor Radio Unit", category: "radio", unit: "pcs", unitPrice: 3200, currency: "USD" },
-  "radio-rru": { name: "Remote Radio Unit (RRU)", category: "radio", unit: "pcs", unitPrice: 4100, currency: "USD" },
-  "radio-du": { name: "Distributed Unit (DU)", category: "radio", unit: "pcs", unitPrice: 6800, currency: "USD" },
-  "radio-cu": { name: "Central Unit (CU)", category: "radio", unit: "pcs", unitPrice: 7400, currency: "USD" },
-  "radio-expansion": { name: "Future Expansion Radio Slot", category: "radio", unit: "pcs", unitPrice: 2900, currency: "USD" },
-  "ant-ceiling": { name: "Indoor Ceiling Antenna", category: "antenna", unit: "pcs", unitPrice: 145, currency: "USD" },
-  "ant-wall": { name: "Wall Mount Antenna", category: "antenna", unit: "pcs", unitPrice: 165, currency: "USD" },
-  "ant-industrial": { name: "Industrial Antenna", category: "antenna", unit: "pcs", unitPrice: 420, currency: "USD" },
-  "ant-smallcell": { name: "Small Cell Unit", category: "antenna", unit: "pcs", unitPrice: 980, currency: "USD" },
-  "ant-directional": { name: "Directional Antenna", category: "antenna", unit: "pcs", unitPrice: 260, currency: "USD" },
-  "net-core": { name: "Private Core (Compact)", category: "network", unit: "pcs", unitPrice: 21000, currency: "USD" },
-  "net-edge": { name: "Edge Switch (24-port PoE+)", category: "network", unit: "pcs", unitPrice: 3400, currency: "USD" },
-  "net-agg": { name: "Aggregation Switch", category: "network", unit: "pcs", unitPrice: 5600, currency: "USD" },
-  "net-router": { name: "Enterprise Router", category: "network", unit: "pcs", unitPrice: 4200, currency: "USD" },
-  "net-firewall": { name: "Network Firewall", category: "network", unit: "pcs", unitPrice: 3800, currency: "USD" },
-  "net-cabinet": { name: "Network Cabinet 42U", category: "network", unit: "pcs", unitPrice: 1250, currency: "USD" },
-  "net-patch": { name: "Patch Panel 24-port", category: "network", unit: "pcs", unitPrice: 160, currency: "USD" },
-  "tx-fiber": { name: "Fiber Cable (OS2)", category: "transmission", unit: "m", unitPrice: 3.4, currency: "USD" },
-  "tx-cat6": { name: "CAT6 Cable", category: "transmission", unit: "m", unitPrice: 1.15, currency: "USD" },
-  "tx-cat6a": { name: "CAT6A Cable", category: "transmission", unit: "m", unitPrice: 1.85, currency: "USD" },
-  "tx-cat7": { name: "CAT7 Cable", category: "transmission", unit: "m", unitPrice: 2.6, currency: "USD" },
-  "tx-patchcord": { name: "Fiber Patch Cord", category: "transmission", unit: "pcs", unitPrice: 22, currency: "USD" },
-  "tx-termbox": { name: "Fiber Termination Box", category: "transmission", unit: "pcs", unitPrice: 180, currency: "USD" },
-  "tx-media": { name: "Media Converter", category: "transmission", unit: "pcs", unitPrice: 140, currency: "USD" },
-  "inst-mount": { name: "Antenna Mount Kit", category: "installation", unit: "pcs", unitPrice: 48, currency: "USD" },
-  "inst-wallbracket": { name: "Wall Bracket", category: "installation", unit: "pcs", unitPrice: 36, currency: "USD" },
-  "inst-ceilbracket": { name: "Ceiling Bracket", category: "installation", unit: "pcs", unitPrice: 32, currency: "USD" },
-  "inst-psu": { name: "Power Supply Unit", category: "installation", unit: "pcs", unitPrice: 180, currency: "USD" },
-  "inst-ground": { name: "Grounding Kit", category: "installation", unit: "pcs", unitPrice: 65, currency: "USD" },
-  "inst-powercable": { name: "Power Cable", category: "installation", unit: "m", unitPrice: 2.1, currency: "USD" },
-  "inst-groundcable": { name: "Ground Cable", category: "installation", unit: "m", unitPrice: 1.6, currency: "USD" },
-  "acc-connector": { name: "RF / RJ45 Connectors", category: "accessories", unit: "pcs", unitPrice: 9, currency: "USD" },
-  "acc-tray": { name: "Cable Tray", category: "accessories", unit: "m", unitPrice: 14, currency: "USD" },
-  "acc-tie": { name: "Cable Ties (pack of 100)", category: "accessories", unit: "pack", unitPrice: 12, currency: "USD" },
-  "acc-label": { name: "Labeling Kit", category: "accessories", unit: "set", unitPrice: 45, currency: "USD" },
+const REFERENCE: Record<
+  string,
+  Omit<PriceRecord, "sku" | "availability" | "leadTime" | "warranty" | "version">
+> = {
+  "radio-indoor": {
+    name: "Indoor Radio Unit",
+    category: "radio",
+    unit: "pcs",
+    unitPrice: 3200,
+    currency: "USD",
+  },
+  "radio-rru": {
+    name: "Remote Radio Unit (RRU)",
+    category: "radio",
+    unit: "pcs",
+    unitPrice: 4100,
+    currency: "USD",
+  },
+  "radio-du": {
+    name: "Distributed Unit (DU)",
+    category: "radio",
+    unit: "pcs",
+    unitPrice: 6800,
+    currency: "USD",
+  },
+  "radio-cu": {
+    name: "Central Unit (CU)",
+    category: "radio",
+    unit: "pcs",
+    unitPrice: 7400,
+    currency: "USD",
+  },
+  "radio-expansion": {
+    name: "Future Expansion Radio Slot",
+    category: "radio",
+    unit: "pcs",
+    unitPrice: 2900,
+    currency: "USD",
+  },
+  "ant-ceiling": {
+    name: "Indoor Ceiling Antenna",
+    category: "antenna",
+    unit: "pcs",
+    unitPrice: 145,
+    currency: "USD",
+  },
+  "ant-wall": {
+    name: "Wall Mount Antenna",
+    category: "antenna",
+    unit: "pcs",
+    unitPrice: 165,
+    currency: "USD",
+  },
+  "ant-industrial": {
+    name: "Industrial Antenna",
+    category: "antenna",
+    unit: "pcs",
+    unitPrice: 420,
+    currency: "USD",
+  },
+  "ant-smallcell": {
+    name: "Small Cell Unit",
+    category: "antenna",
+    unit: "pcs",
+    unitPrice: 980,
+    currency: "USD",
+  },
+  "ant-directional": {
+    name: "Directional Antenna",
+    category: "antenna",
+    unit: "pcs",
+    unitPrice: 260,
+    currency: "USD",
+  },
+  "net-core": {
+    name: "Private Core (Compact)",
+    category: "network",
+    unit: "pcs",
+    unitPrice: 21000,
+    currency: "USD",
+  },
+  "net-edge": {
+    name: "Edge Switch (24-port PoE+)",
+    category: "network",
+    unit: "pcs",
+    unitPrice: 3400,
+    currency: "USD",
+  },
+  "net-agg": {
+    name: "Aggregation Switch",
+    category: "network",
+    unit: "pcs",
+    unitPrice: 5600,
+    currency: "USD",
+  },
+  "net-router": {
+    name: "Enterprise Router",
+    category: "network",
+    unit: "pcs",
+    unitPrice: 4200,
+    currency: "USD",
+  },
+  "net-firewall": {
+    name: "Network Firewall",
+    category: "network",
+    unit: "pcs",
+    unitPrice: 3800,
+    currency: "USD",
+  },
+  "net-cabinet": {
+    name: "Network Cabinet 42U",
+    category: "network",
+    unit: "pcs",
+    unitPrice: 1250,
+    currency: "USD",
+  },
+  "net-patch": {
+    name: "Patch Panel 24-port",
+    category: "network",
+    unit: "pcs",
+    unitPrice: 160,
+    currency: "USD",
+  },
+  "tx-fiber": {
+    name: "Fiber Cable (OS2)",
+    category: "transmission",
+    unit: "m",
+    unitPrice: 3.4,
+    currency: "USD",
+  },
+  "tx-cat6": {
+    name: "CAT6 Cable",
+    category: "transmission",
+    unit: "m",
+    unitPrice: 1.15,
+    currency: "USD",
+  },
+  "tx-cat6a": {
+    name: "CAT6A Cable",
+    category: "transmission",
+    unit: "m",
+    unitPrice: 1.85,
+    currency: "USD",
+  },
+  "tx-cat7": {
+    name: "CAT7 Cable",
+    category: "transmission",
+    unit: "m",
+    unitPrice: 2.6,
+    currency: "USD",
+  },
+  "tx-patchcord": {
+    name: "Fiber Patch Cord",
+    category: "transmission",
+    unit: "pcs",
+    unitPrice: 22,
+    currency: "USD",
+  },
+  "tx-termbox": {
+    name: "Fiber Termination Box",
+    category: "transmission",
+    unit: "pcs",
+    unitPrice: 180,
+    currency: "USD",
+  },
+  "tx-media": {
+    name: "Media Converter",
+    category: "transmission",
+    unit: "pcs",
+    unitPrice: 140,
+    currency: "USD",
+  },
+  "inst-mount": {
+    name: "Antenna Mount Kit",
+    category: "installation",
+    unit: "pcs",
+    unitPrice: 48,
+    currency: "USD",
+  },
+  "inst-wallbracket": {
+    name: "Wall Bracket",
+    category: "installation",
+    unit: "pcs",
+    unitPrice: 36,
+    currency: "USD",
+  },
+  "inst-ceilbracket": {
+    name: "Ceiling Bracket",
+    category: "installation",
+    unit: "pcs",
+    unitPrice: 32,
+    currency: "USD",
+  },
+  "inst-psu": {
+    name: "Power Supply Unit",
+    category: "installation",
+    unit: "pcs",
+    unitPrice: 180,
+    currency: "USD",
+  },
+  "inst-ground": {
+    name: "Grounding Kit",
+    category: "installation",
+    unit: "pcs",
+    unitPrice: 65,
+    currency: "USD",
+  },
+  "inst-powercable": {
+    name: "Power Cable",
+    category: "installation",
+    unit: "m",
+    unitPrice: 2.1,
+    currency: "USD",
+  },
+  "inst-groundcable": {
+    name: "Ground Cable",
+    category: "installation",
+    unit: "m",
+    unitPrice: 1.6,
+    currency: "USD",
+  },
+  "acc-connector": {
+    name: "RF / RJ45 Connectors",
+    category: "accessories",
+    unit: "pcs",
+    unitPrice: 9,
+    currency: "USD",
+  },
+  "acc-tray": {
+    name: "Cable Tray",
+    category: "accessories",
+    unit: "m",
+    unitPrice: 14,
+    currency: "USD",
+  },
+  "acc-tie": {
+    name: "Cable Ties (pack of 100)",
+    category: "accessories",
+    unit: "pack",
+    unitPrice: 12,
+    currency: "USD",
+  },
+  "acc-label": {
+    name: "Labeling Kit",
+    category: "accessories",
+    unit: "set",
+    unitPrice: 45,
+    currency: "USD",
+  },
 };
 
 export const placeholderPricingDatabase: PricingDatabase = {
@@ -327,7 +535,13 @@ export const placeholderPricingDatabase: PricingDatabase = {
   currency: "USD",
   price(sku, vendor) {
     const ref = REFERENCE[sku];
-    const base = ref ?? { name: sku, category: "accessories" as BomCategoryId, unit: "pcs", unitPrice: 0, currency: "USD" as const };
+    const base = ref ?? {
+      name: sku,
+      category: "accessories" as BomCategoryId,
+      unit: "pcs",
+      unitPrice: 0,
+      currency: "USD" as const,
+    };
     return {
       sku,
       name: base.name,
@@ -430,11 +644,38 @@ export function buildBomItems(
   const d = detection;
   const n = Math.max(1, d.antennas);
   const specs: Spec[] = [
-    { sku: "radio-indoor", subcategory: "Indoor Radios", quantity: n, source: "One radio per optimized antenna position" },
-    { sku: "radio-rru", subcategory: "RRUs", quantity: Math.max(1, Math.ceil(n / 6)), source: "Sector aggregation per floor" },
-    { sku: "radio-du", subcategory: "Distributed Units", quantity: Math.max(1, Math.ceil(n / 8)), source: "Distributed unit per radio cluster" },
-    { sku: "radio-cu", subcategory: "Central Units", quantity: 1, source: "Single central unit for the site" },
-    { sku: "radio-expansion", subcategory: "Future Expansion Units", quantity: Math.max(1, Math.round(n * 0.15)), source: "15% expansion reserve", futureSupport: true, status: "Optional" },
+    {
+      sku: "radio-indoor",
+      subcategory: "Indoor Radios",
+      quantity: n,
+      source: "One radio per optimized antenna position",
+    },
+    {
+      sku: "radio-rru",
+      subcategory: "RRUs",
+      quantity: Math.max(1, Math.ceil(n / 6)),
+      source: "Sector aggregation per floor",
+    },
+    {
+      sku: "radio-du",
+      subcategory: "Distributed Units",
+      quantity: Math.max(1, Math.ceil(n / 8)),
+      source: "Distributed unit per radio cluster",
+    },
+    {
+      sku: "radio-cu",
+      subcategory: "Central Units",
+      quantity: 1,
+      source: "Single central unit for the site",
+    },
+    {
+      sku: "radio-expansion",
+      subcategory: "Future Expansion Units",
+      quantity: Math.max(1, Math.round(n * 0.15)),
+      source: "15% expansion reserve",
+      futureSupport: true,
+      status: "Optional",
+    },
   ];
 
   for (const [cat, qty] of Object.entries(d.byCategory)) {
@@ -447,34 +688,151 @@ export function buildBomItems(
   }
 
   specs.push(
-    { sku: "net-core", subcategory: "Core", quantity: 1, source: "Private core for the deployment" },
-    { sku: "net-edge", subcategory: "Edge Switches", quantity: d.switches, source: `PoE+ ports for ${n} radios` },
-    { sku: "net-agg", subcategory: "Aggregation Switches", quantity: d.aggregation, source: "Aggregation per equipment room" },
+    {
+      sku: "net-core",
+      subcategory: "Core",
+      quantity: 1,
+      source: "Private core for the deployment",
+    },
+    {
+      sku: "net-edge",
+      subcategory: "Edge Switches",
+      quantity: d.switches,
+      source: `PoE+ ports for ${n} radios`,
+    },
+    {
+      sku: "net-agg",
+      subcategory: "Aggregation Switches",
+      quantity: d.aggregation,
+      source: "Aggregation per equipment room",
+    },
     { sku: "net-router", subcategory: "Routers", quantity: 1, source: "Enterprise uplink router" },
     { sku: "net-firewall", subcategory: "Firewalls", quantity: 1, source: "Perimeter security" },
-    { sku: "net-cabinet", subcategory: "Network Cabinets", quantity: d.cabinets, source: `Cabinet per ${4} radio cluster` },
-    { sku: "net-patch", subcategory: "Patch Panels", quantity: d.cabinets * 2, source: "Two panels per cabinet" },
+    {
+      sku: "net-cabinet",
+      subcategory: "Network Cabinets",
+      quantity: d.cabinets,
+      source: `Cabinet per ${4} radio cluster`,
+    },
+    {
+      sku: "net-patch",
+      subcategory: "Patch Panels",
+      quantity: d.cabinets * 2,
+      source: "Two panels per cabinet",
+    },
 
-    { sku: "tx-fiber", subcategory: "Fiber Cables", quantity: d.fiberMeters, source: "Fiber backbone between equipment rooms" },
-    { sku: "tx-cat6", subcategory: "CAT6", quantity: d.cat6Meters, source: "Radio feeder runs from cable routes" },
-    { sku: "tx-cat6a", subcategory: "CAT6A", quantity: round5(d.cat6Meters * 0.25), source: "High-throughput sectors" },
-    { sku: "tx-cat7", subcategory: "CAT7", quantity: round5(d.cat6Meters * 0.1), source: "Critical area feeders", futureSupport: true, status: "Optional" },
-    { sku: "tx-patchcord", subcategory: "Fiber Patch Cords", quantity: d.cabinets * 4, source: "Four cords per cabinet" },
-    { sku: "tx-termbox", subcategory: "Fiber Termination Boxes", quantity: d.equipmentRooms, source: "One box per equipment room" },
-    { sku: "tx-media", subcategory: "Media Converters", quantity: d.equipmentRooms, source: "Copper / fiber conversion" },
+    {
+      sku: "tx-fiber",
+      subcategory: "Fiber Cables",
+      quantity: d.fiberMeters,
+      source: "Fiber backbone between equipment rooms",
+    },
+    {
+      sku: "tx-cat6",
+      subcategory: "CAT6",
+      quantity: d.cat6Meters,
+      source: "Radio feeder runs from cable routes",
+    },
+    {
+      sku: "tx-cat6a",
+      subcategory: "CAT6A",
+      quantity: round5(d.cat6Meters * 0.25),
+      source: "High-throughput sectors",
+    },
+    {
+      sku: "tx-cat7",
+      subcategory: "CAT7",
+      quantity: round5(d.cat6Meters * 0.1),
+      source: "Critical area feeders",
+      futureSupport: true,
+      status: "Optional",
+    },
+    {
+      sku: "tx-patchcord",
+      subcategory: "Fiber Patch Cords",
+      quantity: d.cabinets * 4,
+      source: "Four cords per cabinet",
+    },
+    {
+      sku: "tx-termbox",
+      subcategory: "Fiber Termination Boxes",
+      quantity: d.equipmentRooms,
+      source: "One box per equipment room",
+    },
+    {
+      sku: "tx-media",
+      subcategory: "Media Converters",
+      quantity: d.equipmentRooms,
+      source: "Copper / fiber conversion",
+    },
 
-    { sku: "inst-mount", subcategory: "Mount Kits", quantity: n, source: "One mount kit per antenna" },
-    { sku: "inst-wallbracket", subcategory: "Wall Brackets", quantity: d.byCategory["indoor-wall"] ?? Math.ceil(n * 0.2), source: "Wall-mounted placements" },
-    { sku: "inst-ceilbracket", subcategory: "Ceiling Brackets", quantity: d.byCategory["indoor-ceiling"] ?? Math.ceil(n * 0.6), source: "Ceiling placements at installation height" },
-    { sku: "inst-psu", subcategory: "Power Supplies", quantity: d.cabinets * 2, source: "Redundant PSU per cabinet" },
-    { sku: "inst-ground", subcategory: "Grounding Kits", quantity: d.cabinets + d.equipmentRooms, source: "Grounding per cabinet and room" },
-    { sku: "inst-powercable", subcategory: "Power Cable", quantity: d.powerCableMeters, source: "Power distribution runs" },
-    { sku: "inst-groundcable", subcategory: "Ground Cable", quantity: d.groundCableMeters, source: "Ground bonding runs" },
+    {
+      sku: "inst-mount",
+      subcategory: "Mount Kits",
+      quantity: n,
+      source: "One mount kit per antenna",
+    },
+    {
+      sku: "inst-wallbracket",
+      subcategory: "Wall Brackets",
+      quantity: d.byCategory["indoor-wall"] ?? Math.ceil(n * 0.2),
+      source: "Wall-mounted placements",
+    },
+    {
+      sku: "inst-ceilbracket",
+      subcategory: "Ceiling Brackets",
+      quantity: d.byCategory["indoor-ceiling"] ?? Math.ceil(n * 0.6),
+      source: "Ceiling placements at installation height",
+    },
+    {
+      sku: "inst-psu",
+      subcategory: "Power Supplies",
+      quantity: d.cabinets * 2,
+      source: "Redundant PSU per cabinet",
+    },
+    {
+      sku: "inst-ground",
+      subcategory: "Grounding Kits",
+      quantity: d.cabinets + d.equipmentRooms,
+      source: "Grounding per cabinet and room",
+    },
+    {
+      sku: "inst-powercable",
+      subcategory: "Power Cable",
+      quantity: d.powerCableMeters,
+      source: "Power distribution runs",
+    },
+    {
+      sku: "inst-groundcable",
+      subcategory: "Ground Cable",
+      quantity: d.groundCableMeters,
+      source: "Ground bonding runs",
+    },
 
-    { sku: "acc-connector", subcategory: "Connectors", quantity: n * 3 + 3, source: "Three connectors per radio plus spares" },
-    { sku: "acc-tray", subcategory: "Cable Trays", quantity: round5(d.cat6Meters * 0.35), source: "Tray coverage on main routes" },
-    { sku: "acc-tie", subcategory: "Cable Ties", quantity: Math.max(2, Math.ceil(n / 3)), source: "Cable management packs" },
-    { sku: "acc-label", subcategory: "Labels", quantity: d.equipmentRooms, source: "Labeling kit per equipment room" },
+    {
+      sku: "acc-connector",
+      subcategory: "Connectors",
+      quantity: n * 3 + 3,
+      source: "Three connectors per radio plus spares",
+    },
+    {
+      sku: "acc-tray",
+      subcategory: "Cable Trays",
+      quantity: round5(d.cat6Meters * 0.35),
+      source: "Tray coverage on main routes",
+    },
+    {
+      sku: "acc-tie",
+      subcategory: "Cable Ties",
+      quantity: Math.max(2, Math.ceil(n / 3)),
+      source: "Cable management packs",
+    },
+    {
+      sku: "acc-label",
+      subcategory: "Labels",
+      quantity: d.equipmentRooms,
+      source: "Labeling kit per equipment room",
+    },
   );
 
   return specs
@@ -517,7 +875,12 @@ export interface CostBreakdown {
 
 export function computeCost(items: BomItem[]): CostBreakdown {
   const sum = (f: (i: BomItem) => boolean) =>
-    Number(items.filter(f).reduce((s, i) => s + i.totalPrice, 0).toFixed(2));
+    Number(
+      items
+        .filter(f)
+        .reduce((s, i) => s + i.totalPrice, 0)
+        .toFixed(2),
+    );
   const equipment = sum((i) => i.category === "radio" || i.category === "antenna");
   const network = sum((i) => i.category === "network");
   const cable = sum((i) => i.category === "transmission");
@@ -552,9 +915,27 @@ export interface LaborRole {
 export function computeLabor(antennas: number): LaborRole[] {
   const days = Math.max(3, Math.ceil(antennas / 2.5));
   const rows: Omit<LaborRole, "total">[] = [
-    { id: "install", role: "Installation Engineers", people: Math.max(2, Math.ceil(antennas / 6)), days, dailyCost: 220 },
-    { id: "rf", role: "RF Technicians", people: Math.max(2, Math.ceil(antennas / 3)), days, dailyCost: 120 },
-    { id: "commissioning", role: "Commissioning Engineer", people: 1, days: Math.max(2, Math.round(days * 0.6)), dailyCost: 350 },
+    {
+      id: "install",
+      role: "Installation Engineers",
+      people: Math.max(2, Math.ceil(antennas / 6)),
+      days,
+      dailyCost: 220,
+    },
+    {
+      id: "rf",
+      role: "RF Technicians",
+      people: Math.max(2, Math.ceil(antennas / 3)),
+      days,
+      dailyCost: 120,
+    },
+    {
+      id: "commissioning",
+      role: "Commissioning Engineer",
+      people: 1,
+      days: Math.max(2, Math.round(days * 0.6)),
+      dailyCost: 350,
+    },
     { id: "pm", role: "Project Manager", people: 1, days, dailyCost: 400 },
   ];
   return rows.map((r) => ({ ...r, total: r.people * r.days * r.dailyCost }));
@@ -616,7 +997,10 @@ export function computeRack(detection: EquipmentDetection): RackEstimate {
   const lines = [
     { label: "Private Core", units: 4 },
     { label: "Central Unit", units: 2 },
-    { label: `Distributed Units × ${Math.max(1, Math.ceil(detection.antennas / 8))}`, units: Math.max(1, Math.ceil(detection.antennas / 8)) * 2 },
+    {
+      label: `Distributed Units × ${Math.max(1, Math.ceil(detection.antennas / 8))}`,
+      units: Math.max(1, Math.ceil(detection.antennas / 8)) * 2,
+    },
     { label: `Edge Switches × ${detection.switches}`, units: detection.switches },
     { label: `Aggregation × ${detection.aggregation}`, units: detection.aggregation * 2 },
     { label: `Patch Panels × ${detection.cabinets * 2}`, units: detection.cabinets * 2 },
@@ -624,7 +1008,10 @@ export function computeRack(detection: EquipmentDetection): RackEstimate {
     { label: "Cable Management", units: 3 },
   ];
   const cabinetSize = 42;
-  const used = Math.min(cabinetSize, lines.reduce((s, l) => s + l.units, 0));
+  const used = Math.min(
+    cabinetSize,
+    lines.reduce((s, l) => s + l.units, 0),
+  );
   return {
     cabinetSize,
     cabinets: detection.cabinets,
@@ -648,7 +1035,10 @@ export interface CableSummary {
 
 export function computeCables(detection: EquipmentDetection): CableSummary {
   const total =
-    detection.fiberMeters + detection.cat6Meters + detection.powerCableMeters + detection.groundCableMeters;
+    detection.fiberMeters +
+    detection.cat6Meters +
+    detection.powerCableMeters +
+    detection.groundCableMeters;
   const complexity = total > 900 ? "High" : total > 450 ? "Medium" : "Low";
   return {
     fiber: detection.fiberMeters,
@@ -834,8 +1224,7 @@ export function buildEngineeringBom(
 
 /* -------------------- formatting -------------------- */
 
-export const money = (n: number) =>
-  `$${Math.round(n).toLocaleString("en-US")}`;
+export const money = (n: number) => `$${Math.round(n).toLocaleString("en-US")}`;
 
 export const money2 = (n: number) =>
   `$${n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
@@ -1115,8 +1504,7 @@ export function compareVendors(
       vendor,
       catalog,
       estimatedCost: Number(cost.subtotal.toFixed(0)),
-      equipment:
-        id === "mavenir" ? "Open RAN" : `${detection.antennas} Antennas`,
+      equipment: id === "mavenir" ? "Open RAN" : `${detection.antennas} Antennas`,
       availability: vendor.availability,
       leadTimeDays: vendor.leadWeeks * 7,
       warranty: vendor.warranty,
@@ -1174,7 +1562,8 @@ export function procurementOverview(vendor: BomVendor, from = Date.now()): Procu
 
 /* -------------------- AI cost optimization -------------------- */
 
-export type OptimizationId = "antenna-category" | "cable-length" | "alt-vendor" | "install-complexity";
+export type OptimizationId =
+  "antenna-category" | "cable-length" | "alt-vendor" | "install-complexity";
 
 export interface CostOptimization {
   id: OptimizationId;

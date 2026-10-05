@@ -145,8 +145,14 @@ export function PropertiesPanel({
     );
   }
 
-  const pv = power ?? (one ? one.txPower : Math.round(selected.reduce((s, a) => s + a.txPower, 0) / selected.length));
-  const hv = height ?? (one ? one.height : Number((selected.reduce((s, a) => s + a.height, 0) / selected.length).toFixed(1)));
+  const pv =
+    power ??
+    (one ? one.txPower : Math.round(selected.reduce((s, a) => s + a.txPower, 0) / selected.length));
+  const hv =
+    height ??
+    (one
+      ? one.height
+      : Number((selected.reduce((s, a) => s + a.height, 0) / selected.length).toFixed(1)));
 
   return (
     <section className="rounded-2xl border border-border bg-card p-4 shadow-soft">
@@ -440,40 +446,41 @@ export function CompareDialog({
   );
   const other = versions.find((v) => v.id === otherId);
 
-  const rows: { label: string; a: string; b: string; better: number }[] = current && other
-    ? [
-        {
-          label: "Coverage",
-          a: `${current.kpis.coverage}%`,
-          b: `${other.kpis.coverage}%`,
-          better: Math.sign(current.kpis.coverage - other.kpis.coverage),
-        },
-        {
-          label: "Capacity",
-          a: `${current.kpis.capacity}%`,
-          b: `${other.kpis.capacity}%`,
-          better: Math.sign(current.kpis.capacity - other.kpis.capacity),
-        },
-        {
-          label: "Average SINR",
-          a: `${current.kpis.avgSinr} dB`,
-          b: `${other.kpis.avgSinr} dB`,
-          better: Math.sign(current.kpis.avgSinr - other.kpis.avgSinr),
-        },
-        {
-          label: "Antennas",
-          a: `${current.antennas.length}`,
-          b: `${other.antennas.length}`,
-          better: Math.sign(other.antennas.length - current.antennas.length),
-        },
-        {
-          label: "Estimated Cost",
-          a: current.cost,
-          b: other.cost,
-          better: 0,
-        },
-      ]
-    : [];
+  const rows: { label: string; a: string; b: string; better: number }[] =
+    current && other
+      ? [
+          {
+            label: "Coverage",
+            a: `${current.kpis.coverage}%`,
+            b: `${other.kpis.coverage}%`,
+            better: Math.sign(current.kpis.coverage - other.kpis.coverage),
+          },
+          {
+            label: "Capacity",
+            a: `${current.kpis.capacity}%`,
+            b: `${other.kpis.capacity}%`,
+            better: Math.sign(current.kpis.capacity - other.kpis.capacity),
+          },
+          {
+            label: "Average SINR",
+            a: `${current.kpis.avgSinr} dB`,
+            b: `${other.kpis.avgSinr} dB`,
+            better: Math.sign(current.kpis.avgSinr - other.kpis.avgSinr),
+          },
+          {
+            label: "Antennas",
+            a: `${current.antennas.length}`,
+            b: `${other.antennas.length}`,
+            better: Math.sign(other.antennas.length - current.antennas.length),
+          },
+          {
+            label: "Estimated Cost",
+            a: current.cost,
+            b: other.cost,
+            better: 0,
+          },
+        ]
+      : [];
 
   return (
     <div className="fixed inset-0 z-50 grid place-items-center bg-foreground/40 p-4 backdrop-blur-sm">
@@ -514,9 +521,7 @@ export function CompareDialog({
             {rows.map((r) => (
               <tr key={r.label} className="border-t border-border">
                 <td className="py-2 text-xs text-muted-foreground">{r.label}</td>
-                <td
-                  className={`num py-2 text-xs font-bold ${r.better > 0 ? "text-success" : ""}`}
-                >
+                <td className={`num py-2 text-xs font-bold ${r.better > 0 ? "text-success" : ""}`}>
                   {r.a}
                   {r.better > 0 && " ▲"}
                 </td>

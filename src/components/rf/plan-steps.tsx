@@ -144,16 +144,11 @@ export function CriticalAreasStep({
 
       <div className="space-y-4">
         <div className="rounded-2xl border border-border bg-card p-4">
-          <p className="text-xs font-bold uppercase tracking-wide text-muted-foreground">
-            Legend
-          </p>
+          <p className="text-xs font-bold uppercase tracking-wide text-muted-foreground">Legend</p>
           <ul className="mt-3 space-y-2">
             {PRIORITIES.map((p) => (
               <li key={p} className="flex items-center gap-2 text-sm">
-                <span
-                  className="size-3 rounded"
-                  style={{ background: PRIORITY_META[p].color }}
-                />
+                <span className="size-3 rounded" style={{ background: PRIORITY_META[p].color }} />
                 {PRIORITY_META[p].label}
                 <span className="num ml-auto text-xs text-muted-foreground">
                   {Object.values(value).filter((v) => v === p).length}
@@ -181,9 +176,7 @@ export function CriticalAreasStep({
           <button
             onClick={() => {
               const next = { ...value };
-              rooms
-                .filter((r) => r.usage === bulkUsage)
-                .forEach((r) => (next[r.id] = brush));
+              rooms.filter((r) => r.usage === bulkUsage).forEach((r) => (next[r.id] = brush));
               onChange(next);
             }}
             className="mt-2 w-full rounded-xl bg-primary px-3 py-2 text-xs font-semibold text-primary-foreground transition-smooth hover:brightness-110"
@@ -199,9 +192,7 @@ export function CriticalAreasStep({
         </div>
 
         <div className="max-h-64 overflow-auto rounded-2xl border border-border bg-card p-4">
-          <p className="text-xs font-bold uppercase tracking-wide text-muted-foreground">
-            Rooms
-          </p>
+          <p className="text-xs font-bold uppercase tracking-wide text-muted-foreground">Rooms</p>
           <ul className="mt-2 space-y-1">
             {rooms.map((r) => (
               <li key={r.id} className="flex items-center gap-2 text-xs">
@@ -245,9 +236,7 @@ export function RestrictedAreasStep({
 }) {
   const vp = useFittedViewport(model);
   const [drawing, setDrawing] = useState(false);
-  const [draft, setDraft] = useState<{ x: number; y: number; w: number; h: number } | null>(
-    null,
-  );
+  const [draft, setDraft] = useState<{ x: number; y: number; w: number; h: number } | null>(null);
   const start = useRef<{ x: number; y: number } | null>(null);
   const [activeId, setActiveId] = useState<string | null>(null);
 
@@ -261,9 +250,7 @@ export function RestrictedAreasStep({
           <button
             onClick={() => setDrawing((d) => !d)}
             className={`rounded-lg border px-3 py-1.5 text-xs font-semibold transition-smooth ${
-              drawing
-                ? "border-danger bg-danger/10 text-danger"
-                : "border-border hover:bg-accent"
+              drawing ? "border-danger bg-danger/10 text-danger" : "border-border hover:bg-accent"
             }`}
           >
             {drawing ? "Drawing — drag on plan" : "Add Restricted Area"}

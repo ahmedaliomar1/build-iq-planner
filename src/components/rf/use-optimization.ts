@@ -55,9 +55,11 @@ export function useOptimization(
   const [recalc, setRecalc] = useState<{ steps: RfLayerId[]; index: number; label: string } | null>(
     null,
   );
-  const pending = useRef<{ antennas: OptAntenna[]; change: OptChange; affected: RfLayerId[] } | null>(
-    null,
-  );
+  const pending = useRef<{
+    antennas: OptAntenna[];
+    change: OptChange;
+    affected: RfLayerId[];
+  } | null>(null);
 
   /* ---------- bootstrap from the Initial RF Design ---------- */
   useEffect(() => {
@@ -130,7 +132,16 @@ export function useOptimization(
       STEP_MS,
     );
     return () => clearTimeout(t);
-  }, [recalc, ctx, layers, initial, projectId, state.versions, state.modifications, state.kpis.simulationSeconds]);
+  }, [
+    recalc,
+    ctx,
+    layers,
+    initial,
+    projectId,
+    state.versions,
+    state.modifications,
+    state.kpis.simulationSeconds,
+  ]);
 
   /* ---------- editing operations ---------- */
 
@@ -150,6 +161,14 @@ export function useOptimization(
     },
     [ctx, projectId, state.antennas, state.modifications],
   );
+
+  /** abandons an in-flight local recalculation and restores the previous layout */
+  const cancelRecalc = useCallback(() => {
+    pending.current = null;
+    undoStack.current.pop();
+    setHistoryTick((t) => t + 1);
+    setRecalc(null);
+  }, []);
 
   /** silent update that never triggers recalculation (lock, rename, tilt) */
   const setAntennas = useCallback(
@@ -251,7 +270,10 @@ export function useOptimization(
       .map((a) => Number(a.id.replace("ant-", "")))
       .filter((n) => Number.isFinite(n));
     const n = (used.length ? Math.max(...used) : 0) + 1;
-    return { id: `ant-${String(n).padStart(2, "0")}`, label: `Antenna ${String(n).padStart(2, "0")}` };
+    return {
+      id: `ant-${String(n).padStart(2, "0")}`,
+      label: `Antenna ${String(n).padStart(2, "0")}`,
+    };
   }, [state.antennas]);
 
   const roomNameAt = useCallback(
@@ -277,6 +299,7 @@ export function useOptimization(
     layers: layers ?? initial?.layers ?? null,
     recalc,
     applyChange,
+    cancelRecalc,
     setAntennas,
     undo,
     redo,

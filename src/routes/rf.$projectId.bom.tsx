@@ -1,13 +1,16 @@
 import { useMemo } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowLeft, ArrowRight, CheckCircle2, Download, FileDown, PackageSearch } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  CheckCircle2,
+  Download,
+  FileDown,
+  PackageSearch,
+} from "lucide-react";
 import { toast } from "sonner";
 import { AppShell } from "@/components/app-shell";
-import {
-  BomWorkflow,
-  ProcurementDashboard,
-  VendorSelection,
-} from "@/components/bom/bom-progress";
+import { BomWorkflow, ProcurementDashboard, VendorSelection } from "@/components/bom/bom-progress";
 import {
   AiCostOptimization,
   BomVersions,
@@ -36,7 +39,13 @@ import {
   useOptState,
   validateOptimization,
 } from "@/services/optimizationService";
-import { bomToCsv, money, resetBomState, saveBomState, ESTIMATED_BOM_MS } from "@/services/bomService";
+import {
+  bomToCsv,
+  money,
+  resetBomState,
+  saveBomState,
+  ESTIMATED_BOM_MS,
+} from "@/services/bomService";
 
 export const Route = createFileRoute("/rf/$projectId/bom")({
   head: () => ({
@@ -108,8 +117,8 @@ function BomRoute() {
       items={state.items.length}
       totalQuantity={Math.round(state.items.reduce((s, i) => s + i.quantity, 0))}
       equipmentCost={(preview?.cost.equipment ?? 0) + (preview?.cost.network ?? 0)}
-      laborCost={state.status === "idle" ? 0 : preview?.labor ?? 0}
-      projectCost={state.items.length ? preview?.projectCost ?? 0 : 0}
+      laborCost={state.status === "idle" ? 0 : (preview?.labor ?? 0)}
+      projectCost={state.items.length ? (preview?.projectCost ?? 0) : 0}
       vendorStatus={gen.vendor && state.vendor ? gen.vendor.availability : "Pending"}
       readiness={state.status === "done" ? 100 : gen.progress}
     />
@@ -185,6 +194,17 @@ function BomRoute() {
             />
           )}
           <BomWorkflow state={state} progress={gen.progress} remainingMs={gen.remainingMs} />
+          <div className="flex justify-center">
+            <button
+              onClick={() => {
+                gen.cancel();
+                toast.info("BOM generation cancelled");
+              }}
+              className="rounded-xl border border-border px-4 py-2 text-sm font-semibold transition-smooth hover:bg-accent"
+            >
+              Cancel generation
+            </button>
+          </div>
         </div>
       </AppShell>
     );
@@ -220,9 +240,7 @@ function BomRoute() {
             Save
           </button>
           <button
-            onClick={() =>
-              downloadFile(`${base}.csv`, bomToCsv(bom), "text/csv")
-            }
+            onClick={() => downloadFile(`${base}.csv`, bomToCsv(bom), "text/csv")}
             className="inline-flex items-center gap-2 rounded-xl border border-border px-4 py-2.5 text-sm font-semibold transition-smooth hover:bg-accent"
           >
             <Download className="size-4" /> Export CSV
@@ -287,10 +305,7 @@ function BomRoute() {
 
         <CostSummary finance={bom.financialSummary} />
         <BomViewer items={bom.items} />
-        <ProcurementValidation
-          checks={gen.validation.checks}
-          passed={gen.validation.passed}
-        />
+        <ProcurementValidation checks={gen.validation.checks} passed={gen.validation.passed} />
         <BomVersions versions={state.versions} />
 
         <div className="flex flex-wrap items-center gap-3 rounded-2xl border border-border bg-card p-4 shadow-soft">
@@ -339,10 +354,13 @@ function BomRoute() {
         <div className="rounded-2xl border border-border bg-card p-4 shadow-soft">
           <h3 className="text-sm font-bold tracking-tight">Engineering BOM Object</h3>
           <pre className="num mt-3 max-h-80 overflow-auto rounded-xl border border-border bg-background p-3 text-[11px] leading-relaxed">
-            {JSON.stringify(bom, (k, v) => (k === "items" ? `[${bom.items.length} BOM line items]` : v), 2)}
+            {JSON.stringify(
+              bom,
+              (k, v) => (k === "items" ? `[${bom.items.length} BOM line items]` : v),
+              2,
+            )}
           </pre>
         </div>
-
       </div>
     </AppShell>
   );

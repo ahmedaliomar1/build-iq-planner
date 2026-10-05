@@ -180,7 +180,10 @@ export function useExportCenter(
   const cancel = useCallback(() => {
     saveExportState(projectId, {
       status: "cancelled",
-      log: [...state.log, { at: Date.now(), kind: "info" as const, text: "Package generation cancelled" }],
+      log: [
+        ...state.log,
+        { at: Date.now(), kind: "info" as const, text: "Package generation cancelled" },
+      ],
     });
   }, [projectId, state.log]);
 

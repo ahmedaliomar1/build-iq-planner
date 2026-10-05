@@ -1,3 +1,4 @@
+import { toast } from "sonner";
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import {
   AlertTriangle,
@@ -46,13 +47,7 @@ export const Route = createFileRoute("/new")({
   component: WizardPage,
 });
 
-const STEPS = [
-  "Project Information",
-  "Upload Drawing",
-  "AI Analysis",
-  "Review",
-  "Ready",
-];
+const STEPS = ["Project Information", "Upload Drawing", "AI Analysis", "Review", "Ready"];
 
 interface UploadItem extends UploadedFile {
   id: string;
@@ -72,8 +67,7 @@ function WizardPage() {
   const [touched, setTouched] = useState(false);
 
   const step1Valid = name.trim().length > 0 && country && buildingType;
-  const uploadsDone =
-    files.length > 0 && files.every((f) => f.progress === 100 && !f.failed);
+  const uploadsDone = files.length > 0 && files.every((f) => f.progress === 100 && !f.failed);
 
   const startAnalysis = () => {
     const p = createProject({
@@ -113,6 +107,11 @@ function WizardPage() {
           {step === 2 && (
             <StepAnalysis
               buildingType={buildingType}
+              onCancel={() => {
+                if (projectId) updateProject(projectId, { status: "draft" });
+                setStep(1);
+                toast.info("Building analysis cancelled — your files are kept");
+              }}
               onDone={(m) => {
                 setModel(m);
                 if (projectId) {
@@ -206,9 +205,7 @@ function StepIndicator({ step }: { step: number }) {
                 {label}
               </span>
             </div>
-            {i < STEPS.length - 1 && (
-              <span className="hidden h-px flex-1 bg-border md:block" />
-            )}
+            {i < STEPS.length - 1 && <span className="hidden h-px flex-1 bg-border md:block" />}
           </li>
         );
       })}
@@ -297,9 +294,7 @@ function StepInfo(props: {
                     network === id ? "border-primary" : "border-border"
                   }`}
                 >
-                  {network === id && (
-                    <span className="size-2 rounded-full bg-primary" />
-                  )}
+                  {network === id && <span className="size-2 rounded-full bg-primary" />}
                 </span>
                 <span className="text-sm font-semibold">{title}</span>
               </span>
@@ -582,9 +577,11 @@ const TASKS = [
 function StepAnalysis({
   buildingType,
   onDone,
+  onCancel,
 }: {
   buildingType: string;
   onDone: (m: BuildingModel) => void;
+  onCancel: () => void;
 }) {
   const [progress, setProgress] = useState(0);
   const doneRef = useRef(false);
@@ -654,9 +651,7 @@ function StepAnalysis({
             />
           </svg>
           <div className="pointer-events-none absolute text-center">
-            <p className="num text-4xl font-bold tracking-tight">
-              {Math.round(progress)}%
-            </p>
+            <p className="num text-4xl font-bold tracking-tight">{Math.round(progress)}%</p>
             <p className="mt-1 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
               {remaining}s remaining
             </p>
@@ -697,6 +692,14 @@ function StepAnalysis({
             );
           })}
         </ul>
+      </div>
+      <div className="mt-6 flex justify-center">
+        <button
+          onClick={onCancel}
+          className="rounded-xl border border-border px-4 py-2 text-sm font-semibold transition-smooth hover:bg-accent"
+        >
+          Cancel analysis
+        </button>
       </div>
     </div>
   );
@@ -752,9 +755,7 @@ function StepReview({
         ))}
         <span
           className={`rounded-lg px-2.5 py-1 text-[11px] font-semibold ${
-            model.scaleDetected
-              ? "bg-success-soft text-success"
-              : "bg-warning-soft text-warning"
+            model.scaleDetected ? "bg-success-soft text-success" : "bg-warning-soft text-warning"
           }`}
         >
           {model.scaleDetected ? "Scale Detected Successfully" : "Scale Not Detected"}
@@ -831,9 +832,7 @@ function ComparePane({
     <div className="overflow-hidden rounded-2xl border border-border bg-canvas">
       <div className="flex items-center justify-between border-b border-border bg-card px-4 py-2.5">
         <span className="text-xs font-bold uppercase tracking-wide">{label}</span>
-        <span className="num text-[11px] text-muted-foreground">
-          {Math.round(vp.view.z * 8)}%
-        </span>
+        <span className="num text-[11px] text-muted-foreground">{Math.round(vp.view.z * 8)}%</span>
       </div>
       <div
         ref={vp.ref}

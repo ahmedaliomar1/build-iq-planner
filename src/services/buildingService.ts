@@ -12,7 +12,12 @@ export const buildingService = {
       return api.post(`/projects/${projectId}/building/upload`, form);
     }
     await mockDelay(300);
-    return { fileId: `file_${Date.now()}`, name: file.name, size: file.size, uploadedAt: Date.now() };
+    return {
+      fileId: `file_${Date.now()}`,
+      name: file.name,
+      size: file.size,
+      uploadedAt: Date.now(),
+    };
   },
   async analyzeBuilding(projectId: string): Promise<DigitalBuilding | null> {
     if (!USE_MOCK) return api.post(`/projects/${projectId}/building/analyze`);
@@ -31,9 +36,15 @@ export const buildingService = {
     if (!USE_MOCK) return api.post(`/projects/${projectId}/building/validate`);
     const model = await this.getDigitalBuilding(projectId);
     const walls = model?.objects.filter((o) => o.kind === "wall").length ?? 0;
-    return walls > 0 ? { valid: true, issues: [] } : { valid: false, issues: ["No walls detected"] };
+    return walls > 0
+      ? { valid: true, issues: [] }
+      : { valid: false, issues: ["No walls detected"] };
   },
-  async saveDigitalBuilding(projectId: string, model: DigitalBuilding, label: string): Promise<void> {
+  async saveDigitalBuilding(
+    projectId: string,
+    model: DigitalBuilding,
+    label: string,
+  ): Promise<void> {
     if (!USE_MOCK) return api.put(`/projects/${projectId}/building`, { model, label });
     await mockDelay(150);
     saveModel(projectId, model, label);

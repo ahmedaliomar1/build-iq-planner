@@ -44,7 +44,13 @@ export const projectService = {
     if (!USE_MOCK) return api.post(`/projects/${id}/duplicate`);
     const src = readAll().find((p) => p.id === id);
     if (!src) return null;
-    const copy = createProject({ name: `${src.name} (copy)`, network: src.network, country: src.country, buildingType: src.buildingType, files: src.files });
+    const copy = createProject({
+      name: `${src.name} (copy)`,
+      network: src.network,
+      country: src.country,
+      buildingType: src.buildingType,
+      files: src.files,
+    });
     updateProject(copy.id, { model: src.model });
     return copy;
   },
@@ -63,7 +69,10 @@ type Slice = Record<string, unknown>;
 const slice = (key: string, projectId: string): Slice | null => {
   if (typeof window === "undefined") return null;
   try {
-    return (JSON.parse(window.localStorage.getItem(key) ?? "{}") as Record<string, Slice>)[projectId] ?? null;
+    return (
+      (JSON.parse(window.localStorage.getItem(key) ?? "{}") as Record<string, Slice>)[projectId] ??
+      null
+    );
   } catch {
     return null;
   }
@@ -77,11 +86,17 @@ export function workflowStatus(projectId: string, base: Project["status"]): Proj
   const opt = slice("apcp.rfopt.v1", projectId);
   const sim = slice("apcp.rfsim.v1", projectId);
   if (exp?.["finalPackage"] && exp["status"] === "done") return "Completed";
-  if (rep?.["status"] === "done" && Array.isArray(exp?.["history"]) && (exp["history"] as unknown[]).length) return "Export Ready";
+  if (
+    rep?.["status"] === "done" &&
+    Array.isArray(exp?.["history"]) &&
+    (exp["history"] as unknown[]).length
+  )
+    return "Export Ready";
   if (rep?.["status"] === "done") return "Reports Ready";
   if (bom?.["savedVersion"] || bom?.["status"] === "done") return "BOM Ready";
   if (opt?.["savedAt"]) return "Optimization Completed";
-  if (Array.isArray(opt?.["antennas"]) && (opt["antennas"] as unknown[]).length) return "Optimization";
+  if (Array.isArray(opt?.["antennas"]) && (opt["antennas"] as unknown[]).length)
+    return "Optimization";
   if (sim?.["status"] === "complete") return "Simulation Completed";
   if (sim?.["status"] === "running") return "Simulation Running";
   if (slice("apcp.rfprofile.v1", projectId)) return "RF Profile Ready";
@@ -107,10 +122,24 @@ export interface ProjectSummary {
 export function projectSummary(p: Project): ProjectSummary {
   const exp = slice("apcp.export.v1", p.id);
   const pkg = exp?.["finalPackage"] as
-    | { version: string; timestamp: number; kpis: { coverage: number; capacity: number; antennas: number; vendor: string; estimatedCost: number }; projectInformation: { technology: string } }
+    | {
+        version: string;
+        timestamp: number;
+        kpis: {
+          coverage: number;
+          capacity: number;
+          antennas: number;
+          vendor: string;
+          estimatedCost: number;
+        };
+        projectInformation: { technology: string };
+      }
     | undefined;
   const sim = slice("apcp.rfsim.v1", p.id)?.["design"] as
-    | { kpis: { coverage: number; capacity: number; antennas: number }; projectInformation: { technology: string } }
+    | {
+        kpis: { coverage: number; capacity: number; antennas: number };
+        projectInformation: { technology: string };
+      }
     | undefined;
   const opt = slice("apcp.rfopt.v1", p.id);
   const optK = opt?.["kpis"] as { coverage: number; capacity: number } | undefined;

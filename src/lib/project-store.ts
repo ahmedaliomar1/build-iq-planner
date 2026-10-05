@@ -64,9 +64,7 @@ export function createProject(
 }
 
 export function updateProject(id: string, patch: Partial<Project>) {
-  write(
-    read().map((p) => (p.id === id ? { ...p, ...patch, updatedAt: Date.now() } : p)),
-  );
+  write(read().map((p) => (p.id === id ? { ...p, ...patch, updatedAt: Date.now() } : p)));
 }
 
 export function saveModel(id: string, model: BuildingModel, label: string) {

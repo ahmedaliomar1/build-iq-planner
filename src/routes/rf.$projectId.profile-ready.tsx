@@ -17,7 +17,8 @@ export const Route = createFileRoute("/rf/$projectId/profile-ready")({
       { property: "og:title", content: "RF Profile Saved — AI Private Cellular Planner" },
       {
         property: "og:description",
-        content: "Frequency, bandwidth, propagation, materials and regulations captured in one RF Profile.",
+        content:
+          "Frequency, bandwidth, propagation, materials and regulations captured in one RF Profile.",
       },
     ],
   }),

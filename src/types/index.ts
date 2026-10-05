@@ -17,7 +17,10 @@ export type Window = OpeningObj & { kind: "window" };
 
 export type { RfConfig as RFRequirements } from "@/lib/rf-config";
 export type { RfProfileConfig as RFProfile } from "@/lib/rf-profile";
-export type { InitialRfDesign as InitialRFDesign, AntennaPlacement as Antenna } from "@/lib/rf-simulation";
+export type {
+  InitialRfDesign as InitialRFDesign,
+  AntennaPlacement as Antenna,
+} from "@/lib/rf-simulation";
 export type { OptimizedRfDesign as OptimizedRFDesign } from "@/lib/rf-optimization";
 export type { EngineeringBom as EngineeringBOM } from "@/lib/bom";
 export type { ReportRecord as Report, ReportDocument } from "@/lib/reports";

@@ -163,13 +163,10 @@ export function Scene({
           const lid = o.kind === "door" ? "doors" : "windows";
           if (!on(lid)) return null;
           const host = walls.find((w) => w.id === o.wallId);
-          const angle = host
-            ? Math.atan2(host.y2 - host.y1, host.x2 - host.x1)
-            : 0;
+          const angle = host ? Math.atan2(host.y2 - host.y1, host.x2 - host.x1) : 0;
           const dx = (Math.cos(angle) * o.width) / 2;
           const dy = (Math.sin(angle) * o.width) / 2;
-          const color =
-            o.kind === "door" ? "var(--warning)" : "var(--primary)";
+          const color = o.kind === "door" ? "var(--warning)" : "var(--primary)";
           return (
             <g key={o.id} opacity={op(lid)} {...pick(o.id, o.kind)}>
               <line

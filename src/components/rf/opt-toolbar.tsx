@@ -71,7 +71,9 @@ export function OptToolbar({
           onClick={() => onTool(t.id)}
           title={t.label}
           className={`${btn} ${
-            tool === t.id ? "border-primary bg-primary-soft text-primary" : "border-border hover:bg-accent"
+            tool === t.id
+              ? "border-primary bg-primary-soft text-primary"
+              : "border-border hover:bg-accent"
           }`}
         >
           <t.icon className="size-3.5" />
@@ -81,23 +83,47 @@ export function OptToolbar({
 
       <span className="mx-1 h-6 w-px bg-border" />
 
-      <button onClick={onUndo} disabled={!canUndo} title="Undo (Ctrl+Z)" className={`${btn} border-border hover:bg-accent disabled:opacity-40`}>
+      <button
+        onClick={onUndo}
+        disabled={!canUndo}
+        title="Undo (Ctrl+Z)"
+        className={`${btn} border-border hover:bg-accent disabled:opacity-40`}
+      >
         <Undo2 className="size-3.5" />
       </button>
-      <button onClick={onRedo} disabled={!canRedo} title="Redo (Ctrl+Y)" className={`${btn} border-border hover:bg-accent disabled:opacity-40`}>
+      <button
+        onClick={onRedo}
+        disabled={!canRedo}
+        title="Redo (Ctrl+Y)"
+        className={`${btn} border-border hover:bg-accent disabled:opacity-40`}
+      >
         <Redo2 className="size-3.5" />
       </button>
-      <button onClick={onSave} title="Save (Ctrl+S)" className={`${btn} border-border hover:bg-accent`}>
+      <button
+        onClick={onSave}
+        title="Save (Ctrl+S)"
+        className={`${btn} border-border hover:bg-accent`}
+      >
         <Save className="size-3.5" />
         <span className="hidden xl:inline">Save</span>
       </button>
 
       <span className="mx-1 h-6 w-px bg-border" />
 
-      <button onClick={onLock} disabled={!hasSelection} title="Lock selection" className={`${btn} border-border hover:bg-accent disabled:opacity-40`}>
+      <button
+        onClick={onLock}
+        disabled={!hasSelection}
+        title="Lock selection"
+        className={`${btn} border-border hover:bg-accent disabled:opacity-40`}
+      >
         <Lock className="size-3.5" />
       </button>
-      <button onClick={onUnlock} disabled={!hasSelection} title="Unlock selection" className={`${btn} border-border hover:bg-accent disabled:opacity-40`}>
+      <button
+        onClick={onUnlock}
+        disabled={!hasSelection}
+        title="Unlock selection"
+        className={`${btn} border-border hover:bg-accent disabled:opacity-40`}
+      >
         <LockOpen className="size-3.5" />
       </button>
       <button

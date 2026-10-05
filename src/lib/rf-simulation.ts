@@ -163,13 +163,7 @@ export const ESTIMATED_TOTAL_MS = SIM_STAGES.reduce((n, s) => n + estimatedStage
 /* -------------------- engineering data structures -------------------- */
 
 export type RfLayerId =
-  | "coverage"
-  | "capacity"
-  | "sinr"
-  | "rsrp"
-  | "rsrq"
-  | "interference"
-  | "critical";
+  "coverage" | "capacity" | "sinr" | "rsrp" | "rsrq" | "interference" | "critical";
 
 export interface RfCell {
   x: number;
@@ -259,7 +253,13 @@ export interface SimulationResults {
     noiseMarginDb: number;
   };
   coverage: { gridCells: number; coveredPct: number; floors: number };
-  capacity: { users: number; iot: number; trafficMbps: number; sectorCapacityMbps: number; congestedCells: number };
+  capacity: {
+    users: number;
+    iot: number;
+    trafficMbps: number;
+    sectorCapacityMbps: number;
+    congestedCells: number;
+  };
   optimization: { iterations: number; startScore: number; bestScore: number; history: number[] };
 }
 
@@ -499,10 +499,7 @@ export const placeholderRfEngine: RfSimulationService = {
 
   generateEnvironment({ project, profile }) {
     const dist = materialDistribution(project.model, profile.materialOverrides);
-    const weighted = dist.reduce(
-      (sum, d) => sum + materialById(d.id).wallLoss * (d.pct / 100),
-      0,
-    );
+    const weighted = dist.reduce((sum, d) => sum + materialById(d.id).wallLoss * (d.pct / 100), 0);
     return {
       materialLossDb: Number(weighted.toFixed(2)),
       reflectionIndex: Number(Math.min(1, weighted / 22).toFixed(2)),
@@ -547,7 +544,9 @@ export const placeholderRfEngine: RfSimulationService = {
   calculateLinkBudget(ctx) {
     const env = placeholderRfEngine.generateEnvironment(ctx);
     const band = bandOf(ctx.profile);
-    const pathLoss = Number((32.4 + 20 * Math.log10(band.freq / 1000) + 22 * Math.log10(30)).toFixed(2));
+    const pathLoss = Number(
+      (32.4 + 20 * Math.log10(band.freq / 1000) + 22 * Math.log10(30)).toFixed(2),
+    );
     return {
       txPowerDbm: 20,
       antennaGainDbi: ctx.profile.antennaCategory === "industrial" ? 8 : 5,
@@ -555,9 +554,7 @@ export const placeholderRfEngine: RfSimulationService = {
       materialLossDb: env.materialLossDb,
       pathLossDb: pathLoss,
       receiverSensitivityDbm: -100,
-      noiseMarginDb: Number(
-        (20 + 5 - 1.5 - env.materialLossDb - pathLoss + 100).toFixed(2),
-      ),
+      noiseMarginDb: Number((20 + 5 - 1.5 - env.materialLossDb - pathLoss + 100).toFixed(2)),
     };
   },
 
@@ -571,7 +568,13 @@ export const placeholderRfEngine: RfSimulationService = {
       if (chosen.every((k) => Math.hypot(k.x - c.x, k.y - c.y) >= spacing)) chosen.push(c);
     }
     const capacityBoost =
-      config.capacity === "very-high" ? 3 : config.capacity === "high" ? 2 : config.capacity === "medium" ? 1 : 0;
+      config.capacity === "very-high"
+        ? 3
+        : config.capacity === "high"
+          ? 2
+          : config.capacity === "medium"
+            ? 1
+            : 0;
     for (const c of sorted) {
       if (chosen.length >= chosen.length + capacityBoost) break;
       if (!chosen.includes(c) && chosen.length < sorted.length) {
@@ -695,7 +698,9 @@ export const placeholderRfEngine: RfSimulationService = {
     return {
       coverage: Number(((covered / Math.max(1, cov.length)) * 100).toFixed(1)),
       capacity: Number(
-        ((capCells.filter((c) => c.raw >= 40).length / Math.max(1, capCells.length)) * 100).toFixed(1),
+        ((capCells.filter((c) => c.raw >= 40).length / Math.max(1, capCells.length)) * 100).toFixed(
+          1,
+        ),
       ),
       deadZones: Math.round(dead / 6),
       avgSinr: Number(avg(layers.sinr.cells).toFixed(1)),
@@ -805,7 +810,11 @@ export const placeholderRfEngine: RfSimulationService = {
         y: mid.y,
       });
     }
-    if (ctx.profile.antennaCategory !== "industrial" && ctx.project.buildingType === "Factory" && first) {
+    if (
+      ctx.profile.antennaCategory !== "industrial" &&
+      ctx.project.buildingType === "Factory" &&
+      first
+    ) {
       out.push({
         id: "rec-category",
         priority: "high",
@@ -993,9 +1002,23 @@ export function resetSimState(projectId: string) {
 /* -------------------- export helpers -------------------- */
 
 export function designToCsv(design: InitialRfDesign) {
-  const head = "id,label,room,category,x,y,height_m,tx_power_dbm,gain_dbi,radius_m,status,served_users";
+  const head =
+    "id,label,room,category,x,y,height_m,tx_power_dbm,gain_dbi,radius_m,status,served_users";
   const rows = design.selectedAntennaLayout.map((a) =>
-    [a.id, a.label, a.roomName, a.category, a.x, a.y, a.height, a.txPower, a.gain, a.radius, a.status, a.servedUsers].join(","),
+    [
+      a.id,
+      a.label,
+      a.roomName,
+      a.category,
+      a.x,
+      a.y,
+      a.height,
+      a.txPower,
+      a.gain,
+      a.radius,
+      a.status,
+      a.servedUsers,
+    ].join(","),
   );
   const kpi = [
     "",
@@ -1044,7 +1067,9 @@ export function designToReport(design: InitialRfDesign) {
     "WARNINGS",
     "--------",
     ...(design.warnings.length
-      ? design.warnings.map((w) => `[${w.severity.toUpperCase()}] ${w.title} — ${w.location}: ${w.description}`)
+      ? design.warnings.map(
+          (w) => `[${w.severity.toUpperCase()}] ${w.title} — ${w.location}: ${w.description}`,
+        )
       : ["None detected."]),
     "",
     "RECOMMENDATIONS",

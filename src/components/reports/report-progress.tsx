@@ -1,5 +1,13 @@
 import { useEffect, useRef } from "react";
-import { Activity, Check, FileStack, Loader2, Map as MapIcon, Package, Percent } from "lucide-react";
+import {
+  Activity,
+  Check,
+  FileStack,
+  Loader2,
+  Map as MapIcon,
+  Package,
+  Percent,
+} from "lucide-react";
 import {
   REPORT_STAGES,
   reportDate,
@@ -95,7 +103,9 @@ export function ReportsStartScreen({
         <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {facts.map(([k, v]) => (
             <div key={k} className="rounded-2xl border border-border bg-background p-4">
-              <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">{k}</p>
+              <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                {k}
+              </p>
               <p className="num mt-1 text-base font-bold tracking-tight">{v}</p>
             </div>
           ))}
@@ -154,7 +164,15 @@ export function ReportWorkflow({
         <div className="flex flex-wrap items-center gap-5 border-b border-border p-5 md:p-6">
           <div className="relative size-32 shrink-0">
             <svg viewBox="0 0 128 128" className="size-32 -rotate-90">
-              <circle cx="64" cy="64" r={r} fill="none" stroke="currentColor" strokeWidth="9" className="text-muted" />
+              <circle
+                cx="64"
+                cy="64"
+                r={r}
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="9"
+                className="text-muted"
+              />
               <circle
                 cx="64"
                 cy="64"
@@ -197,7 +215,9 @@ export function ReportWorkflow({
                 <div
                   key={s.id}
                   className={`rounded-2xl border p-4 transition-smooth ${
-                    stageStatus === "active" ? "border-primary/40 bg-primary-soft/40" : "border-border"
+                    stageStatus === "active"
+                      ? "border-primary/40 bg-primary-soft/40"
+                      : "border-border"
                   }`}
                 >
                   <div className="flex items-center gap-2.5">
@@ -235,12 +255,19 @@ export function ReportWorkflow({
               <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                 Engineering Activity Log
               </p>
-              <div ref={logRef} className="num mt-2 max-h-72 space-y-1 overflow-auto text-[11px] leading-relaxed">
+              <div
+                ref={logRef}
+                className="num mt-2 max-h-72 space-y-1 overflow-auto text-[11px] leading-relaxed"
+              >
                 {state.log.map((l, i) => (
                   <p
                     key={i}
                     className={
-                      l.kind === "calc" ? "text-primary" : l.kind === "info" ? "text-muted-foreground" : ""
+                      l.kind === "calc"
+                        ? "text-primary"
+                        : l.kind === "info"
+                          ? "text-muted-foreground"
+                          : ""
                     }
                   >
                     [{reportDate(l.at).split(", ")[1]}] {l.text}

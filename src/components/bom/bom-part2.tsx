@@ -116,7 +116,9 @@ export function VendorComparison({
           <div
             key={r.vendorId}
             className={`rounded-2xl border p-4 transition-smooth ${
-              selected === r.vendorId ? "border-primary bg-primary/5 shadow-soft" : "border-border bg-background"
+              selected === r.vendorId
+                ? "border-primary bg-primary/5 shadow-soft"
+                : "border-border bg-background"
             }`}
           >
             <div className="flex items-start justify-between gap-2">
@@ -171,7 +173,9 @@ function VendorDetails({ row, onClose }: { row: VendorComparisonRow; onClose: ()
       <div className="rounded-2xl border border-primary/30 bg-primary/5 p-4">
         <div className="flex items-center gap-2">
           <Building2 className="size-4 text-primary" />
-          <h4 className="text-sm font-bold tracking-tight">{row.vendor.name} — Engineering Details</h4>
+          <h4 className="text-sm font-bold tracking-tight">
+            {row.vendor.name} — Engineering Details
+          </h4>
           <button
             onClick={onClose}
             className="ml-auto rounded-lg border border-border px-2 py-1 text-[11px] font-semibold transition-smooth hover:bg-accent"
@@ -202,7 +206,9 @@ function VendorDetails({ row, onClose }: { row: VendorComparisonRow; onClose: ()
 function DetailList({ title, values }: { title: string; values: string[] }) {
   return (
     <div className="rounded-xl border border-border bg-background p-3">
-      <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">{title}</p>
+      <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
+        {title}
+      </p>
       <ul className="mt-1.5 space-y-1">
         {values.map((v) => (
           <li key={v} className="text-[11px]">
@@ -258,7 +264,10 @@ function Bar({ label, value }: { label: string; value: number }) {
         <span className="num font-semibold text-foreground">{value}%</span>
       </div>
       <div className="mt-1 h-2 overflow-hidden rounded-full bg-muted">
-        <div className="h-full rounded-full bg-primary transition-smooth" style={{ width: `${value}%` }} />
+        <div
+          className="h-full rounded-full bg-primary transition-smooth"
+          style={{ width: `${value}%` }}
+        />
       </div>
     </div>
   );
@@ -418,7 +427,9 @@ export function BomViewer({ items }: { items: BomItem[] }) {
     const q = query.trim().toLowerCase();
     const rows = items
       .filter((i) => (cat === "all" ? true : i.category === cat))
-      .filter((i) => !q || i.name.toLowerCase().includes(q) || i.subcategory.toLowerCase().includes(q))
+      .filter(
+        (i) => !q || i.name.toLowerCase().includes(q) || i.subcategory.toLowerCase().includes(q),
+      )
       .sort((a, b) =>
         sort === "name"
           ? a.name.localeCompare(b.name)
@@ -502,7 +513,9 @@ export function BomViewer({ items }: { items: BomItem[] }) {
                 ) : (
                   <ChevronRight className="size-4 text-muted-foreground" />
                 )}
-                <span className="text-sm font-semibold tracking-tight">{categoryMeta(c).label}</span>
+                <span className="text-sm font-semibold tracking-tight">
+                  {categoryMeta(c).label}
+                </span>
                 <span className="num ml-auto text-xs font-semibold">{money2(subtotal)}</span>
               </button>
               {isOpen && (
@@ -525,7 +538,9 @@ export function BomViewer({ items }: { items: BomItem[] }) {
                         <td className="num px-3 py-1.5 text-right">{i.quantity}</td>
                         <td className="px-3 py-1.5 text-muted-foreground">{i.unit}</td>
                         <td className="num px-3 py-1.5 text-right">{money2(i.unitPrice)}</td>
-                        <td className="num px-3 py-1.5 text-right font-semibold">{money2(i.totalPrice)}</td>
+                        <td className="num px-3 py-1.5 text-right font-semibold">
+                          {money2(i.totalPrice)}
+                        </td>
                         <td className="px-3 py-1.5 text-muted-foreground">{i.vendor}</td>
                         <td className="px-4 py-1.5 text-muted-foreground">{i.status}</td>
                       </tr>
@@ -550,13 +565,7 @@ export function BomViewer({ items }: { items: BomItem[] }) {
 
 /* -------------------- engineering validation -------------------- */
 
-export function ProcurementValidation({
-  checks,
-  passed,
-}: {
-  checks: BomCheck[];
-  passed: boolean;
-}) {
+export function ProcurementValidation({ checks, passed }: { checks: BomCheck[]; passed: boolean }) {
   return (
     <div className="rounded-2xl border border-border bg-card p-4 shadow-soft">
       <div className="flex items-center gap-2">

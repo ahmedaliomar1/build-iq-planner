@@ -19,13 +19,7 @@ const NAV = [
   { to: "/settings", label: "Settings", icon: Settings },
 ] as const;
 
-export function AppShell({
-  breadcrumb,
-  children,
-}: {
-  breadcrumb: string[];
-  children: ReactNode;
-}) {
+export function AppShell({ breadcrumb, children }: { breadcrumb: string[]; children: ReactNode }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
   return (
@@ -52,11 +46,7 @@ export function AppShell({
           {breadcrumb.map((c, i) => (
             <span key={c} className="flex items-center gap-1.5">
               {i > 0 && <ChevronRight className="size-3.5 opacity-60" />}
-              <span
-                className={
-                  i === breadcrumb.length - 1 ? "font-semibold text-foreground" : ""
-                }
-              >
+              <span className={i === breadcrumb.length - 1 ? "font-semibold text-foreground" : ""}>
                 {c}
               </span>
             </span>

@@ -61,7 +61,9 @@ export function ExportSelector({
       <div className="mt-3 grid gap-4 md:grid-cols-3">
         {EXPORT_GROUPS.map((g) => (
           <div key={g}>
-            <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{g}</p>
+            <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              {g}
+            </p>
             <div className="mt-2 space-y-1.5">
               {EXPORT_ITEMS.filter((i) => i.group === g).map((i) => (
                 <label
@@ -174,7 +176,11 @@ export function PackageInfoForm({
   const field = (k: keyof PackageInfo, label: string) => (
     <label className="block text-xs font-semibold text-muted-foreground">
       {label}
-      <input className={input} value={info[k]} onChange={(e) => onChange({ [k]: e.target.value })} />
+      <input
+        className={input}
+        value={info[k]}
+        onChange={(e) => onChange({ [k]: e.target.value })}
+      />
     </label>
   );
   return (
@@ -189,8 +195,8 @@ export function PackageInfoForm({
         {field("notes", "Notes (optional)")}
       </div>
       <p className="mt-3 text-xs text-muted-foreground">
-        Automatically included: creation date, generation time, project ID ({projectId}) and software
-        version.
+        Automatically included: creation date, generation time, project ID ({projectId}) and
+        software version.
       </p>
     </section>
   );
@@ -240,7 +246,10 @@ export function PackagingWorkflow({
           <p className="text-sm font-semibold">Current: {current}</p>
           <p className="text-xs text-muted-foreground">Remaining ≈ {fmtMs(remainingMs)}</p>
           {onCancel && (
-            <button onClick={onCancel} className="rounded-lg border border-border px-3 py-1.5 text-xs font-semibold hover:bg-accent">
+            <button
+              onClick={onCancel}
+              className="rounded-lg border border-border px-3 py-1.5 text-xs font-semibold hover:bg-accent"
+            >
               Cancel
             </button>
           )}
@@ -258,7 +267,9 @@ export function PackagingWorkflow({
                     <span
                       className={cn(
                         "size-4 rounded-full border-2",
-                        active ? "animate-dash-spin border-primary border-t-transparent" : "border-border",
+                        active
+                          ? "animate-dash-spin border-primary border-t-transparent"
+                          : "border-border",
                       )}
                     />
                   )}
@@ -348,7 +359,9 @@ export function ExportCompleted({
         <CheckCircle2 className="animate-pop-check size-12 text-success" />
       </div>
       <h1 className="text-2xl font-bold tracking-tight">Export Completed Successfully</h1>
-      <p className="text-sm font-semibold text-success">✓ Final RF Design Package Saved Successfully</p>
+      <p className="text-sm font-semibold text-success">
+        ✓ Final RF Design Package Saved Successfully
+      </p>
       <div className="grid gap-3 text-left sm:grid-cols-5">
         {items.map(([l, v]) => (
           <div key={l} className={card}>
@@ -427,13 +440,19 @@ export function DownloadManager({
   const rows = useMemo(() => {
     const r = history.filter(
       (h) =>
-        h.name.toLowerCase().includes(q.toLowerCase()) && (fmt === "all" || h.formats.includes(fmt)),
+        h.name.toLowerCase().includes(q.toLowerCase()) &&
+        (fmt === "all" || h.formats.includes(fmt)),
     );
     return [...r].sort((a, b) =>
-      sort === "name" ? a.name.localeCompare(b.name) : sort === "size" ? b.sizeKb - a.sizeKb : b.exportedAt - a.exportedAt,
+      sort === "name"
+        ? a.name.localeCompare(b.name)
+        : sort === "size"
+          ? b.sizeKb - a.sizeKb
+          : b.exportedAt - a.exportedAt,
     );
   }, [history, q, sort, fmt]);
-  const icon = "rounded-lg p-1.5 text-muted-foreground transition-smooth hover:bg-accent hover:text-foreground";
+  const icon =
+    "rounded-lg p-1.5 text-muted-foreground transition-smooth hover:bg-accent hover:text-foreground";
   return (
     <section className={card}>
       <div className="flex flex-wrap items-center gap-2">
@@ -448,13 +467,23 @@ export function DownloadManager({
               className="rounded-lg border border-border bg-background py-1.5 pl-8 pr-2 text-xs outline-none"
             />
           </div>
-          <select value={fmt} onChange={(e) => setFmt(e.target.value as typeof fmt)} className="rounded-lg border border-border bg-background px-2 py-1.5 text-xs">
+          <select
+            value={fmt}
+            onChange={(e) => setFmt(e.target.value as typeof fmt)}
+            className="rounded-lg border border-border bg-background px-2 py-1.5 text-xs"
+          >
             <option value="all">All formats</option>
             {EXPORT_FORMATS.map((f) => (
-              <option key={f.id} value={f.id}>{f.label}</option>
+              <option key={f.id} value={f.id}>
+                {f.label}
+              </option>
             ))}
           </select>
-          <select value={sort} onChange={(e) => setSort(e.target.value as typeof sort)} className="rounded-lg border border-border bg-background px-2 py-1.5 text-xs">
+          <select
+            value={sort}
+            onChange={(e) => setSort(e.target.value as typeof sort)}
+            className="rounded-lg border border-border bg-background px-2 py-1.5 text-xs"
+          >
             <option value="date">Newest</option>
             <option value="name">Name</option>
             <option value="size">Size</option>
@@ -468,23 +497,40 @@ export function DownloadManager({
           <table className="w-full text-sm">
             <thead className="text-left text-xs uppercase tracking-wide text-muted-foreground">
               <tr>
-                <th className="py-2">Package</th><th>Version</th><th>Export Date</th><th>Size</th><th>Format</th><th>Status</th><th />
+                <th className="py-2">Package</th>
+                <th>Version</th>
+                <th>Export Date</th>
+                <th>Size</th>
+                <th>Format</th>
+                <th>Status</th>
+                <th />
               </tr>
             </thead>
             <tbody>
               {rows.map((h) => (
                 <tr key={h.key} className="border-t border-border">
-                  <td className="py-2 font-semibold"><FileArchive className="mr-1.5 inline size-4 text-primary" />{h.name}</td>
+                  <td className="py-2 font-semibold">
+                    <FileArchive className="mr-1.5 inline size-4 text-primary" />
+                    {h.name}
+                  </td>
                   <td>{h.version}</td>
                   <td className="text-muted-foreground">{reportDate(h.exportedAt)}</td>
                   <td>{formatSize(h.sizeKb)}</td>
                   <td className="uppercase text-muted-foreground">{h.formats.join(", ")}</td>
                   <td className="text-success">{h.status}</td>
                   <td className="whitespace-nowrap text-right">
-                    <button title="Download again" onClick={onDownload} className={icon}><Download className="size-4" /></button>
-                    <button title="Duplicate" onClick={() => onDuplicate(h.key)} className={icon}><Copy className="size-4" /></button>
-                    <button title="Regenerate" onClick={onRegenerate} className={icon}><RefreshCw className="size-4" /></button>
-                    <button title="Delete" onClick={() => onDelete(h.key)} className={icon}><Trash2 className="size-4" /></button>
+                    <button title="Download again" onClick={onDownload} className={icon}>
+                      <Download className="size-4" />
+                    </button>
+                    <button title="Duplicate" onClick={() => onDuplicate(h.key)} className={icon}>
+                      <Copy className="size-4" />
+                    </button>
+                    <button title="Regenerate" onClick={onRegenerate} className={icon}>
+                      <RefreshCw className="size-4" />
+                    </button>
+                    <button title="Delete" onClick={() => onDelete(h.key)} className={icon}>
+                      <Trash2 className="size-4" />
+                    </button>
                   </td>
                 </tr>
               ))}

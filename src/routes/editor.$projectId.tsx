@@ -26,23 +26,10 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import { PropertiesPanel } from "@/components/editor/properties-panel";
 import { Scene } from "@/components/editor/scene";
-import {
-  LayersPanel,
-  MaterialsPanel,
-  ValidationPanel,
-} from "@/components/editor/side-panels";
+import { LayersPanel, MaterialsPanel, ValidationPanel } from "@/components/editor/side-panels";
 import { GridDefs, useViewport } from "@/components/editor/viewport";
-import type {
-  BuildingModel,
-  BuildingObject,
-  MaterialId,
-} from "@/services/buildingService";
-import {
-  dist,
-  uid,
-  validateModel,
-  type ValidationIssue,
-} from "@/lib/geometry";
+import type { BuildingModel, BuildingObject, MaterialId } from "@/services/buildingService";
+import { dist, uid, validateModel, type ValidationIssue } from "@/lib/geometry";
 import { saveModel, updateProject, useProject } from "@/services/projectService";
 
 export const Route = createFileRoute("/editor/$projectId")({
@@ -64,15 +51,7 @@ export const Route = createFileRoute("/editor/$projectId")({
   component: EditorPage,
 });
 
-type Tool =
-  | "select"
-  | "move"
-  | "wall"
-  | "door"
-  | "window"
-  | "column"
-  | "room"
-  | "measure";
+type Tool = "select" | "move" | "wall" | "door" | "window" | "column" | "room" | "measure";
 
 function EditorPage() {
   const { projectId } = Route.useParams();
@@ -93,9 +72,9 @@ function EditorPage() {
   const [draft, setDraft] = useState<{ x1: number; y1: number; x2: number; y2: number } | null>(
     null,
   );
-  const [measure, setMeasure] = useState<
-    { x1: number; y1: number; x2: number; y2: number } | null
-  >(null);
+  const [measure, setMeasure] = useState<{ x1: number; y1: number; x2: number; y2: number } | null>(
+    null,
+  );
   const [scaleWizard, setScaleWizard] = useState(false);
   const [savedAt, setSavedAt] = useState<number | null>(null);
   const [confirmDelete, setConfirmDelete] = useState<string | null>(null);
@@ -174,7 +153,8 @@ function EditorPage() {
       const mod = e.ctrlKey || e.metaKey;
       if (mod && e.key.toLowerCase() === "z") {
         e.preventDefault();
-        e.shiftKey ? redo() : undo();
+        if (e.shiftKey) redo();
+        else undo();
       } else if (mod && e.key.toLowerCase() === "y") {
         e.preventDefault();
         redo();
@@ -365,11 +345,8 @@ function EditorPage() {
   return (
     <div className="flex h-screen flex-col bg-background">
       {/* top toolbar */}
-      <header className="flex h-14 shrink-0 items-center gap-1.5 border-b border-border bg-card px-3">
-        <Link
-          to="/"
-          className="mr-2 truncate text-sm font-bold tracking-tight hover:text-primary"
-        >
+      <header className="flex h-14 shrink-0 items-center gap-1.5 overflow-x-auto border-b border-border bg-card px-3">
+        <Link to="/" className="mr-2 truncate text-sm font-bold tracking-tight hover:text-primary">
           {project.name}
         </Link>
         <span className="hidden rounded-lg bg-secondary px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-muted-foreground md:block">
@@ -377,8 +354,18 @@ function EditorPage() {
         </span>
 
         <div className="mx-auto flex items-center gap-1">
-          <TB icon={MousePointer2} label="Select" active={tool === "select"} onClick={() => setTool("select")} />
-          <TB icon={Move} label="Move / Pan" active={tool === "move"} onClick={() => setTool("move")} />
+          <TB
+            icon={MousePointer2}
+            label="Select"
+            active={tool === "select"}
+            onClick={() => setTool("select")}
+          />
+          <TB
+            icon={Move}
+            label="Move / Pan"
+            active={tool === "move"}
+            onClick={() => setTool("move")}
+          />
           <TB
             icon={Trash2}
             label="Delete (Del)"
@@ -389,7 +376,12 @@ function EditorPage() {
           <TB icon={Undo2} label="Undo (Ctrl+Z)" onClick={undo} disabled={past.length === 0} />
           <TB icon={Redo2} label="Redo (Ctrl+Y)" onClick={redo} disabled={future.length === 0} />
           <Divider />
-          <TB icon={Ruler} label="Measure" active={tool === "measure"} onClick={() => setTool("measure")} />
+          <TB
+            icon={Ruler}
+            label="Measure"
+            active={tool === "measure"}
+            onClick={() => setTool("measure")}
+          />
           <TB icon={ZoomIn} label="Zoom In" onClick={() => vp.zoomBy(1.2)} />
           <TB icon={ZoomOut} label="Zoom Out" onClick={() => vp.zoomBy(1 / 1.2)} />
           <TB icon={Maximize} label="Fit Screen" onClick={() => vp.fit()} />
@@ -417,9 +409,9 @@ function EditorPage() {
         </button>
       </header>
 
-      <div className="flex min-h-0 flex-1">
+      <div className="flex min-h-0 flex-1 flex-wrap overflow-y-auto md:flex-nowrap md:overflow-visible">
         {/* left toolbox */}
-        <aside className="flex w-20 shrink-0 flex-col items-center gap-1.5 border-r border-border bg-card py-3">
+        <aside className="flex h-[60vh] w-20 shrink-0 flex-col overflow-y-auto md:h-auto items-center gap-1.5 border-r border-border bg-card py-3">
           {TOOLBOX.map((t) => (
             <button
               key={t.id}
@@ -471,15 +463,31 @@ function EditorPage() {
           onPointerDown={onCanvasDown}
           onPointerMove={onCanvasMove}
           onPointerUp={onCanvasUp}
-          className="relative min-w-0 flex-1 touch-none select-none bg-canvas"
+          className="relative h-[60vh] min-w-0 flex-1 touch-none md:h-auto select-none bg-canvas"
           style={{ cursor: tool === "select" || tool === "move" ? "grab" : "crosshair" }}
         >
           <svg className="absolute inset-0 size-full">
             {grid && <GridDefs z={vp.view.z} view={vp.view} />}
             <g transform={`translate(${vp.view.x} ${vp.view.y}) scale(${vp.view.z})`}>
               {/* origin axes */}
-              <line x1={-1000} y1={0} x2={1000} y2={0} stroke="var(--primary)" strokeWidth={0.03} opacity={0.4} />
-              <line x1={0} y1={-1000} x2={0} y2={1000} stroke="var(--primary)" strokeWidth={0.03} opacity={0.4} />
+              <line
+                x1={-1000}
+                y1={0}
+                x2={1000}
+                y2={0}
+                stroke="var(--primary)"
+                strokeWidth={0.03}
+                opacity={0.4}
+              />
+              <line
+                x1={0}
+                y1={-1000}
+                x2={0}
+                y2={1000}
+                stroke="var(--primary)"
+                strokeWidth={0.03}
+                opacity={0.4}
+              />
               {model && (
                 <Scene
                   model={model}
@@ -551,9 +559,7 @@ function EditorPage() {
           </svg>
 
           <div className="pointer-events-none absolute bottom-3 left-3 flex gap-2">
-            <Chip>
-              {model?.scaleDetected ? "Scale calibrated" : "Scale not calibrated"}
-            </Chip>
+            <Chip>{model?.scaleDetected ? "Scale calibrated" : "Scale not calibrated"}</Chip>
             <Chip>Zoom {Math.round(vp.view.z * 8)}%</Chip>
             <Chip>{snap ? "Snap 0.5 m" : "Snap off"}</Chip>
           </div>
@@ -566,7 +572,7 @@ function EditorPage() {
         </div>
 
         {/* right panel */}
-        <aside className="flex w-80 shrink-0 flex-col border-l border-border bg-card">
+        <aside className="flex w-full shrink-0 flex-col border-t border-border md:w-80 md:border-t-0 md:border-l border-border bg-card">
           <div className="flex shrink-0 gap-1 border-b border-border p-2">
             {(["properties", "layers", "materials", "validation"] as const).map((p) => (
               <button
@@ -588,7 +594,9 @@ function EditorPage() {
                 object={selectedObject}
                 onChange={(patch) =>
                   patchObjects((objs) =>
-                    objs.map((o) => (o.id === selected ? ({ ...o, ...patch } as BuildingObject) : o)),
+                    objs.map((o) =>
+                      o.id === selected ? ({ ...o, ...patch } as BuildingObject) : o,
+                    ),
                   )
                 }
               />
@@ -653,8 +661,7 @@ function EditorPage() {
       {confirmDelete && (
         <Modal onClose={() => setConfirmDelete(null)} title="Delete object?">
           <p className="text-sm text-muted-foreground">
-            This removes the object from the digital building model. You can undo with
-            Ctrl+Z.
+            This removes the object from the digital building model. You can undo with Ctrl+Z.
           </p>
           <div className="mt-6 flex justify-end gap-2">
             <button
@@ -699,10 +706,8 @@ function EditorPage() {
 }
 
 function scaleObject(o: BuildingObject, f: number): BuildingObject {
-  if (o.kind === "wall")
-    return { ...o, x1: o.x1 * f, y1: o.y1 * f, x2: o.x2 * f, y2: o.y2 * f };
-  if (o.kind === "room")
-    return { ...o, points: o.points.map((p) => ({ x: p.x * f, y: p.y * f })) };
+  if (o.kind === "wall") return { ...o, x1: o.x1 * f, y1: o.y1 * f, x2: o.x2 * f, y2: o.y2 * f };
+  if (o.kind === "room") return { ...o, points: o.points.map((p) => ({ x: p.x * f, y: p.y * f })) };
   return { ...o, x: o.x * f, y: o.y * f };
 }
 
@@ -715,7 +720,8 @@ function ScaleWizard({
 }) {
   const [meters, setMeters] = useState("20");
   const [picked, setPicked] = useState<{ x: number; y: number }[]>([]);
-  const measured = picked.length === 2 ? dist(picked[0]!.x, picked[0]!.y, picked[1]!.x, picked[1]!.y) : 0;
+  const measured =
+    picked.length === 2 ? dist(picked[0]!.x, picked[0]!.y, picked[1]!.x, picked[1]!.y) : 0;
 
   return (
     <Modal onClose={onClose} title="Manual Scale Wizard">

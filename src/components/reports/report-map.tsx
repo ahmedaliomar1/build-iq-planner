@@ -44,7 +44,13 @@ export function ReportMap({
       role="img"
       aria-label={layer ? `${layer.label} engineering map` : "Antenna layout map"}
     >
-      <rect x={b.minX - pad} y={b.minY - pad} width={b.w + pad * 2} height={b.h + pad * 2} fill="#ffffff" />
+      <rect
+        x={b.minX - pad}
+        y={b.minY - pad}
+        width={b.w + pad * 2}
+        height={b.h + pad * 2}
+        fill="#ffffff"
+      />
 
       {layer &&
         layer.cells.map((c, i) => (
@@ -90,8 +96,23 @@ export function ReportMap({
         antennas.map((a) => (
           <g key={a.id}>
             <circle cx={a.x} cy={a.y} r={a.radius} fill="#2563eb" opacity={0.08} />
-            <circle cx={a.x} cy={a.y} r={a.radius} fill="none" stroke="#2563eb" strokeWidth={stroke * 0.5} opacity={0.5} />
-            <circle cx={a.x} cy={a.y} r={Math.max(0.5, b.w / 90)} fill="#2563eb" stroke="#ffffff" strokeWidth={stroke * 0.6} />
+            <circle
+              cx={a.x}
+              cy={a.y}
+              r={a.radius}
+              fill="none"
+              stroke="#2563eb"
+              strokeWidth={stroke * 0.5}
+              opacity={0.5}
+            />
+            <circle
+              cx={a.x}
+              cy={a.y}
+              r={Math.max(0.5, b.w / 90)}
+              fill="#2563eb"
+              stroke="#ffffff"
+              strokeWidth={stroke * 0.6}
+            />
           </g>
         ))}
     </svg>

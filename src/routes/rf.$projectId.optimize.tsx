@@ -42,7 +42,10 @@ export const Route = createFileRoute("/rf/$projectId/optimize")({
         content:
           "Manually optimize antenna positions, power, height and categories with live local recalculation of coverage, capacity, SINR and interference layers.",
       },
-      { property: "og:title", content: "Interactive RF Optimization — AI Private Cellular Planner" },
+      {
+        property: "og:title",
+        content: "Interactive RF Optimization — AI Private Cellular Planner",
+      },
       {
         property: "og:description",
         content:
@@ -74,9 +77,11 @@ function RfOptimize() {
   const [pendingMove, setPendingMove] = useState<{ ids: string[]; dx: number; dy: number } | null>(
     null,
   );
-  const [pendingAdd, setPendingAdd] = useState<{ x: number; y: number; category: string | null } | null>(
-    null,
-  );
+  const [pendingAdd, setPendingAdd] = useState<{
+    x: number;
+    y: number;
+    category: string | null;
+  } | null>(null);
   const [pendingDelete, setPendingDelete] = useState<string[] | null>(null);
   const api = useRef<CanvasApi | null>(null);
   const onApi = useCallback((a: CanvasApi) => {
@@ -91,14 +96,17 @@ function RfOptimize() {
     [state.antennas, draft, selectedIds],
   );
   const selected = antennas.filter((a) => selectedIds.includes(a.id));
-  const layer = state.activeLayer ? opt.layers?.[state.activeLayer] ?? null : null;
+  const layer = state.activeLayer ? (opt.layers?.[state.activeLayer] ?? null) : null;
   const currentVersion = state.versions.find((v) => v.id === state.currentVersionId);
 
   const setLayerSetting = (id: string, patch: Partial<LayerSettings>) =>
     saveOptState(projectId, {
       layerSettings: {
         ...state.layerSettings,
-        [id]: { ...(state.layerSettings[id] ?? { visible: true, opacity: 1, locked: false }), ...patch },
+        [id]: {
+          ...(state.layerSettings[id] ?? { visible: true, opacity: 1, locked: false }),
+          ...patch,
+        },
       },
     });
 
@@ -108,10 +116,18 @@ function RfOptimize() {
     if (!pendingMove) return;
     const next = antennas.map((a) =>
       pendingMove.ids.includes(a.id) && !a.locked
-        ? { ...a, x: Number((a.x + pendingMove.dx).toFixed(2)), y: Number((a.y + pendingMove.dy).toFixed(2)) }
+        ? {
+            ...a,
+            x: Number((a.x + pendingMove.dx).toFixed(2)),
+            y: Number((a.y + pendingMove.dy).toFixed(2)),
+          }
         : a,
     );
-    opt.applyChange(next, { kind: "move", label: `Moved ${pendingMove.ids.length} antenna(s)`, antennaIds: pendingMove.ids });
+    opt.applyChange(next, {
+      kind: "move",
+      label: `Moved ${pendingMove.ids.length} antenna(s)`,
+      antennaIds: pendingMove.ids,
+    });
     setPendingMove(null);
   };
 
@@ -151,7 +167,11 @@ function RfOptimize() {
     if (!pendingDelete) return;
     opt.applyChange(
       antennas.filter((a) => !pendingDelete.includes(a.id)),
-      { kind: "delete", label: `Deleted ${pendingDelete.length} antenna(s)`, antennaIds: pendingDelete },
+      {
+        kind: "delete",
+        label: `Deleted ${pendingDelete.length} antenna(s)`,
+        antennaIds: pendingDelete,
+      },
     );
     setPendingDelete(null);
     setSelectedIds([]);
@@ -183,7 +203,8 @@ function RfOptimize() {
     setDraft(null);
     opt.applyChange(next, {
       kind,
-      label: kind === "power" ? `Transmit power → ${patch.txPower} dBm` : `Height → ${patch.height} m`,
+      label:
+        kind === "power" ? `Transmit power → ${patch.txPower} dBm` : `Height → ${patch.height} m`,
       antennaIds: selectedIds,
     });
   };
@@ -205,8 +226,10 @@ function RfOptimize() {
     if (!target) return;
     const next = antennas.map((a) => {
       if (a.id !== target.id) return a;
-      if (s.action === "height") return { ...a, height: Math.min(6, a.height + (s.payload?.dh ?? 0.5)) };
-      if (s.action === "power") return { ...a, txPower: Math.max(10, a.txPower + (s.payload?.dp ?? -2)) };
+      if (s.action === "height")
+        return { ...a, height: Math.min(6, a.height + (s.payload?.dh ?? 0.5)) };
+      if (s.action === "power")
+        return { ...a, txPower: Math.max(10, a.txPower + (s.payload?.dp ?? -2)) };
       if (s.action === "move")
         return {
           ...a,
@@ -229,21 +252,30 @@ function RfOptimize() {
   }, [initial, projectId]);
 
   const design = useMemo(
-    () => (initial ? buildOptimizedDesign(initial, { ...state, layers: opt.layers }, opt.validation) : null),
+    () =>
+      initial
+        ? buildOptimizedDesign(initial, { ...state, layers: opt.layers }, opt.validation)
+        : null,
     [initial, state, opt.layers, opt.validation],
   );
 
   const exportSnapshot = (format: "png" | "pdf" | "json") => {
     if (!design) return;
-    const base = `${project?.name ?? "project"}-optimized-rf-design`.replace(/\s+/g, "-").toLowerCase();
+    const base = `${project?.name ?? "project"}-optimized-rf-design`
+      .replace(/\s+/g, "-")
+      .toLowerCase();
     if (format === "json") {
       downloadFile(`${base}.json`, JSON.stringify(design, null, 2), "application/json");
     } else if (format === "pdf") {
       downloadFile(`${base}-report.txt`, optimizedToReport(design), "text/plain");
-      toast.info("Placeholder engineering report exported — styled PDF arrives with the Reports module.");
+      toast.info(
+        "Placeholder engineering report exported — styled PDF arrives with the Reports module.",
+      );
     } else {
       downloadFile(`${base}-layout.csv`, optimizedToCsv(design), "text/csv");
-      toast.info("Canvas image export arrives with the Reports module — antenna layout exported instead.");
+      toast.info(
+        "Canvas image export arrives with the Reports module — antenna layout exported instead.",
+      );
     }
   };
 
@@ -499,12 +531,23 @@ function RfOptimize() {
                   >
                     {i < opt.recalc!.index ? "✓" : i + 1}
                   </span>
-                  <span className={i <= opt.recalc!.index ? "font-semibold" : "text-muted-foreground"}>
+                  <span
+                    className={i <= opt.recalc!.index ? "font-semibold" : "text-muted-foreground"}
+                  >
                     Updating {s.toUpperCase()} Layer…
                   </span>
                 </div>
               ))}
             </div>
+            <button
+              onClick={() => {
+                opt.cancelRecalc();
+                toast.info("Recalculation cancelled — previous design kept");
+              }}
+              className="mt-4 w-full rounded-xl border border-border px-3 py-2 text-xs font-semibold transition-smooth hover:bg-accent"
+            >
+              Cancel
+            </button>
           </div>
         </div>
       )}

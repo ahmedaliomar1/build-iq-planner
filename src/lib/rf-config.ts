@@ -79,9 +79,21 @@ export const SERVICES: { id: string; label: string; note: string; load: number }
 ];
 
 export const PURPOSES: { id: string; label: string; note: string }[] = [
-  { id: "smart-factory", label: "Smart Factory", note: "Automation, AGVs, robotics, deterministic control." },
-  { id: "smart-hospital", label: "Smart Hospital", note: "Clinical mobility, imaging transfer, staff safety." },
-  { id: "smart-warehouse", label: "Smart Warehouse", note: "Scanners, AGVs, dense racking coverage." },
+  {
+    id: "smart-factory",
+    label: "Smart Factory",
+    note: "Automation, AGVs, robotics, deterministic control.",
+  },
+  {
+    id: "smart-hospital",
+    label: "Smart Hospital",
+    note: "Clinical mobility, imaging transfer, staff safety.",
+  },
+  {
+    id: "smart-warehouse",
+    label: "Smart Warehouse",
+    note: "Scanners, AGVs, dense racking coverage.",
+  },
   { id: "office", label: "Office", note: "Employee data and voice with high density." },
   { id: "airport", label: "Airport", note: "Wide areas, mission-critical ops, roaming." },
   { id: "port", label: "Port", note: "Cranes, remote control, outdoor-indoor mix." },
@@ -355,9 +367,14 @@ export function totalDevices(d: DeviceCounts) {
 export function serviceImpact(services: string[]) {
   const chosen = SERVICES.filter((s) => services.includes(s.id));
   const load = chosen.reduce((s, c) => s + c.load, 0);
-  const latency = chosen.some((c) => c.load >= 4) ? "Ultra-low (< 10 ms)" : chosen.length ? "Moderate (20 – 50 ms)" : "—";
+  const latency = chosen.some((c) => c.load >= 4)
+    ? "Ultra-low (< 10 ms)"
+    : chosen.length
+      ? "Moderate (20 – 50 ms)"
+      : "—";
   const uplink = chosen.some((c) => ["cctv", "aicam"].includes(c.id)) ? "Uplink heavy" : "Balanced";
-  const profile = load >= 12 ? "Dense capacity layer" : load >= 6 ? "Balanced layer" : "Coverage layer";
+  const profile =
+    load >= 12 ? "Dense capacity layer" : load >= 6 ? "Balanced layer" : "Coverage layer";
   return { load, latency, uplink, profile };
 }
 
@@ -391,7 +408,11 @@ export interface RfRequirementsPackage {
     rooms: { id: string; name: string; usage: string; area: number }[];
     wallMaterials: Record<string, string>;
   };
-  network: { technology: NetworkTech | null; selectionMode: string; aiRecommendation: RfConfig["aiRecommendation"] };
+  network: {
+    technology: NetworkTech | null;
+    selectionMode: string;
+    aiRecommendation: RfConfig["aiRecommendation"];
+  };
   deploymentPurpose: string | null;
   services: string[];
   connectedDevices: DeviceCounts & { total: number };
@@ -404,10 +425,7 @@ export interface RfRequirementsPackage {
   preferredVendor: string | null;
 }
 
-export function buildRequirementsPackage(
-  project: Project,
-  cfg: RfConfig,
-): RfRequirementsPackage {
+export function buildRequirementsPackage(project: Project, cfg: RfConfig): RfRequirementsPackage {
   const stats = buildingStats(project.model);
   const rooms = project.model.objects.filter((o) => o.kind === "room") as {
     id: string;

@@ -14,10 +14,15 @@ export const reportService = {
     return readMock<ReportsState>("apcp.reports.v1", projectId)?.reports ?? [];
   },
   async getReportStatus(projectId: string) {
-    if (!USE_MOCK) return api.get<{ status: ReportsState["status"] }>(`/projects/${projectId}/reports/status`);
+    if (!USE_MOCK)
+      return api.get<{ status: ReportsState["status"] }>(`/projects/${projectId}/reports/status`);
     return { status: readMock<ReportsState>("apcp.reports.v1", projectId)?.status ?? "idle" };
   },
-  async getReportPreview(projectId: string, id: ReportId, ctx: ReportContext): Promise<ReportDocument> {
+  async getReportPreview(
+    projectId: string,
+    id: ReportId,
+    ctx: ReportContext,
+  ): Promise<ReportDocument> {
     if (!USE_MOCK) return api.get(`/projects/${projectId}/reports/${id}`);
     await mockDelay(150);
     return buildReportDocument(id, ctx, "v1.0", Date.now());

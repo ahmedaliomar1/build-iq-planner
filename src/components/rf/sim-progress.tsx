@@ -1,13 +1,5 @@
 import { useEffect, useRef } from "react";
-import {
-  Activity,
-  Check,
-  CircleSlash,
-  Loader2,
-  Minimize2,
-  Maximize2,
-  X,
-} from "lucide-react";
+import { Activity, Check, CircleSlash, Loader2, Minimize2, Maximize2, X } from "lucide-react";
 import {
   OPTIMIZATION_ITERATIONS,
   SIM_STAGES,
@@ -32,13 +24,7 @@ function StageIcon({ status }: { status: "done" | "active" | "todo" }) {
   return <span className="size-5 shrink-0 rounded-full border border-border" />;
 }
 
-function TaskRow({
-  label,
-  status,
-}: {
-  label: string;
-  status: "done" | "active" | "todo";
-}) {
+function TaskRow({ label, status }: { label: string; status: "done" | "active" | "todo" }) {
   return (
     <li className="flex items-center gap-2.5 py-1.5 text-sm">
       <StageIcon status={status} />
@@ -177,13 +163,7 @@ export function SimulationProgress({
               >
                 {progress.toFixed(0)}%
               </text>
-              <text
-                x="64"
-                y="80"
-                textAnchor="middle"
-                fontSize="9"
-                fill="var(--muted-foreground)"
-              >
+              <text x="64" y="80" textAnchor="middle" fontSize="9" fill="var(--muted-foreground)">
                 overall progress
               </text>
             </svg>
@@ -274,7 +254,10 @@ export function SimulationProgress({
             <h2 className="text-xs font-bold uppercase tracking-wide text-muted-foreground">
               Live Engineering Log
             </h2>
-            <div ref={logRef} className="num mt-3 flex-1 space-y-1 overflow-auto text-[11px] leading-relaxed">
+            <div
+              ref={logRef}
+              className="num mt-3 flex-1 space-y-1 overflow-auto text-[11px] leading-relaxed"
+            >
               {state.log.map((l, i) => (
                 <p
                   key={`${l.at}-${i}`}

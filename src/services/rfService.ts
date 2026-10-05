@@ -15,7 +15,10 @@ export const rfService = {
     if (!USE_MOCK) return api.put(`/projects/${projectId}/rf/requirements`, patch);
     saveRfConfig(projectId, patch);
   },
-  async generateRFRequirements(projectId: string, data: Partial<RFRequirements>): Promise<RFRequirements> {
+  async generateRFRequirements(
+    projectId: string,
+    data: Partial<RFRequirements>,
+  ): Promise<RFRequirements> {
     if (!USE_MOCK) return api.post(`/projects/${projectId}/rf/requirements`, data);
     await mockDelay();
     saveRfConfig(projectId, data);
@@ -33,8 +36,14 @@ export const rfService = {
     return this.getRFProfile(projectId);
   },
   /** RF profile validation — mock runs the existing rule set; FastAPI later. */
-  async validateRFProfile(projectId: string, project: Project, cfg: RfConfig, prof: RfProfileConfig) {
-    if (!USE_MOCK) return api.post<RfProfileValidation>(`/projects/${projectId}/rf/profile/validate`, prof);
+  async validateRFProfile(
+    projectId: string,
+    project: Project,
+    cfg: RfConfig,
+    prof: RfProfileConfig,
+  ) {
+    if (!USE_MOCK)
+      return api.post<RfProfileValidation>(`/projects/${projectId}/rf/profile/validate`, prof);
     return checkRFProfile(project, cfg, prof);
   },
 };
@@ -48,7 +57,11 @@ export interface RfProfileValidation {
 }
 
 /** Synchronous validation used by screens for live feedback. */
-export function checkRFProfile(project: Project, cfg: RfConfig, prof: RfProfileConfig): RfProfileValidation {
+export function checkRFProfile(
+  project: Project,
+  cfg: RfConfig,
+  prof: RfProfileConfig,
+): RfProfileValidation {
   const items = validateRfProfile(project, cfg, prof);
   const errors = items.filter((i) => i.status === "fail").map((i) => i.label);
   const warnings: string[] = [];

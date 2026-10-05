@@ -41,7 +41,8 @@ function TemplatesPage() {
               </span>
               <h2 className="mt-4 font-semibold">{t} Template</h2>
               <p className="mt-1 text-xs text-muted-foreground">
-                Typical wall build-up, room usage set and indoor coverage target for {t.toLowerCase()} sites.
+                Typical wall build-up, room usage set and indoor coverage target for{" "}
+                {t.toLowerCase()} sites.
               </p>
               <Link
                 to="/new"

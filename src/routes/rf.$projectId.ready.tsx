@@ -34,9 +34,7 @@ function RfReady() {
   const pkg = project ? buildRequirementsPackage(project, cfg) : null;
 
   return (
-    <AppShell
-      breadcrumb={["Workspace", "Projects", project?.name ?? "Project", "RF Requirements"]}
-    >
+    <AppShell breadcrumb={["Workspace", "Projects", project?.name ?? "Project", "RF Requirements"]}>
       <div className="mx-auto max-w-3xl p-4 md:p-10">
         <div className="animate-rise flex flex-col items-center rounded-3xl border border-border bg-card p-8 text-center shadow-lift md:p-12">
           <span className="animate-pop-check grid size-24 place-items-center rounded-full bg-success-soft">

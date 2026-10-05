@@ -19,8 +19,7 @@ export const Route = createFileRoute("/rf/$projectId/")({
       },
       {
         property: "og:description",
-        content:
-          "Capture requirements, constraints and objectives before AI RF planning begins.",
+        content: "Capture requirements, constraints and objectives before AI RF planning begins.",
       },
     ],
   }),
@@ -66,9 +65,7 @@ function RfEntry() {
               <Building2 className="size-5" />
             </span>
             <div>
-              <h1 className="text-xl font-bold tracking-tight md:text-2xl">
-                Building Summary
-              </h1>
+              <h1 className="text-xl font-bold tracking-tight md:text-2xl">Building Summary</h1>
               <p className="text-sm text-muted-foreground">
                 Confirm the digital twin before RF design configuration begins.
               </p>

@@ -64,9 +64,7 @@ function PrepareRf() {
           </div>
           <div className="num mt-2 flex justify-between text-xs text-muted-foreground">
             <span>{pct}% complete</span>
-            <span>
-              {complete ? "Finished" : `~${remaining.toFixed(0)}s remaining`}
-            </span>
+            <span>{complete ? "Finished" : `~${remaining.toFixed(0)}s remaining`}</span>
           </div>
 
           <ol className="mt-7 space-y-2.5">

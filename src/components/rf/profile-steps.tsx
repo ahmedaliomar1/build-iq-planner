@@ -146,7 +146,9 @@ export function KnowledgeBaseStep({
         <div className="mt-4 space-y-3">
           {dist.map((d) => (
             <div key={d.id} className="flex items-center gap-3">
-              <span className="w-28 shrink-0 text-xs font-semibold">{materialById(d.id).category}</span>
+              <span className="w-28 shrink-0 text-xs font-semibold">
+                {materialById(d.id).category}
+              </span>
               <div className="h-2.5 flex-1 overflow-hidden rounded-full bg-secondary">
                 <div
                   className="h-full rounded-full transition-[width] duration-700"
@@ -157,7 +159,9 @@ export function KnowledgeBaseStep({
             </div>
           ))}
           {!dist.length && (
-            <p className="text-sm text-muted-foreground">No walls detected in the digital building.</p>
+            <p className="text-sm text-muted-foreground">
+              No walls detected in the digital building.
+            </p>
           )}
         </div>
 
@@ -223,7 +227,11 @@ function UnknownMaterialReview({
       next[w.id] = m;
       if (applySimilar) {
         for (const o of allWalls) {
-          if (o.id !== w.id && Math.abs(o.thickness - w.thickness) < 0.02 && o.material === w.material) {
+          if (
+            o.id !== w.id &&
+            Math.abs(o.thickness - w.thickness) < 0.02 &&
+            o.material === w.material
+          ) {
             next[o.id] = m;
           }
         }
@@ -305,7 +313,9 @@ function UnknownMaterialReview({
                     <td className="px-3 py-2.5">
                       <span
                         className={`num rounded-full px-2 py-0.5 text-[11px] font-bold ${
-                          conf < 62 ? "bg-warning-soft text-warning" : "bg-secondary text-muted-foreground"
+                          conf < 62
+                            ? "bg-warning-soft text-warning"
+                            : "bg-secondary text-muted-foreground"
                         }`}
                       >
                         {conf}%
@@ -437,51 +447,56 @@ export function FrequencyStep({
           <div className="animate-rise flex max-h-[85vh] w-full max-w-3xl flex-col overflow-hidden rounded-3xl border border-border bg-card shadow-lift">
             <header className="flex items-center gap-3 border-b border-border px-5 py-4">
               <h3 className="text-sm font-bold">Select Frequency Band</h3>
-              <button onClick={() => setOpen(false)} className="ml-auto rounded-lg p-1.5 hover:bg-accent">
+              <button
+                onClick={() => setOpen(false)}
+                className="ml-auto rounded-lg p-1.5 hover:bg-accent"
+              >
                 <X className="size-4" />
               </button>
             </header>
             <div className="grid flex-1 gap-3 overflow-auto p-5 sm:grid-cols-2">
-              {BANDS.filter((b) => b.tech === (cfg.technology === "lte" ? "lte" : "5g")).map((b) => {
-                const blocked = reg.restricted.includes(b.id);
-                return (
-                  <button
-                    key={b.id}
-                    onClick={() => !blocked && setPick(b.id)}
-                    className={`${cardCls(pick === b.id)} ${blocked ? "opacity-50" : ""}`}
-                  >
-                    <div className="flex items-center gap-2">
-                      <span className="num text-base font-bold">{b.label}</span>
-                      <span className="num text-xs text-muted-foreground">
-                        {b.freq >= 10000 ? `${b.freq / 1000} GHz` : `${b.freq} MHz`}
-                      </span>
-                      {blocked && (
-                        <span className="ml-auto rounded-full bg-destructive/10 px-2 py-0.5 text-[10px] font-bold text-destructive">
-                          Restricted
+              {BANDS.filter((b) => b.tech === (cfg.technology === "lte" ? "lte" : "5g")).map(
+                (b) => {
+                  const blocked = reg.restricted.includes(b.id);
+                  return (
+                    <button
+                      key={b.id}
+                      onClick={() => !blocked && setPick(b.id)}
+                      className={`${cardCls(pick === b.id)} ${blocked ? "opacity-50" : ""}`}
+                    >
+                      <div className="flex items-center gap-2">
+                        <span className="num text-base font-bold">{b.label}</span>
+                        <span className="num text-xs text-muted-foreground">
+                          {b.freq >= 10000 ? `${b.freq / 1000} GHz` : `${b.freq} MHz`}
                         </span>
-                      )}
-                    </div>
-                    <dl className="mt-2 space-y-1 text-xs text-muted-foreground">
-                      <div>
-                        <dt className="inline font-semibold text-foreground">Coverage: </dt>
-                        <dd className="inline">{b.coverage}</dd>
+                        {blocked && (
+                          <span className="ml-auto rounded-full bg-destructive/10 px-2 py-0.5 text-[10px] font-bold text-destructive">
+                            Restricted
+                          </span>
+                        )}
                       </div>
-                      <div>
-                        <dt className="inline font-semibold text-foreground">Capacity: </dt>
-                        <dd className="inline">{b.capacity}</dd>
-                      </div>
-                      <div>
-                        <dt className="inline font-semibold text-foreground">Use cases: </dt>
-                        <dd className="inline">{b.useCases}</dd>
-                      </div>
-                      <div>
-                        <dt className="inline font-semibold text-foreground">Compatibility: </dt>
-                        <dd className="inline">{b.compatibility}</dd>
-                      </div>
-                    </dl>
-                  </button>
-                );
-              })}
+                      <dl className="mt-2 space-y-1 text-xs text-muted-foreground">
+                        <div>
+                          <dt className="inline font-semibold text-foreground">Coverage: </dt>
+                          <dd className="inline">{b.coverage}</dd>
+                        </div>
+                        <div>
+                          <dt className="inline font-semibold text-foreground">Capacity: </dt>
+                          <dd className="inline">{b.capacity}</dd>
+                        </div>
+                        <div>
+                          <dt className="inline font-semibold text-foreground">Use cases: </dt>
+                          <dd className="inline">{b.useCases}</dd>
+                        </div>
+                        <div>
+                          <dt className="inline font-semibold text-foreground">Compatibility: </dt>
+                          <dd className="inline">{b.compatibility}</dd>
+                        </div>
+                      </dl>
+                    </button>
+                  );
+                },
+              )}
             </div>
             <footer className="flex items-center gap-3 border-t border-border px-5 py-4">
               <button
@@ -525,7 +540,9 @@ export function BandwidthStep({ prof, update }: { prof: RfProfileConfig; update:
           >
             <div className="flex items-center gap-2">
               <span className="num text-base font-bold">{b.label}</span>
-              {prof.bandwidth === b.id && <Check className="ml-auto size-4 text-primary" strokeWidth={3} />}
+              {prof.bandwidth === b.id && (
+                <Check className="ml-auto size-4 text-primary" strokeWidth={3} />
+              )}
             </div>
             <p className="mt-1.5 text-xs text-muted-foreground">{b.note}</p>
           </button>
@@ -647,10 +664,15 @@ export function FloorsStep({ prof, update }: { prof: RfProfileConfig; update: Up
 
   return (
     <div className="animate-rise space-y-5">
-      <StepHead title="Floor Information" note="Only floor height is editable. Values must be between 2 and 30 m." />
+      <StepHead
+        title="Floor Information"
+        note="Only floor height is editable. Values must be between 2 and 30 m."
+      />
       <div className="space-y-3">
         {prof.floors.map((f) => {
-          const invalid = editing === f.id && (!Number.isFinite(Number(value)) || Number(value) < 2 || Number(value) > 30);
+          const invalid =
+            editing === f.id &&
+            (!Number.isFinite(Number(value)) || Number(value) < 2 || Number(value) > 30);
           return (
             <div
               key={f.id}
@@ -806,7 +828,10 @@ export function ObstaclesStep({
               </div>
               <ul className="mt-3 max-h-52 space-y-1.5 overflow-auto">
                 {active.items.map((i) => (
-                  <li key={i.id} className="rounded-lg border border-border bg-background px-3 py-2">
+                  <li
+                    key={i.id}
+                    className="rounded-lg border border-border bg-background px-3 py-2"
+                  >
                     <p className="num text-xs font-semibold">{i.label}</p>
                     <p className="text-[11px] text-muted-foreground">{i.note}</p>
                   </li>
@@ -1033,7 +1058,11 @@ export function ValidationStep({
                   : "bg-destructive text-destructive-foreground"
               }`}
             >
-              {i.status === "pass" ? <Check className="size-4" strokeWidth={3} /> : <X className="size-4" />}
+              {i.status === "pass" ? (
+                <Check className="size-4" strokeWidth={3} />
+              ) : (
+                <X className="size-4" />
+              )}
             </span>
             <span className="text-sm font-semibold">{i.label}</span>
             <span
@@ -1060,7 +1089,9 @@ export function ValidationStep({
               <AlertTriangle className="size-5 text-warning" />
               <div>
                 <p className="text-sm font-bold">{i.issue}</p>
-                <p className="text-xs text-muted-foreground">{i.hint ?? "Status: Review Required"}</p>
+                <p className="text-xs text-muted-foreground">
+                  {i.hint ?? "Status: Review Required"}
+                </p>
               </div>
               <button
                 onClick={() => onFix(i.target ?? 0)}
@@ -1096,9 +1127,19 @@ export function RfProfileSummary({
 
   const rows: [string, string, number][] = [
     ["Technology", cfg.technology === "lte" ? "Private LTE" : "Private 5G", 1],
-    ["Band", band ? `${band.label} · ${band.freq >= 10000 ? `${band.freq / 1000} GHz` : `${band.freq} MHz`}` : "—", 1],
+    [
+      "Band",
+      band
+        ? `${band.label} · ${band.freq >= 10000 ? `${band.freq / 1000} GHz` : `${band.freq} MHz`}`
+        : "—",
+      1,
+    ],
     ["Bandwidth", prof.bandwidth === "auto" ? "Auto" : `${prof.bandwidth} MHz`, 2],
-    ["Antenna Category", ANTENNA_CATEGORIES.find((a) => a.id === prof.antennaCategory)?.label ?? "—", 3],
+    [
+      "Antenna Category",
+      ANTENNA_CATEGORIES.find((a) => a.id === prof.antennaCategory)?.label ?? "—",
+      3,
+    ],
     ["Propagation Model", env ? `${env.label} Indoor` : "—", 4],
     ["Building Materials", unknown.length ? `${unknown.length} pending` : "Validated", 0],
     ["Building Geometry", "Validated", 5],
@@ -1109,10 +1150,16 @@ export function RfProfileSummary({
 
   return (
     <div className="animate-rise space-y-5">
-      <StepHead title="RF Profile Summary" note="Review the engineering profile before saving it to the project." />
+      <StepHead
+        title="RF Profile Summary"
+        note="Review the engineering profile before saving it to the project."
+      />
       <div className="overflow-hidden rounded-2xl border border-border bg-card">
         {rows.map(([k, v, step]) => (
-          <div key={k} className="flex items-center gap-3 border-b border-border px-5 py-3.5 last:border-0">
+          <div
+            key={k}
+            className="flex items-center gap-3 border-b border-border px-5 py-3.5 last:border-0"
+          >
             <span className="text-sm font-semibold text-muted-foreground">{k}</span>
             <span className="num ml-auto text-sm font-bold">{v}</span>
             <button
@@ -1129,7 +1176,11 @@ export function RfProfileSummary({
           ok ? "bg-success-soft text-success" : "bg-warning-soft text-warning"
         }`}
       >
-        {ok ? <Check className="size-3.5" strokeWidth={3} /> : <AlertTriangle className="size-3.5" />}
+        {ok ? (
+          <Check className="size-3.5" strokeWidth={3} />
+        ) : (
+          <AlertTriangle className="size-3.5" />
+        )}
         {ok ? "RF Profile Ready" : "Validation issues must be resolved"}
       </div>
     </div>
