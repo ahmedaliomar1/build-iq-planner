@@ -345,7 +345,7 @@ function EditorPage() {
   return (
     <div className="flex h-screen flex-col bg-background">
       {/* top toolbar */}
-      <header className="flex h-14 shrink-0 items-center gap-1.5 border-b border-border bg-card px-3">
+      <header className="flex h-14 shrink-0 items-center gap-1.5 overflow-x-auto border-b border-border bg-card px-3">
         <Link to="/" className="mr-2 truncate text-sm font-bold tracking-tight hover:text-primary">
           {project.name}
         </Link>
