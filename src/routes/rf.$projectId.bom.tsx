@@ -185,6 +185,17 @@ function BomRoute() {
             />
           )}
           <BomWorkflow state={state} progress={gen.progress} remainingMs={gen.remainingMs} />
+          <div className="flex justify-center">
+            <button
+              onClick={() => {
+                gen.cancel();
+                toast.info("BOM generation cancelled");
+              }}
+              className="rounded-xl border border-border px-4 py-2 text-sm font-semibold transition-smooth hover:bg-accent"
+            >
+              Cancel generation
+            </button>
+          </div>
         </div>
       </AppShell>
     );

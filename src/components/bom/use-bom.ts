@@ -98,6 +98,18 @@ export function useBomGeneration(projectId: string, design: OptimizedRfDesign | 
     [projectId],
   );
 
+  /** stops generation and returns to the start screen; saved versions are untouched */
+  const cancel = useCallback(() => {
+    if (timer.current) clearTimeout(timer.current);
+    saveBomState(projectId, {
+      status: "idle",
+      stageIndex: 0,
+      taskIndex: 0,
+      items: [],
+      log: pushLog("BOM generation cancelled", "info", readBomLog(projectId)),
+    });
+  }, [projectId, pushLog]);
+
   /* ---------------- ticking engine ---------------- */
   useEffect(() => {
     if (!design || !detection) return;
@@ -336,6 +348,7 @@ export function useBomGeneration(projectId: string, design: OptimizedRfDesign | 
     estimatedStageMs,
     completedTasks,
     start,
+    cancel,
     chooseVendor,
     bom,
     preview,

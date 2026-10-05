@@ -113,6 +113,11 @@ function WizardPage() {
           {step === 2 && (
             <StepAnalysis
               buildingType={buildingType}
+              onCancel={() => {
+                if (projectId) updateProject(projectId, { status: "draft" });
+                setStep(1);
+                toast.info("Building analysis cancelled — your files are kept");
+              }}
               onDone={(m) => {
                 setModel(m);
                 if (projectId) {
@@ -582,9 +587,11 @@ const TASKS = [
 function StepAnalysis({
   buildingType,
   onDone,
+  onCancel,
 }: {
   buildingType: string;
   onDone: (m: BuildingModel) => void;
+  onCancel: () => void;
 }) {
   const [progress, setProgress] = useState(0);
   const doneRef = useRef(false);
@@ -697,6 +704,14 @@ function StepAnalysis({
             );
           })}
         </ul>
+      </div>
+      <div className="mt-6 flex justify-center">
+        <button
+          onClick={onCancel}
+          className="rounded-xl border border-border px-4 py-2 text-sm font-semibold transition-smooth hover:bg-accent"
+        >
+          Cancel analysis
+        </button>
       </div>
     </div>
   );

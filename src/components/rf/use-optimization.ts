@@ -151,6 +151,14 @@ export function useOptimization(
     [ctx, projectId, state.antennas, state.modifications],
   );
 
+  /** abandons an in-flight local recalculation and restores the previous layout */
+  const cancelRecalc = useCallback(() => {
+    pending.current = null;
+    undoStack.current.pop();
+    setHistoryTick((t) => t + 1);
+    setRecalc(null);
+  }, []);
+
   /** silent update that never triggers recalculation (lock, rename, tilt) */
   const setAntennas = useCallback(
     (next: OptAntenna[], label: string) => {
@@ -277,6 +285,7 @@ export function useOptimization(
     layers: layers ?? initial?.layers ?? null,
     recalc,
     applyChange,
+    cancelRecalc,
     setAntennas,
     undo,
     redo,

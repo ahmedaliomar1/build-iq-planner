@@ -505,6 +505,15 @@ function RfOptimize() {
                 </div>
               ))}
             </div>
+            <button
+              onClick={() => {
+                opt.cancelRecalc();
+                toast.info("Recalculation cancelled — previous design kept");
+              }}
+              className="mt-4 w-full rounded-xl border border-border px-3 py-2 text-xs font-semibold transition-smooth hover:bg-accent"
+            >
+              Cancel
+            </button>
           </div>
         </div>
       )}
